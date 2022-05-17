@@ -6,8 +6,9 @@ namespace Kevin_Restaurant
     {
         static void Main(string[] args)
         {
-            Table_map A = new Table_map();
-            A.Choice(3);
+
+            //Table_map A = new Table_map();
+            //A.Choice(3);
         }
     }
 }
