@@ -23,7 +23,6 @@ namespace Kevin_Restaurant.Controllers
             string json = JsonSerializer.Serialize(_users);
             //Console.WriteLine(json);
             File.WriteAllText(path, json);
-            Console.WriteLine("load done");
         }
 
         public void Write()

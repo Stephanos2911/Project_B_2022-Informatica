@@ -23,7 +23,7 @@ namespace Kevin_Restaurant.Models
         public bool Admin { get; set; }
 
         [JsonPropertyName("telephonenumber")]
-        public int TelephoneNumber { get; set; }
+        public string TelephoneNumber { get; set; }
 
         public void Writetofile()
         {

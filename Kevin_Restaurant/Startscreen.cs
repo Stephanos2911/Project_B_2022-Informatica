@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Kevin_Restaurant.Controllers;
+using Kevin_Restaurant.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -93,33 +95,83 @@ Have fun dining out and thank you for choosing us. -K";
         {
             Console.Clear();
             Console.WriteLine("Enter username:");
-            this.Username = Console.ReadLine();
+            string Username = Console.ReadLine();
             Console.WriteLine("Enter password:");
-            this.Password = Console.ReadLine();
-
-
+            string Password = Console.ReadLine();
+            Users usercontroller = new Users();
+            User logintry = usercontroller.Getusername(Username);
+            if (logintry.Password == Password && logintry.Username == Username)
+            {
+                Mainmenu mainMenu = new Mainmenu(logintry.Admin);
+                mainMenu.StartMainMenu();
+            }
+            else
+            {
+                Console.WriteLine("wrong credentials, Press enter to try again");
+                this.EntertoContinue();
+                this.Login();
+            }
         }
+
 
         public void Register() // asks for username, password, phonenumber then registers to json.
         {
+
+            //setup nieuwe user om te writen
             Console.Clear();
+            Users usercontroller = new Users();
+            User writeuser = new User();
+            writeuser.Admin = false;
+
+
+            //vraag inputs 
             Console.WriteLine("What do you want your username to be?");
-            this.Username = Console.ReadLine();
+            writeuser.Username = Console.ReadLine();
             Console.WriteLine("What do you want your password to be? ");
-            this.Password = Console.ReadLine();
+            writeuser.Password = Console.ReadLine();
             Console.WriteLine("What is your phonenumber?");
-            this.Telephonenumber = Console.ReadLine();
-            int phonenumber_length = this.Telephonenumber.Length;
-            if (phonenumber_length < 10)
+            writeuser.TelephoneNumber = Console.ReadLine();
+
+
+            //check telefoon
+            while (writeuser.TelephoneNumber.Length > 15 || OnlyDigits(writeuser.TelephoneNumber) || writeuser.TelephoneNumber.Length < 9)
             {
-                while (phonenumber_length < 10)
+                Console.WriteLine("Please enter a valid phonenumber");
+                writeuser.TelephoneNumber = Console.ReadLine();
+            }
+
+            writeuser.Writetofile();
+
+            //registration is succesfull, wait for key press to continue
+            Console.WriteLine("\n Registration successful, press enter to continue to login.");
+            this.EntertoContinue(); 
+            this.Login();
+
+        }
+
+        public void EntertoContinue() // wacht tot enter gedrukt word om door te gaan
+        {
+            ConsoleKeyInfo keypress = Console.ReadKey();
+            bool waiting = true;
+            if (waiting == true)
+            {
+                if (keypress.Key == ConsoleKey.Enter)
                 {
-                    Console.WriteLine("Please enter a valid phonenumber");
-                    Console.WriteLine("What is your phonenumber?");
-                    this.Telephonenumber = Console.ReadLine();
-                    phonenumber_length = this.Telephonenumber.Length;
+                    waiting = false;
                 }
             }
+        }
+        
+
+        public bool OnlyDigits(string str) // checkt of de string alleen getallen bevat
+        {
+            foreach (char c in str)
+            {
+                if (c < '0' || c > '9')
+                    return true;
+            }
+
+            return false;
         }
     }
 }
