@@ -352,7 +352,7 @@ namespace Kevin_Restaurant
                 }
             }
         }
-        public void Choice(int groupsize)//functie voor uitvoeren keuze manual/auto-pick met pijltjes
+        public int Choice(int groupsize)//functie voor uitvoeren keuze manual/auto-pick met pijltjes
         {
             Console.WindowHeight = Console.LargestWindowHeight;
             Console.WindowWidth = Console.LargestWindowWidth;
@@ -372,6 +372,7 @@ namespace Kevin_Restaurant
                     Auto_pick(groupsize);
                     break;
             }
+            return this.Table_choice;
         }
     }
 }
