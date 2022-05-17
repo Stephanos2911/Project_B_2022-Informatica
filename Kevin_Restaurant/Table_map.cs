@@ -372,7 +372,7 @@ namespace Kevin_Restaurant
                     Auto_pick(groupsize);
                     break;
             }
-            return this.Table_choice;
+            return this.Table_choice; 
         }
     }
 }
