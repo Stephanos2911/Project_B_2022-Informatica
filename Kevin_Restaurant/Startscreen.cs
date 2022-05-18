@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+//registreren
 namespace Kevin_Restaurant
 { // deze class is net nieuw. aangemaakt door gwn ADD te drukken 
     internal class Startscreen
