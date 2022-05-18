@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kevin_Restaurant.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,21 +9,25 @@ namespace Kevin_Restaurant
 {
     internal class Mainmenu
     {
-        public bool Admin; 
+        public bool Admin;
+        public string name;
         public string [] user_options;
         public string[] admin_options;
         public string[] reservation_options;
+        public ArrowMenu main_menu;
+        public ArrowMenu admin_main_menu;
+        public ArrowMenu reservation_menu;
 
-
-        public Mainmenu(bool isadmin)
+        public Mainmenu(bool isadmin, string name)
         {
             this.Admin = isadmin;
+            this.name = name;
+            //string of options
             this.user_options = new string[2]
             {
                 "Reservations",
                 "Log out"
             };
-
             this.admin_options = new string[4]
             {
                 "Manage Reservations",
@@ -30,55 +35,67 @@ namespace Kevin_Restaurant
                 "Manage Dishes",
                 "Back"
             };
-
-            this.reservation_options = new string[4]
+            this.reservation_options = new string[3]
             {
                 "Make new reservation",
                 "View confirmation codes",
-                "Manage Dishes",
                 "Back"
             };
+
+            //menus instantiate
+            this.main_menu = new ArrowMenu($"Welcome {this.name}", this.user_options,0);
+            this.admin_main_menu = new ArrowMenu($"Welcome {this.name}", this.admin_options,0);
+            this.reservation_menu = new ArrowMenu("Manage Reservations", this.reservation_options,0);
         }
 
-        public void StartMainMenu()//Main menu met arrowmenu normale user
+        public void StartMainMenu()//Main menu start
         {
             Console.Clear();
             if (this.Admin)
             {
-                ArrowMenu main_menu = new ArrowMenu("Main Menu", this.user_options);
-                int index = main_menu.Move();
+
+                this.AdminMainMenu();
             }
             else
             {
-                ArrowMenu main_menu = new ArrowMenu("Main Menu", this.admin_options);
-                int index = main_menu.Move();
-                switch (index)
-                {
-                    case 0:
-                        Reservationmenu();
-                        break;
-                    case 1:
-                        Startscreen beginscherm = new Startscreen();
-                        beginscherm.Show_StartingScreen();
-                        break;
-                }
+
+                this.UserMainMenu();
             }
         }
 
         public void Reservationmenu() // reservering menu voor normale user
         {
-            ArrowMenu reservation_menu = new ArrowMenu("Reservation Menu", this.reservation_options);
-            int index = reservation_menu.Move();
+            int index = this.reservation_menu.Move();
             switch (index)
             {
-
+                case 0:
+                    Reservations ReservationController = new Reservations();
+                    ReservationController.make_reservation(ReservationController);
+                    break;
+                default:
+                    this.StartMainMenu();
+                    break;
             }
         }
 
-        public void AdminMenu() //main menu voor admin
+        public void UserMainMenu()
         {
-            ArrowMenu admin_menu = new ArrowMenu("Admin Menu", this.admin_options);
-            int index = admin_menu.Move();
+            int index = this.main_menu.Move();
+            switch (index)
+            {
+                case 0:
+                    Reservationmenu();
+                    break;
+                case 1:
+                    Startscreen beginscherm = new Startscreen();
+                    beginscherm.Show_StartingScreen();
+                    break;
+            }
+        }
+
+        public void AdminMainMenu() //main menu voor admin
+        {
+            int index = this.admin_main_menu.Move();
             switch (index)
             {
 

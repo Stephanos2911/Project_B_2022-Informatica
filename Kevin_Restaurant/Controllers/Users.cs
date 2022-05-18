@@ -20,7 +20,6 @@ namespace Kevin_Restaurant.Controllers
 
         public void Load()
         {
-            Console.WriteLine(path);
             string json = File.ReadAllText(path);
 
             _users = JsonSerializer.Deserialize<List<User>>(json);
@@ -34,7 +33,6 @@ namespace Kevin_Restaurant.Controllers
             string json = JsonSerializer.Serialize(_users, options);
             File.WriteAllText(path, json);
         }
-
 
 
         public User GetId(int id)
@@ -56,13 +54,13 @@ namespace Kevin_Restaurant.Controllers
         {
             int index = _users.FindIndex(s => s.Id == updateuser.Id);
 
-            if (index == -1)
+            if (index != -1)
             {
-                _users.Add(updateuser);
+                _users[index] = updateuser;
             }
             else
             {
-                _users[index] = updateuser;
+                _users.Add(updateuser);
             }
             Write();
 

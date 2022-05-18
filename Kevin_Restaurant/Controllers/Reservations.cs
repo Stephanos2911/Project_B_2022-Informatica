@@ -65,7 +65,7 @@ namespace Kevin_Restaurant.Controllers
             return _reservations.Find(i => i.Date == date);
         }
 
-        public static Reservation make_reservation(Reservations reservations)
+        public Reservation make_reservation(Reservations reservations)
         {
             Reservation res = new Reservation();
 
@@ -129,7 +129,7 @@ namespace Kevin_Restaurant.Controllers
             var string_dates_array = string_dates.ToArray();
             //var st = string_dates.ToArray();
 
-            ArrowMenu choose_date = new ArrowMenu(promt, string_dates_array);
+            ArrowMenu choose_date = new ArrowMenu(promt, string_dates_array,0);
             int selectedIndex = choose_date.Move();
             Console.WriteLine(dates[selectedIndex]);
             //foreach string_dates
@@ -160,7 +160,7 @@ namespace Kevin_Restaurant.Controllers
             {
                 var promt = $"please select the dish for person{i}";
                 string[] meal_options = { "meat", "fish", "vegatarian", "vegan" };
-                ArrowMenu choose_date = new ArrowMenu(promt, meal_options);
+                ArrowMenu choose_date = new ArrowMenu(promt, meal_options, 0);
                 int selectedIndex = choose_date.Move();
                 meals[i] = meal_options[selectedIndex];
 
@@ -174,7 +174,7 @@ namespace Kevin_Restaurant.Controllers
                 "19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15",
                 "21:30", "21:45", "22:00", "22:15", "22:30", "22:45", "23:00" };
 
-            ArrowMenu choose_date = new ArrowMenu(promt, string_times);
+            ArrowMenu choose_date = new ArrowMenu(promt, string_times,0);
             int selectedIndex = choose_date.Move();
 
             Console.WriteLine(string_times[selectedIndex]);

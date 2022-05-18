@@ -361,7 +361,7 @@ namespace Kevin_Restaurant
                     "let me pick",
                     "Choose for me"
                 };
-            ArrowMenu gek = new ArrowMenu("  You can pick a table of your choosing or let us decide the best table.", options);
+            ArrowMenu gek = new ArrowMenu("  You can pick a table of your choosing or let us decide the best table.", options, 0);
             int index = gek.Move();
             switch (index)
             {

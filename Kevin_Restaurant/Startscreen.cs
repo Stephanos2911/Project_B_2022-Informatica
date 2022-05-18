@@ -54,7 +54,7 @@ Use the up and down arrow to select what you want to do. (maybe)
 Have fun dining out and thank you for choosing us. -K";
 
             string[] options = { "Sign up", "Log in", "Exit", "More / Extra" };
-            ArrowMenu mainMenu = new ArrowMenu(intro, options);
+            ArrowMenu mainMenu = new ArrowMenu(intro, options, 24);
             int SelectedIndex = mainMenu.Move();
 
 
@@ -81,7 +81,7 @@ Have fun dining out and thank you for choosing us. -K";
 
             string prompt = "Another menu";
             string[] options = { "Menu Card", "Map", "Reservation" };
-            ArrowMenu OtherMenu = new ArrowMenu(prompt, options);
+            ArrowMenu OtherMenu = new ArrowMenu(prompt, options, 0);
             int extra_selectedIndex = OtherMenu.Move();
 
             switch (extra_selectedIndex)
@@ -109,7 +109,7 @@ Have fun dining out and thank you for choosing us. -K";
             User logintry = usercontroller.Getusername(Username);
             if (logintry != null && logintry.Password == Password && logintry.Username == Username)
             {
-                Mainmenu mainMenu = new Mainmenu(logintry.Admin);
+                Mainmenu mainMenu = new Mainmenu(logintry.Admin, logintry.Username);
                 mainMenu.StartMainMenu();
             }
             else
@@ -154,7 +154,7 @@ Have fun dining out and thank you for choosing us. -K";
         }
 
 
-        public User CheckCredentials(List<User> users, int ID) // function to check all inputs
+        public User CheckCredentials(List<User> users, int ID) // function to keep asking for correct inputs
         {
             User writeuser = new User();
             writeuser.Id = ID;
