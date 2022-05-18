@@ -1,4 +1,5 @@
 ﻿using Kevin_Restaurant.Controllers;
+using Kevin_Restaurant.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Kevin_Restaurant
         public ArrowMenu main_menu;
         public ArrowMenu admin_main_menu;
         public ArrowMenu reservation_menu;
-
+        public Startscreen beginscherm;
         public Mainmenu(bool isadmin, string name)
         {
             this.Admin = isadmin;
@@ -33,7 +34,7 @@ namespace Kevin_Restaurant
                 "Manage Reservations",
                 "Manage Users",
                 "Manage Dishes",
-                "Back"
+                "Log out"
             };
             this.reservation_options = new string[3]
             {
@@ -43,9 +44,11 @@ namespace Kevin_Restaurant
             };
 
             //menus instantiate
-            this.main_menu = new ArrowMenu($"Welcome {this.name}", this.user_options,0);
-            this.admin_main_menu = new ArrowMenu($"Welcome {this.name}", this.admin_options,0);
-            this.reservation_menu = new ArrowMenu("Manage Reservations", this.reservation_options,0);
+            this.main_menu = new ArrowMenu($"Welcome {this.name}", this.user_options, 0);
+            this.admin_main_menu = new ArrowMenu($"Welcome {this.name}", this.admin_options, 0);
+            this.reservation_menu = new ArrowMenu("Manage Reservations", this.reservation_options, 0);
+            this.beginscherm = new Startscreen();
+            
         }
 
         public void StartMainMenu()//Main menu start
@@ -70,7 +73,7 @@ namespace Kevin_Restaurant
             {
                 case 0:
                     Reservations ReservationController = new Reservations();
-                    ReservationController.make_reservation(ReservationController);
+                    Reservation NewReservation = ReservationController.make_reservation(ReservationController);
                     break;
                 default:
                     this.StartMainMenu();
@@ -78,7 +81,7 @@ namespace Kevin_Restaurant
             }
         }
 
-        public void UserMainMenu()
+        public void UserMainMenu() // main menu for users
         {
             int index = this.main_menu.Move();
             switch (index)
@@ -87,8 +90,7 @@ namespace Kevin_Restaurant
                     Reservationmenu();
                     break;
                 case 1:
-                    Startscreen beginscherm = new Startscreen();
-                    beginscherm.Show_StartingScreen();
+                    this.beginscherm.Show_StartingScreen();
                     break;
             }
         }
@@ -98,7 +100,9 @@ namespace Kevin_Restaurant
             int index = this.admin_main_menu.Move();
             switch (index)
             {
-
+                default:
+                    this.beginscherm.Show_StartingScreen();
+                    break;
             }
         } 
     }

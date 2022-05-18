@@ -99,10 +99,38 @@ Have fun dining out and thank you for choosing us. -K";
         {
             //setup
             Console.Clear();
-            Console.WriteLine("Enter username:");
-            string Username = Console.ReadLine();
-            Console.WriteLine("Enter password:");
-            string Password = Console.ReadLine();
+            Console.WriteLine("Login");
+            bool check = false;
+
+            while(check == false)
+            { 
+                Console.WriteLine("Enter username:");
+                string username = Console.ReadLine();
+                if(username == "")
+                {
+                    Console.WriteLine("You have didn't enter a username");
+                }
+                else
+                {
+                    check = true;
+                }
+            }
+            check = false;
+
+            while (check == false)
+            {
+                Console.WriteLine("Enter password:");
+                string password = Console.ReadLine();
+                if (password == "")
+                {
+                    Console.WriteLine("You have didn't enter a password");
+                }
+                else
+                {
+                    check = true;
+                }
+            }
+
             Users usercontroller = new Users();
 
             //check if credentials are valid to an account
@@ -112,9 +140,10 @@ Have fun dining out and thank you for choosing us. -K";
                 Mainmenu mainMenu = new Mainmenu(logintry.Admin, logintry.Username);
                 mainMenu.StartMainMenu();
             }
+
             else
             {
-                Console.WriteLine("wrong credentials, Press enter to try again");
+                Console.WriteLine("Your username and password do not correspond to any User in our database, Press enter to try again");
                 this.KeytoContinue();
                 this.Login();
             }
@@ -205,11 +234,17 @@ Have fun dining out and thank you for choosing us. -K";
                             stoploop = true;
                         }
                     }
+                    if (input == "")
+                    {
+                        Console.WriteLine("No username was typed:");
+                        check = false;
+                        stoploop = true;
+                    }
                 }
                 //check if telephonenumber is already in database
                 else
                 {
-                    if (input.Length > 15 || OnlyDigits(input) || input.Length < 9)
+                    if (input.Length > 15 || OnlyDigits(input) || input.Length < 9 || input == "")
                     {
                         Console.WriteLine("Please enter a valid phonenumber");
                         check = false;
