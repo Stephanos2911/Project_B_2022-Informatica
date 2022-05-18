@@ -40,20 +40,32 @@ namespace Kevin_Restaurant
             };
         }
 
-        public void StartMainMenu()
+        public void StartMainMenu()//Main menu met arrowmenu normale user
         {
             Console.Clear();
-
-            //Main menu met arrowmenu
-            ArrowMenu main_menu = new ArrowMenu("Main Menu", this.user_options);
-            int index = main_menu.Move();
-            switch (index)
+            if (this.Admin)
             {
-   
+                ArrowMenu main_menu = new ArrowMenu("Main Menu", this.user_options);
+                int index = main_menu.Move();
+            }
+            else
+            {
+                ArrowMenu main_menu = new ArrowMenu("Main Menu", this.admin_options);
+                int index = main_menu.Move();
+                switch (index)
+                {
+                    case 0:
+                        Reservationmenu();
+                        break;
+                    case 1:
+                        Startscreen beginscherm = new Startscreen();
+                        beginscherm.Show_StartingScreen();
+                        break;
+                }
             }
         }
 
-        public void Reservationmenu()
+        public void Reservationmenu() // reservering menu voor normale user
         {
             ArrowMenu reservation_menu = new ArrowMenu("Reservation Menu", this.reservation_options);
             int index = reservation_menu.Move();
@@ -63,7 +75,7 @@ namespace Kevin_Restaurant
             }
         }
 
-        public void AdminMenu()
+        public void AdminMenu() //main menu voor admin
         {
             ArrowMenu admin_menu = new ArrowMenu("Admin Menu", this.admin_options);
             int index = admin_menu.Move();

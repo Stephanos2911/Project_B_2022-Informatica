@@ -20,9 +20,10 @@ namespace Kevin_Restaurant.Controllers
 
         public void Load()
         {
-            string json = JsonSerializer.Serialize(_users);
-            //Console.WriteLine(json);
-            File.WriteAllText(path, json);
+            Console.WriteLine(path);
+            string json = File.ReadAllText(path);
+
+            _users = JsonSerializer.Deserialize<List<User>>(json);
         }
 
         public void Write()

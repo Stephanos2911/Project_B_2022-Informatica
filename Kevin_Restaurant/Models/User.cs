@@ -27,8 +27,8 @@ namespace Kevin_Restaurant.Models
 
         public void Writetofile()
         {
-            Users A = new Users();
-            A.Updatelist(this);
+            Users newuser = new Users();
+            newuser.Updatelist(this);
         }
     }
 }

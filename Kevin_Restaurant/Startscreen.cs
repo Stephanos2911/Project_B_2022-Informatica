@@ -100,7 +100,7 @@ Have fun dining out and thank you for choosing us. -K";
             string Password = Console.ReadLine();
             Users usercontroller = new Users();
             User logintry = usercontroller.Getusername(Username);
-            if (logintry.Password == Password && logintry.Username == Username)
+            if (logintry != null && logintry.Password == Password && logintry.Username == Username)
             {
                 Mainmenu mainMenu = new Mainmenu(logintry.Admin);
                 mainMenu.StartMainMenu();
@@ -108,7 +108,7 @@ Have fun dining out and thank you for choosing us. -K";
             else
             {
                 Console.WriteLine("wrong credentials, Press enter to try again");
-                this.EntertoContinue();
+                this.KeytoContinue();
                 this.Login();
             }
         }
@@ -144,12 +144,12 @@ Have fun dining out and thank you for choosing us. -K";
 
             //registration is succesfull, wait for key press to continue
             Console.WriteLine("\n Registration successful, press enter to continue to login.");
-            this.EntertoContinue(); 
+            this.KeytoContinue(); 
             this.Login();
 
         }
 
-        public void EntertoContinue() // wacht tot enter gedrukt word om door te gaan
+        public void KeytoContinue() // wacht tot enter gedrukt word om door te gaan
         {
             ConsoleKeyInfo keypress = Console.ReadKey();
             bool waiting = true;
