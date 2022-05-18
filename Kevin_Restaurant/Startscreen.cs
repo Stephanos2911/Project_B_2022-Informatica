@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 
 //registreren
+// kunnen meerdere usernames dezelfde wachtwoord hebben
 namespace Kevin_Restaurant
-{ // deze class is net nieuw. aangemaakt door gwn ADD te drukken 
+{
     internal class Startscreen
     {
         public string Username;
@@ -55,9 +56,9 @@ Have fun dining out and thank you for choosing us. -K";
             string[] options = { "Sign up", "Log in", "Exit", "More / Extra" };
             ArrowMenu mainMenu = new ArrowMenu(intro, options);
             int SelectedIndex = mainMenu.Move();
-            
-            
-            switch (SelectedIndex) 
+
+
+            switch (SelectedIndex)
             {
                 case 0:
                     this.Register();
@@ -82,7 +83,7 @@ Have fun dining out and thank you for choosing us. -K";
             string[] options = { "Menu Card", "Map", "Reservation" };
             ArrowMenu OtherMenu = new ArrowMenu(prompt, options);
             int extra_selectedIndex = OtherMenu.Move();
-            
+
             switch (extra_selectedIndex)
             {
                 case 0:
@@ -93,14 +94,18 @@ Have fun dining out and thank you for choosing us. -K";
 
         }
 
+
         public void Login()
         {
+            //setup
             Console.Clear();
             Console.WriteLine("Enter username:");
             string Username = Console.ReadLine();
             Console.WriteLine("Enter password:");
             string Password = Console.ReadLine();
             Users usercontroller = new Users();
+
+            //check if credentials are valid to an account
             User logintry = usercontroller.Getusername(Username);
             if (logintry != null && logintry.Password == Password && logintry.Username == Username)
             {
@@ -118,38 +123,22 @@ Have fun dining out and thank you for choosing us. -K";
 
         public void Register() // asks for username, password, phonenumber then registers to json.
         {
+            Console.Clear();
 
             //setup nieuwe user om te writen
-            Console.Clear();
             Users usercontroller = new Users();
-            User writeuser = new User();
-            writeuser.Admin = false;
 
+            User NewUser = CheckCredentials(usercontroller._users, usercontroller._users.Count + 1);
 
-            //vraag inputs 
-            Console.WriteLine("What do you want your username to be?");
-            writeuser.Username = Console.ReadLine();
-            Console.WriteLine("What do you want your password to be? ");
-            writeuser.Password = Console.ReadLine();
-            Console.WriteLine("What is your phonenumber?");
-            writeuser.TelephoneNumber = Console.ReadLine();
-
-
-            //check telefoon
-            while (writeuser.TelephoneNumber.Length > 15 || OnlyDigits(writeuser.TelephoneNumber) || writeuser.TelephoneNumber.Length < 9)
-            {
-                Console.WriteLine("Please enter a valid phonenumber");
-                writeuser.TelephoneNumber = Console.ReadLine();
-            }
-
-            writeuser.Writetofile();
+            NewUser.Writetofile();
 
             //registration is succesfull, wait for key press to continue
             Console.WriteLine("\n Registration successful, press enter to continue to login.");
-            this.KeytoContinue(); 
-            this.Login();
+            this.KeytoContinue();
+            this.Show_StartingScreen();
 
         }
+
 
         public void KeytoContinue() // wacht tot enter gedrukt word om door te gaan
         {
@@ -163,7 +152,86 @@ Have fun dining out and thank you for choosing us. -K";
                 }
             }
         }
-        
+
+
+        public User CheckCredentials(List<User> users, int ID) // function to check all inputs
+        {
+            User writeuser = new User();
+            writeuser.Id = ID;
+            writeuser.Admin = false;
+
+
+            //check username
+            Console.WriteLine("What do you want your username to be?");
+            bool usercheck = false;
+            while (usercheck == false)
+            {
+                writeuser.Username = Console.ReadLine();
+                usercheck = AlreadyExists(users, "Username", writeuser.Username);
+            }
+
+            //ask password
+            Console.WriteLine("What do you want your password to be?");
+            writeuser.Password = Console.ReadLine();
+
+            //check phonenumber
+            Console.WriteLine("Enter your phone-number:");
+            usercheck = false;
+            while (usercheck == false)
+            {
+                writeuser.TelephoneNumber = Console.ReadLine();
+                usercheck = AlreadyExists(users, "Phonenumber", writeuser.TelephoneNumber);
+            }
+
+            return writeuser;
+        }
+
+
+        public bool AlreadyExists(List<User> users, string type, string input)
+        {
+            bool stoploop = false;
+            bool check = true;
+            //check if username exists in database
+            if (stoploop == false)
+            {
+                if (type == "Username")
+                {
+                    foreach (User x in users)
+                    {
+                        if (x.Username == input)
+                        {
+                            Console.WriteLine("This username already exists, try again:");
+                            check = false;
+                            stoploop = true;
+                        }
+                    }
+                }
+                //check if telephonenumber is already in database
+                else
+                {
+                    if (input.Length > 15 || OnlyDigits(input) || input.Length < 9)
+                    {
+                        Console.WriteLine("Please enter a valid phonenumber");
+                        check = false;
+                        stoploop = true;
+                    }
+                    else
+                    {
+                        foreach (User x in users)
+                        {
+                            if (x.TelephoneNumber == input)
+                            {
+                                Console.WriteLine("This phone-number is already registered, try another number:");
+                                check = false;
+                                stoploop = true;
+                            }
+                        }
+                    }
+                }
+            }
+            return check;
+        }
+
 
         public bool OnlyDigits(string str) // checkt of de string alleen getallen bevat
         {
@@ -175,5 +243,6 @@ Have fun dining out and thank you for choosing us. -K";
 
             return false;
         }
+
     }
 }

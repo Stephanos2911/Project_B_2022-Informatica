@@ -4,13 +4,13 @@
     "username": "Stephanos",
     "password": "jemoeder",
     "admin": true,
-    "telephonenumber": "642058154"
+    "telephonenumber": "642058154233"
   },
   {
     "id": 2,
     "username": "Rishi",
     "password": "papa",
     "admin": false,
-    "telephonenumber": "64203443"
+    "telephonenumber": "64203443323"
   }
 ]
