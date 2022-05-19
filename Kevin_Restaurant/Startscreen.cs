@@ -101,6 +101,8 @@ Have fun dining out and thank you for choosing us. -K";
             Console.Clear();
             Console.WriteLine("Login");
             bool check = false;
+            string Usernameattempt = "";
+            string passwordattempt = "";
 
             while(check == false)
             { 
@@ -112,6 +114,7 @@ Have fun dining out and thank you for choosing us. -K";
                 }
                 else
                 {
+                    Usernameattempt = username;
                     check = true;
                 }
             }
@@ -127,6 +130,7 @@ Have fun dining out and thank you for choosing us. -K";
                 }
                 else
                 {
+                    passwordattempt = password;
                     check = true;
                 }
             }
@@ -134,8 +138,8 @@ Have fun dining out and thank you for choosing us. -K";
             Users usercontroller = new Users();
 
             //check if credentials are valid to an account
-            User logintry = usercontroller.Getusername(Username);
-            if (logintry != null && logintry.Password == Password && logintry.Username == Username)
+            User logintry = usercontroller.Getusername(Usernameattempt);
+            if (logintry != null && logintry.Password == passwordattempt && logintry.Username == Usernameattempt)
             {
                 Mainmenu mainMenu = new Mainmenu(logintry.Admin, logintry.Username);
                 mainMenu.StartMainMenu();
@@ -162,7 +166,7 @@ Have fun dining out and thank you for choosing us. -K";
             NewUser.Writetofile();
 
             //registration is succesfull, wait for key press to continue
-            Console.WriteLine("\n Registration successful, press enter to continue to login.");
+            Console.WriteLine("\nRegistration successful, press enter to continue to login.");
             this.KeytoContinue();
             this.Show_StartingScreen();
 
