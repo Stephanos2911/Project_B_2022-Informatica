@@ -124,7 +124,7 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
                 string username = Console.ReadLine();
                 if(username == "")
                 {
-                    Console.WriteLine("You have didn't enter a username");
+                    Console.WriteLine("You didn't enter a username");
                 }
                 else
                 {
@@ -140,7 +140,7 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
                 string password = Console.ReadLine();
                 if (password == "")
                 {
-                    Console.WriteLine("You have didn't enter a password");
+                    Console.WriteLine("You didn't enter a password");
                 }
                 else
                 {
@@ -155,7 +155,7 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
             User logintry = usercontroller.Getusername(Usernameattempt);
             if (logintry != null && logintry.Password == passwordattempt && logintry.Username == Usernameattempt)
             {
-                Mainmenu mainMenu = new Mainmenu(logintry.Admin, logintry.Username);
+                Mainmenu mainMenu = new Mainmenu(logintry.Username);
                 mainMenu.StartMainMenu();
             }
 
