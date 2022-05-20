@@ -29,16 +29,16 @@ namespace Kevin_Restaurant
             for (int i = 0; i < Options.Length; i++) // iterates from line to line
             {
                 string current_option = Options[i];
-                string temp;
+          
                 if (i == SelectedIndex)
                 {
-                    //temp = "=";
+            
                     ForegroundColor = ConsoleColor.Black; // makes sure the text that is selected is marked with a background color,
                     BackgroundColor = ConsoleColor.White;
                 }
                 else
                 {
-                    //temp = "";
+                
                     ForegroundColor = ConsoleColor.White;
                     BackgroundColor = ConsoleColor.Black;
                 }

@@ -15,10 +15,13 @@ namespace Kevin_Restaurant
         public string [] user_options;
         public string[] admin_options;
         public string[] reservation_options;
+
+        //menu 
         public ArrowMenu main_menu;
         public ArrowMenu admin_main_menu;
         public ArrowMenu reservation_menu;
         public Startscreen beginscherm;
+
         public Mainmenu(bool isadmin, string name)
         {
             this.Admin = isadmin;
@@ -39,7 +42,7 @@ namespace Kevin_Restaurant
             this.reservation_options = new string[3]
             {
                 "Make new reservation",
-                "View confirmation codes",
+                "View reservations",
                 "Back"
             };
 
@@ -54,15 +57,29 @@ namespace Kevin_Restaurant
         public void StartMainMenu()//Main menu start
         {
             Console.Clear();
+            int index = 0;
             if (this.Admin)
             {
-
-                this.AdminMainMenu();
+                index = this.admin_main_menu.Move();
+                switch (index)
+                {
+                    default:
+                        this.beginscherm.Show_StartingScreen();
+                        break;
+                }
             }
             else
             {
-
-                this.UserMainMenu();
+                index = this.main_menu.Move();
+                switch (index)
+                {
+                    case 0:
+                        Reservationmenu();
+                        break;
+                    case 1:
+                        this.beginscherm.Show_StartingScreen();
+                        break;
+                }
             }
         }
 
@@ -74,36 +91,12 @@ namespace Kevin_Restaurant
                 case 0:
                     Reservations ReservationController = new Reservations();
                     Reservation NewReservation = ReservationController.make_reservation(ReservationController);
+                    Reservationmenu();
                     break;
                 default:
                     this.StartMainMenu();
                     break;
             }
         }
-
-        public void UserMainMenu() // main menu for users
-        {
-            int index = this.main_menu.Move();
-            switch (index)
-            {
-                case 0:
-                    Reservationmenu();
-                    break;
-                case 1:
-                    this.beginscherm.Show_StartingScreen();
-                    break;
-            }
-        }
-
-        public void AdminMainMenu() //main menu voor admin
-        {
-            int index = this.admin_main_menu.Move();
-            switch (index)
-            {
-                default:
-                    this.beginscherm.Show_StartingScreen();
-                    break;
-            }
-        } 
     }
 }

@@ -17,17 +17,21 @@ namespace Kevin_Restaurant
         public string Password;
         public string Telephonenumber;
 
+        public string[] options;
+        public string[] extra_options;
+
+        public ArrowMenu mainMenu;
+        public ArrowMenu extraMenu;
         public Startscreen()
         {
             this.Username = null;
             this.Password = null;
             this.Telephonenumber = null;
-        }
 
+            this.options = new string [] { "Sign up", "Log in", "More / Extra", "Exit" };
+            this.extra_options = new string[] { "Menu Card", "Map", "Back" };
 
-        public void Show_StartingScreen() // prints all prompts and menus for the user at the beginning of the program
-        {
-            string intro = @"
+            this.mainMenu = new ArrowMenu(@"
  _  __          _       _           _ _                 
 | |/ /         (_)     ( )         | (_)                
 | ' / _____   ___ _ __ |/ ___    __| |_ _ __   ___ _ __ 
@@ -51,13 +55,15 @@ H E L P
 
 Use the up and down arrow to select what you want to do. (maybe) 
 ----------------------------------------------------------------------------------------------------------------------
-Have fun dining out and thank you for choosing us. -K";
-
-            string[] options = { "Sign up", "Log in", "Exit", "More / Extra" };
-            ArrowMenu mainMenu = new ArrowMenu(intro, options, 24);
-            int SelectedIndex = mainMenu.Move();
+Have fun dining out and thank you for choosing us. -K", this.options, 24);
+            this.extraMenu = new ArrowMenu("Extras", this.extra_options,0);
+        }
 
 
+        public void Show_StartingScreen() // prints all prompts and menus for the user at the beginning of the program
+        {
+        
+            int SelectedIndex = this.mainMenu.Move();
             switch (SelectedIndex)
             {
                 case 0:
@@ -67,29 +73,37 @@ Have fun dining out and thank you for choosing us. -K";
                     this.Login();
                     break;
                 case 2:
-                    Environment.Exit(0);
-                    break;
-                case 3:
                     Extras_Menu();
                     break;
+                case 3:
+                    Environment.Exit(0);
+                    break;
             }
+
         }
 
 
         private void Extras_Menu() // menu with extra information for a costumor
         {
+            string[] only_back = { "Back" };
+            int extramenu_selectedIndex = this.extraMenu.Move();
 
-            string prompt = "Another menu";
-            string[] options = { "Menu Card", "Map", "Reservation" };
-            ArrowMenu OtherMenu = new ArrowMenu(prompt, options, 0);
-            int extra_selectedIndex = OtherMenu.Move();
-
-            switch (extra_selectedIndex)
+            switch (extramenu_selectedIndex)
             {
                 case 0:
                     Console.WriteLine("hier komt het menu");
                     break;
+                case 1:
+                    Table_map OnlyToShowMap = new Table_map();
+                    OnlyToShowMap.Show_Tables();
 
+                    ArrowMenu only_forback = new ArrowMenu("These are all the tables we offer at Kevin's", only_back, 50);
+                    int index = only_forback.Move();
+                    this.Extras_Menu();
+                    break;
+                case 2:
+                    this.Show_StartingScreen();
+                    break;
             }
 
         }

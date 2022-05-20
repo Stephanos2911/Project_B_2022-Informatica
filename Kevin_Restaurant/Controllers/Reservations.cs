@@ -65,6 +65,25 @@ namespace Kevin_Restaurant.Controllers
             return _reservations.Find(i => i.Date == date);
         }
 
+        public int ChooseTable(int Groupsize)
+        {
+            Table_map A = new Table_map();
+            DateTime DayForReservation = new DateTime(2020, 05, 05);
+            List<Reservation> NotAvailableTables = FindAllAvailableTables(DayForReservation);
+            foreach (Reservation index in NotAvailableTables)
+            {
+                A.Tables[index.Table - 1].available = false;
+            }
+
+            int indexchoice = A.Choice(Groupsize);
+            return indexchoice;
+        }
+
+        public List<Reservation> FindAllAvailableTables(DateTime date)
+        {
+            return _reservations.FindAll((i => i.Date == date));
+        }
+
         public Reservation make_reservation(Reservations reservations)
         {
             Reservation res = new Reservation();
@@ -77,16 +96,16 @@ namespace Kevin_Restaurant.Controllers
             var time = get_time();
             res.Time = time;
 
-            var diners = Reservations.diners();
-            res.Diners = diners;
+           // var diners = Reservations.diners();
+            //res.Diners = diners;
 
             //var meals = get_meals(dinners);
             //res.Meals = meals;
 
 
-            Table_map x = new Table_map();
-            x.Show_Tables();
-            res.Table = x.Choice(diners);
+           // Table_map x = new Table_map();
+           // x.Show_Tables();
+          //  res.Table = x.Choice(diners);
 
 
             //res.WriteToFile();

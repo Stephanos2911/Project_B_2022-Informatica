@@ -43,7 +43,6 @@ namespace Kevin_Restaurant
         }
         public void Show_Tables()// laat hele plattegrond zien
         {
-            Console.Clear();
             for (int i = 0; i < this.Tables.Length; i++)
             {
                 Tables[i].table_print();
@@ -354,8 +353,6 @@ namespace Kevin_Restaurant
         }
         public int Choice(int groupsize)//functie voor uitvoeren keuze manual/auto-pick met pijltjes
         {
-            Console.WindowHeight = Console.LargestWindowHeight;
-            Console.WindowWidth = Console.LargestWindowWidth;
             Console.Clear(); //setup map
             string[] options = new string[] {
                     "let me pick",

@@ -17,8 +17,8 @@ namespace Kevin_Restaurant.Models
         //[JsonPropertyName("meals")]
         //public string[] Meals { get; set; }
 
-        [JsonPropertyName("diners")]
-        public int Diners { get; set; }
+        //[JsonPropertyName("diners")]
+        //public int Diners { get; set; }
 
         [JsonPropertyName("id")]
         public string Id { get; set; }
