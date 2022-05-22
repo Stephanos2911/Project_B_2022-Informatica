@@ -155,7 +155,7 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
             User logintry = usercontroller.Getusername(Usernameattempt);
             if (logintry != null && logintry.Password == passwordattempt && logintry.Username == Usernameattempt)
             {
-                Mainmenu mainMenu = new Mainmenu(logintry.Username);
+                Mainmenu mainMenu = new Mainmenu(logintry);
                 mainMenu.StartMainMenu();
             }
 
@@ -187,17 +187,22 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
         }
 
 
-        public void KeytoContinue() // wacht tot enter gedrukt word om door te gaan
+        public void KeytoContinue() // enter repeats the action, escape goes back
         {
-            ConsoleKeyInfo keypress = Console.ReadKey();
             bool waiting = true;
             if (waiting == true)
             {
+                ConsoleKeyInfo keypress = Console.ReadKey();
                 if (keypress.Key == ConsoleKey.Enter)
                 {
                     waiting = false;
                 }
             }
+        }
+
+        public void Pressescape()
+        {
+
         }
 
 
