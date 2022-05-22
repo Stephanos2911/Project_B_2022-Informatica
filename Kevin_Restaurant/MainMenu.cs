@@ -10,11 +10,12 @@ namespace Kevin_Restaurant
 {
     internal class Mainmenu
     {
-        public string Name;
         public string [] user_options;
         public string[] admin_options;
         public string[] reservation_options;
         public string[] change_info_options;
+
+        // current user
         public Users Usercontroller;
         public User Currentuser;
 
@@ -27,10 +28,10 @@ namespace Kevin_Restaurant
       
 
 
-        public Mainmenu(string Name)
+        public Mainmenu(User Currentuser)
         {
             this.Usercontroller = new Users();
-            this.Currentuser = Usercontroller.Getusername(Name);
+            this.Currentuser = Currentuser;
             
             //string of options
             this.user_options = new string[3]
@@ -176,7 +177,6 @@ namespace Kevin_Restaurant
                         }
                         else
                         {
-                            Usernameattempt = password;
                             check = true;
                         }
                     }
