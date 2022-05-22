@@ -1,0 +1,86 @@
+[
+  {
+    "theme": "Dutch",
+    "gerecht": "Frikandel",
+    "type": "Meat",
+    "num": "VG1",
+    "price": 15
+  },
+  {
+    "theme": "Dutch",
+    "gerecht": "Vegetarian Bitterballen",
+    "type": "Vegetarian",
+    "num": "VG2",
+    "price": 20
+  },
+  {
+    "theme": "French",
+    "gerecht": "Snails",
+    "type": "Vegan",
+    "num": "VG3",
+    "price": 25
+  },
+  {
+    "theme": "French",
+    "gerecht": "French fish",
+    "type": "Fish",
+    "num": "VG4",
+    "price": 30
+  },
+  {
+    "theme": "Dutch",
+    "gerecht": "Stampot",
+    "type": "Meat",
+    "num": "HG1",
+    "price": 30
+  },
+  {
+    "theme": "Dutch",
+    "gerecht": "Vegetarian Stampot",
+    "type": "Vegetarian",
+    "num": "HG2",
+    "price": 35
+  },
+  {
+    "theme": "French",
+    "gerecht": "Vegan Stampot",
+    "type": "Vegan",
+    "num": "HG3",
+    "price": 40
+  },
+  {
+    "theme": "French",
+    "gerecht": "Fish Stampot",
+    "type": "Fish",
+    "num": "HG4",
+    "price": 45
+  },
+  {
+    "theme": "Dutch",
+    "gerecht": "Cream Pie",
+    "type": "Pie",
+    "num": "NG1",
+    "price": 5
+  },
+  {
+    "theme": "Dutch",
+    "gerecht": "Appel Pie",
+    "type": "Pie",
+    "num": "NG2",
+    "price": 100
+  },
+  {
+    "theme": "French",
+    "gerecht": "Che special",
+    "type": "Che",
+    "num": "NG3",
+    "price": 5
+  },
+  {
+    "theme": "French",
+    "gerecht": "Ice Cream",
+    "type": "Ice Cream",
+    "num": "NG4",
+    "price": 5
+  }
+]
