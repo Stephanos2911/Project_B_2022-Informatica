@@ -11,14 +11,8 @@ namespace Kevin_Restaurant.Models
     internal class Reservation
     {
 
-        //[JsonPropertyName("id")]
-        // public int Booker_Id { get; set; }
-
-        //[JsonPropertyName("meals")]
-        //public string[] Meals { get; set; }
-
-        //[JsonPropertyName("diners")]
-        //public int Diners { get; set; }
+        [JsonPropertyName("diners")]
+        public int Diners { get; set; }
 
         [JsonPropertyName("userid")]
         public int UserId{ get; set; }

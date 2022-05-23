@@ -89,7 +89,7 @@ namespace Kevin_Restaurant.Controllers
             return _reservations.FindAll((i => i.Date == date));
         }
 
-        public Reservation make_reservation(Reservations reservations)
+        public Reservation make_reservation(Reservations reservations, int user_id)
         {
             Reservation res = new Reservation();
 
@@ -101,41 +101,30 @@ namespace Kevin_Restaurant.Controllers
             var time = get_time();
             res.Time = time;
 
-           // var diners = Reservations.diners();
-            //res.Diners = diners;
+            res.UserId = user_id;
 
-            //var meals = get_meals(dinners);
-            //res.Meals = meals;
-
-
-           // Table_map x = new Table_map();
-           // x.Show_Tables();
-          //  res.Table = x.Choice(diners);
+            var diners = Reservations.diners();
+            res.Diners = diners;
 
 
-            //res.WriteToFile();
+            Table_map x = new Table_map();
+            x.Show_Tables();
+            res.Table = x.Choice(diners);
+
+
+            res.WriteToFile();
 
             return res;
         }
         public static DateTime get_date(int days_in_advance)
         {
+            Console.Clear();
             DateTime today = DateTime.Today;
-            var open_days = 0;
-            //for (int i = 0; i < days_in_advance; i++)
-            //{
-            //    if (today.AddDays(i).DayOfWeek != DayOfWeek.Tuesday)
-            //    {
-            //        Console.WriteLine(open_days);
-            //        open_days++;
-            //    }
-            //}
-            //var string_dates = new string[days_in_advance];
-            //var dates = new DateTime[open_days];
 
             var string_dates = new List<string>();
             var dates = new List<DateTime>();
 
-            for (int i = 0; i < open_days; i++)
+            for (int i = 0; i < days_in_advance; i++)
             {
                 if (today.AddDays(i).DayOfWeek != DayOfWeek.Tuesday)
                 {
@@ -147,23 +136,19 @@ namespace Kevin_Restaurant.Controllers
                 }
             }
             string[] Strring_dates_array = string_dates.ToArray();
-            string promt = "Please enter the number infront of the date you would like to book\n" +
-                "the booking is for the entire day from 17:00 to 23:00 enjoy :)\n\n";
+            DateTime[] dates_array = dates.ToArray();
 
-            var string_dates_array = string_dates.ToArray();
-            //var st = string_dates.ToArray();
+            string promt = "the booking is for the entire day from 17:00 to 23:00 enjoy :);";
 
-            ArrowMenu choose_date = new ArrowMenu(promt, string_dates_array,0);
+
+            ArrowMenu choose_date = new ArrowMenu(promt, Strring_dates_array, 1);
             int selectedIndex = choose_date.Move();
-            Console.WriteLine(dates[selectedIndex]);
-            //foreach string_dates
-            //Console.WriteLine(string_dates);
-            //Console.WriteLine(selectedIndex);
-            Console.WriteLine(dates[selectedIndex]);
+
             return dates[selectedIndex];
         }
         public static int diners()
         {
+            Console.Clear();
             Console.WriteLine("how many people are you planning to come?");
             var string_people = Console.ReadLine();
 
@@ -193,6 +178,7 @@ namespace Kevin_Restaurant.Controllers
         }
         public static string get_time()
         {
+            Console.Clear();
             string promt = "what time do you expect you will be arriving?\n\n";
             string[] string_times = { "17:00", "17:15", "17:30", "17:45", "18:00", "18:15", "18:30", "18:45",
                 "19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15",
