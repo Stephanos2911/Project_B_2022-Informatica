@@ -1,0 +1,32 @@
+[
+    {
+        "wine_name": "Red wine",
+        "wine_id": 1,
+        "wine_price": 7.50,
+        "wine_type": "Alcoholic"
+    },
+    {
+        "wine_name": "White wine",
+        "wine_id": 2,
+        "wine_price": 7.50,
+        "wine_type": "Alcoholic"
+    },
+    {
+        "wine_name": "Rose wine",
+        "wine_id": 3,
+        "wine_price": 7.50,
+        "wine_type": "Alcoholic"
+    },
+    {
+        "wine_name": "Sparkling wine",
+        "wine_id": 4,
+        "wine_price": 7.50,
+        "wine_type": "Alcoholic"
+    },
+    {
+        "wine_name": "Dessert wine",
+        "wine_id": 5,
+        "wine_price": 7.50,
+        "wine_type": "Alcoholic"
+    }
+]
