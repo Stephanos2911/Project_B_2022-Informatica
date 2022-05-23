@@ -65,6 +65,11 @@ namespace Kevin_Restaurant.Controllers
             return _reservations.Find(i => i.Date == date);
         }
 
+        public Reservation FindUser(int Userid)
+        {
+            return _reservations.Find(i => i.UserId == Userid);
+        }
+
         public int ChooseTable(int Groupsize)
         {
             Table_map A = new Table_map();
@@ -232,6 +237,22 @@ namespace Kevin_Restaurant.Controllers
                 avalible = true;
             }
             return avalible;
+        }
+        public List<Reservation> FindAllReservations(User Currentuser)
+        {
+            return _reservations.FindAll((i => i.UserId == Currentuser.Id));
+        }
+
+        public void ViewReservations(User Currentuser)
+        {
+            Console.Clear();
+            Console.WriteLine("Overview of all reservations:");
+            Console.WriteLine("\n Date         | Time    | Table   | Name \n");
+            List<Reservation> MadeReservations = FindAllReservations(Currentuser);
+            foreach(Reservation Reservation in MadeReservations)
+            {
+                Console.WriteLine($" {Reservation.Date.ToString("MM/dd/yyyy")}   | {Reservation.Time}   | {Reservation.Table}       | {Currentuser.Username}\n");
+            }
         }
     }
 }
