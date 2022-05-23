@@ -151,13 +151,13 @@ namespace Kevin_Restaurant
 
 
 
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
+   // internal class Program
+ //   {
+     //   static void Main(string[] args)
+//{
             
-            arrangementMenu myMenu = new arrangementMenu();
-            myMenu.Start();
+    //        arrangementMenu myMenu = new arrangementMenu();
+         //   myMenu.Start();
             //        //AllWine wineController = new AllWine();
 
             //        //Wine1 currentWine = wineController.GetByName("Dessert wine");
@@ -674,6 +674,6 @@ namespace Kevin_Restaurant
 
             //                }
             //            }
-                   }
-            }
+    //               }
+    //        }
         }

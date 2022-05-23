@@ -48,14 +48,12 @@ namespace wijn_en_courses.Controllers
             }
             Write();
         }
-
         public void Write()
         {
             string json = JsonSerializer.Serialize(_allwine);
 
             File.WriteAllText(path, json);
             Console.WriteLine("Write done");
-
         }
     }
 }

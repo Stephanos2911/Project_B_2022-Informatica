@@ -29,8 +29,6 @@ namespace Kevin_Restaurant
         //reservation
         public Reservations ReservationController;
 
-
-
         public Mainmenu(User Currentuser)
         {
 
