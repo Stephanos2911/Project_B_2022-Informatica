@@ -24,6 +24,15 @@ namespace Kevin_Restaurant
             this.startposY = Startingposition; 
         }
 
+        public ArrowMenu(string intro, List<string> options, int Startingposition)
+        {
+            // variables inside the class
+            Intro = intro;
+            Options = options.ToArray();
+            SelectedIndex = 0;
+            this.startposY = Startingposition;
+        }
+
         public void DisplayOptions() // displays the text.
         {
             for (int i = 0; i < Options.Length; i++) // iterates from line to line
@@ -42,7 +51,7 @@ namespace Kevin_Restaurant
                     ForegroundColor = ConsoleColor.White;
                     BackgroundColor = ConsoleColor.Black;
                 }
-                WriteLine($" - {current_option} - "); // displays the text again.
+                WriteLine($" {current_option}  "); // displays the text again.
             }
             ResetColor();
         }
@@ -55,13 +64,13 @@ namespace Kevin_Restaurant
             {
                 ForegroundColor = ConsoleColor.Black; 
                 BackgroundColor = ConsoleColor.White;
-                WriteLine($" - {current_option} - ");
+                WriteLine($" {current_option}  ");
             }
             else
             {
                 ForegroundColor = ConsoleColor.White;
                 BackgroundColor = ConsoleColor.Black;
-                WriteLine($" - {current_option} - ");
+                WriteLine($" {current_option}  ");
             }
             ResetColor();
         }

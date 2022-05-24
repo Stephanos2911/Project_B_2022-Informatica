@@ -85,7 +85,7 @@ namespace Kevin_Restaurant.Controllers
         }
 
         public Reservation make_reservation(Reservations reservations)
-        {
+        { 
             Reservation res = new Reservation();
 
             res.Id = reservations.conformation_code();
@@ -182,7 +182,6 @@ namespace Kevin_Restaurant.Controllers
                 ArrowMenu choose_date = new ArrowMenu(promt, meal_options, 0);
                 int selectedIndex = choose_date.Move();
                 meals[i] = meal_options[selectedIndex];
-
             }
             return meals;
         }

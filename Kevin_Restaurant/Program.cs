@@ -8,10 +8,13 @@ namespace Kevin_Restaurant
     {
         static void Main(string[] args)
         {
-            Startscreen beginscherm = new Startscreen();
-            beginscherm.Show_StartingScreen();
-            //Reservations test = new Reservations();
-            //int A = test.ChooseTable(3);
+            //Startscreen beginscherm = new Startscreen();
+            //beginscherm.Show_StartingScreen();
+            ////Reservations test = new Reservations();
+            ////int A = test.ChooseTable(3);
+            OrderScreen screen = new OrderScreen();
+            screen.Start(3);
+
         }
     }
 }
