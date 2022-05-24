@@ -25,14 +25,17 @@ namespace Kevin_Restaurant
         public ArrowMenu reservation_menu;
         public ArrowMenu info_change_menu;
         public Startscreen beginscherm;
-      
 
+        //reservation
+        public Reservations ReservationController;
 
         public Mainmenu(User Currentuser)
         {
+
             this.Usercontroller = new Users();
             this.Currentuser = Currentuser;
-            
+            this.ReservationController = new Reservations();
+
             //string of options
             this.user_options = new string[3]
             {
@@ -111,12 +114,11 @@ namespace Kevin_Restaurant
             switch (index)
             {
                 case 0:
-                    Reservations ReservationController = new Reservations();
-                    Reservation NewReservation = ReservationController.make_reservation(ReservationController);
+                    Reservation NewReservation = ReservationController.make_reservation(this.ReservationController, this.Currentuser.Id);
                     Reservationmenu();
                     break;
                 default:
-                    this.StartMainMenu();
+                    this.ReservationController.ViewReservations(this.Currentuser);
                     break;
             }
         }
@@ -153,7 +155,7 @@ namespace Kevin_Restaurant
                             check = true;
                         }
                     }
-
+                    
                     //writes to file
                     Currentuser.Username = Usernameattempt;
                     Currentuser.Writetofile();

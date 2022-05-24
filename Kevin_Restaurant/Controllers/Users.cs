@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Kevin_Restaurant.Controllers
 {
-    internal class Users
+    class Users
     {
         public List<User> _users;
         string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"Data/userdatabase.json"));
