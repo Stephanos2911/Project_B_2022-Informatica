@@ -24,17 +24,14 @@ namespace Kevin_Restaurant
             this.startposY = Startingposition; 
         }
 
-        public ArrowMenu(string intro, List<string> listoptions, int Startingposition) //overload constructor with list as input
+        public ArrowMenu(string intro, List<string> options, int Startingposition)
         {
             // variables inside the class
             Intro = intro;
-            Options = listoptions.ToArray();
+            Options = options.ToArray();
             SelectedIndex = 0;
             this.startposY = Startingposition;
         }
-
-
-
 
         public void DisplayOptions() // displays the text.
         {
@@ -54,26 +51,26 @@ namespace Kevin_Restaurant
                     ForegroundColor = ConsoleColor.White;
                     BackgroundColor = ConsoleColor.Black;
                 }
-                WriteLine($" {current_option} "); // displays the text again.
+                WriteLine($" {current_option}  "); // displays the text again.
             }
             ResetColor();
         }
 
         public void DisplaySingleOption(int index, bool selected) // Changes the selected option on or off
         {
-            Console.SetCursorPosition(0,startposY + index + 1);
+            Console.SetCursorPosition(0,startposY+ (index+1));
             string current_option = Options[index];
             if (selected)
             {
                 ForegroundColor = ConsoleColor.Black; 
                 BackgroundColor = ConsoleColor.White;
-                WriteLine($" {current_option} ");
+                WriteLine($" {current_option}  ");
             }
             else
             {
                 ForegroundColor = ConsoleColor.White;
                 BackgroundColor = ConsoleColor.Black;
-                WriteLine($" {current_option} ");
+                WriteLine($" {current_option}  ");
             }
             ResetColor();
         }

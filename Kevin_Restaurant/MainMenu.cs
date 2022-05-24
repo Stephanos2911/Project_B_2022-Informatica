@@ -236,7 +236,7 @@ namespace Kevin_Restaurant
             switch (index)
             {
                 case 0:
-                    Reservation NewReservation = ReservationController.make_reservation(this.ReservationController);
+                    Reservation NewReservation = ReservationController.make_reservation(this.ReservationController, this.Currentuser.Id);
                     Reservationmenu();
                     break;
                 default:
@@ -381,7 +381,7 @@ namespace Kevin_Restaurant
                             check = true;
                         }
                     }
-
+                    
                     //writes to file
                     Currentuser.Username = Usernameattempt;
                     Currentuser.Writetofile();

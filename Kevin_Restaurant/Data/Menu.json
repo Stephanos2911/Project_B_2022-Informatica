@@ -3,84 +3,96 @@
     "theme": "Dutch",
     "gerecht": "Frikandel",
     "type": "Meat",
-    "num": "VG1",
-    "price": 15
+    "id": 0,
+    "price": 15,
+    "sort": "appetizer" 
   },
   {
     "theme": "Dutch",
     "gerecht": "Vegetarian Bitterballen",
     "type": "Vegetarian",
-    "num": "VG2",
-    "price": 20
+    "id": 1,
+    "price": 20,
+    "sort": "appetizer"
   },
   {
     "theme": "French",
     "gerecht": "Snails",
     "type": "Vegan",
-    "num": "VG3",
-    "price": 25
+    "id": 2,
+    "price": 25,
+    "sort": "appetizer"
   },
   {
     "theme": "French",
     "gerecht": "French fish",
     "type": "Fish",
-    "num": "VG4",
-    "price": 30
+    "id": 3,
+    "price": 30,
+    "sort": "appetizer"
   },
   {
     "theme": "Dutch",
     "gerecht": "Stampot",
     "type": "Meat",
-    "num": "HG1",
-    "price": 30
+    "id": 4,
+    "price": 30,
+    "sort": "main course"
   },
   {
     "theme": "Dutch",
     "gerecht": "Vegetarian Stampot",
     "type": "Vegetarian",
-    "num": "HG2",
-    "price": 35
+    "id": 5,
+    "price": 35,
+    "sort": "main course"
   },
   {
     "theme": "French",
     "gerecht": "Vegan Stampot",
     "type": "Vegan",
-    "num": "HG3",
-    "price": 40
+    "id": 6,
+    "price": 40,
+    "sort": "main course"
   },
   {
     "theme": "French",
     "gerecht": "Fish Stampot",
     "type": "Fish",
-    "num": "HG4",
-    "price": 45
+    "id": 7,
+    "price": 45,
+    "sort": "main course"
   },
   {
     "theme": "Dutch",
     "gerecht": "Cream Pie",
     "type": "Pie",
-    "num": "NG1",
-    "price": 5
+    "id": 8,
+    "price": 5,
+    "sort": "Dessert"
   },
   {
     "theme": "Dutch",
     "gerecht": "Appel Pie",
     "type": "Pie",
-    "num": "NG2",
-    "price": 100
+    "id": 9,
+    "price": 100,
+    "sort": "Dessert"
   },
   {
     "theme": "French",
     "gerecht": "Che special",
     "type": "Che",
-    "num": "NG3",
-    "price": 5
+    "id": 10,
+    "price": 5,
+    "sort": "Dessert"
   },
   {
     "theme": "French",
     "gerecht": "Ice Cream",
     "type": "Ice Cream",
-    "num": "NG4",
-    "price": 5
+    "id": 11,
+    "price": 5,
+    "sort": "Dessert"
   }
 ]

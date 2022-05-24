@@ -1,4 +1,4 @@
-﻿using Kevin_Restaurant.Models;
+using Kevin_Restaurant.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Kevin_Restaurant.Controllers
 {
-    internal class Dishes
+    public class Dishes
     {
-        private List<Dish> _gerechtenpt2;
-        string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, @"Data/menu.json"));
+        public List<Dish> _Dishes;
+        string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, @"Data/Menu.json"));
 
         public Dishes()
         {
@@ -22,45 +22,48 @@ namespace Kevin_Restaurant.Controllers
         public void Load()
         {
             string json = File.ReadAllText(path);
-            _gerechtenpt2 = JsonSerializer.Deserialize<List<Dish>>(json);
+            _Dishes = JsonSerializer.Deserialize<List<Dish>>(json);
         }
 
         public Dish GetByGerecht(string gerecht)
         {
-            return _gerechtenpt2.Find(x => x.Gerecht == gerecht);
+            return _Dishes.Find(x => x.Gerecht == gerecht);
         }
-        public Dish GetByNum(string num)
+        public Dish GetById(int id)
         {
-            return _gerechtenpt2.Find(x => x.Num == num);
+            return _Dishes.Find(x => x.Id == id);
         }
         public Dish GetByPrice(int price)
         {
-            return _gerechtenpt2.Find(x => x.Price == price);
+            return _Dishes.Find(x => x.Price == price);
         }
         public Dish GetByType(string type)
         {
-            return _gerechtenpt2.Find(x => x.Type == type);
+            return _Dishes.Find(x => x.Type == type);
+        }
+        public Dish GetBySort(string sort)
+        {
+            return _Dishes.Find(x => x.Sort == sort);
         }
 
         public void UpdateList(Dish m)
         {
-            int index = _gerechtenpt2.FindIndex(s => s.Gerecht == m.Gerecht);
+            int index = _Dishes.FindIndex(s => s.Gerecht == m.Gerecht);
             if (index != -1)
             {
-                _gerechtenpt2.Add(m);
+                _Dishes.Add(m);
             }
             else
             {
-                _gerechtenpt2[index] = m;
+                _Dishes[index] = m;
             }
             Write();
         }
 
         public void Write()
         {
-            string json = JsonSerializer.Serialize(_gerechtenpt2);
+            string json = JsonSerializer.Serialize(_Dishes);
             File.WriteAllText(path, json);
-            Console.WriteLine("done");
         }
     }
 }

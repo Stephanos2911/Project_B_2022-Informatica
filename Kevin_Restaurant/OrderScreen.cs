@@ -1,4 +1,4 @@
-using Kevin_Restaurant.Controllers;
+﻿using Kevin_Restaurant.Controllers;
 using Kevin_Restaurant.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,6 @@ namespace Kevin_Restaurant
         public int AppetizerCount;
         public int MainCourseCount;
         public int DessertCount;
-        //public int currentPerson;
         public OrderScreen()
         {
             this.bill = 0;
@@ -28,7 +27,6 @@ namespace Kevin_Restaurant
             this.AppetizerCount = FindAllDish("appetizer").Count();
             this.MainCourseCount = FindAllDish("main course").Count();
             this.DessertCount = FindAllDish("Dessert").Count();
-
         }
 
 
@@ -40,7 +38,8 @@ namespace Kevin_Restaurant
             List<Dish> Maindishes= FindAllDish("main course");
             List<Dish> desserts= FindAllDish("Dessert");
             str[index] = "Appetizers";    
-            index++;  
+            index++;
+            //puts all objects with an "appetizer" attribute in an array
             foreach(Dish i in appetizers)
             {
                 str[index] = $"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-";
@@ -69,28 +68,33 @@ namespace Kevin_Restaurant
             return controller._Dishes.FindAll(i => i.Sort == sort);
         }
 
-        public void Start(int groupsize)
+        public List<string> Start(int groupsize)
         {
             int usersleft = groupsize;
             int currentPerson = 1;
             string prompt = $"Current person {currentPerson}";
             string [] options = alldishestostring();
+            List<string> list = new List<string>();
 
+            //makes the program work until all users have selcted their dishes
             while (usersleft > 0)
             {
                 prompt = $"Current person {currentPerson}";
                 ArrowMenu OtherMenu = new ArrowMenu(prompt, options, 0);
                 int selectedIndex = OtherMenu.Move();
-            
+
+                //if selectedIndex is equal to "appetizer", "main course" or "dessert" the program has to do nothing
                 if (selectedIndex == AppetizerCount+1 || selectedIndex == 0 || selectedIndex == (options.Length - (DessertCount +2)))
                 {
                     ;
                 }
+                //makes the "done" button work
                 else if (selectedIndex == options.Length - 1)
                 {
                     usersleft--;
                     currentPerson++;
                 }
+                //makes all buttons of the dishes work
                 else 
                 {
                     int index= 0 ;
@@ -106,19 +110,23 @@ namespace Kevin_Restaurant
                     {
                         index = selectedIndex -3;
                     }
+                    list.Add(controller.GetById(index).Gerecht);
                     Bill(controller.GetById(index).Price);
                     Order(index);
                 }
+                //gives the final bill
                 Console.Clear();
                 Console.WriteLine($"You selected:\n{this.finalOrder}\n___________________________________________\n");
                 Console.WriteLine($"Total: {this.bill},-");          
             }
+            return list;
         }
+        //makes the final bill
         public void Bill(int inputPrice)
         {
             this.bill += inputPrice;
         }
-
+        //makes the final order after all users have selected their order
         public void Order(int i)
         {
             this.finalOrder += $"{controller._Dishes[i].Gerecht}, {controller._Dishes[i].Price},-\n";
