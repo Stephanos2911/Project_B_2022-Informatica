@@ -4,13 +4,7 @@
     "id": "9GT2",
     "date": "2020-05-05T00:00:00Z",
     "table": 4,
-    "time": "19:30"
-  },
-  {
-    "userid" :  2,
-    "id": "3TT3",
-    "date": "2020-05-05T00:00:00Z",
-    "table": 8,
-    "time": "20:30"
+    "time": "19:30",
+    "meals": [ "Vegetarian Bitterballen", "French fish", "Stampot"]
   }
 ]

@@ -69,12 +69,13 @@ namespace Kevin_Restaurant
             return controller._Dishes.FindAll(i => i.Sort == sort);
         }
 
-        public void Start(int groupsize)
+        public List<string> Start(int groupsize)
         {
             int usersleft = groupsize;
             int currentPerson = 1;
             string prompt = $"Current person {currentPerson}";
             string [] options = alldishestostring();
+            List<string> list = new List<string>();
 
             while (usersleft > 0)
             {
@@ -106,13 +107,17 @@ namespace Kevin_Restaurant
                     {
                         index = selectedIndex -3;
                     }
+                    list.Add(controller.GetById(index).Gerecht);
+
                     Bill(controller.GetById(index).Price);
                     Order(index);
                 }
                 Console.Clear();
                 Console.WriteLine($"You selected:\n{this.finalOrder}\n___________________________________________\n");
-                Console.WriteLine($"Total: {this.bill},-");          
+                Console.WriteLine($"Total: {this.bill},-");
+            
             }
+            return list;
         }
         public void Bill(int inputPrice)
         {

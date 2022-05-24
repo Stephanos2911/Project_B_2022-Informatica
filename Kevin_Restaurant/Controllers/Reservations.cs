@@ -106,10 +106,13 @@ namespace Kevin_Restaurant.Controllers
             var diners = Reservations.diners();
             res.Diners = diners;
 
+            OrderScreen order = new OrderScreen();
+            res.meals = order.Start(diners);
 
-            Table_map x = new Table_map();
-            x.Show_Tables();
-            res.Table = x.Choice(diners);
+
+            //Table_map x = new Table_map();
+            //x.Show_Tables();
+            //res.Table = x.Choice(diners);
 
 
             res.WriteToFile();
