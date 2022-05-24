@@ -21,6 +21,7 @@ namespace Kevin_Restaurant.Models
 
         [JsonPropertyName("id")]
         public string Id { get; set; }
+
         [JsonPropertyName("table")]
 
         public int Table { get; set; }
