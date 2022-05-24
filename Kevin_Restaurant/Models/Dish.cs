@@ -8,18 +8,20 @@ using System.Threading.Tasks;
 
 namespace Kevin_Restaurant.Models
 {
-    internal class Dish
+    public class Dish
     {
         [JsonPropertyName("theme")]
         public string Theme { get; set; }
         [JsonPropertyName("gerecht")]
         public string Gerecht { get; set; }
-        [JsonPropertyName("num")]
-        public string Num { get; set; }
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
         [JsonPropertyName("price")]
         public int Price { get; set; }
         [JsonPropertyName("type")]
         public string Type { get; set; }
+        [JsonPropertyName("sort")]
+        public string Sort { get; set; }
 
         public void WriteToFile()
         {
