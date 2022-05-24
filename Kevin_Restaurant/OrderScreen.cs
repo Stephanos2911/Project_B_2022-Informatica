@@ -68,12 +68,13 @@ namespace Kevin_Restaurant
             return controller._Dishes.FindAll(i => i.Sort == sort);
         }
 
-        public void Start(int groupsize)
+        public List<string> Start(int groupsize)
         {
             int usersleft = groupsize;
             int currentPerson = 1;
             string prompt = $"Current person {currentPerson}";
             string [] options = alldishestostring();
+            List<string> list = new List<string>();
 
             //makes the program work until all users have selcted their dishes
             while (usersleft > 0)
@@ -109,6 +110,7 @@ namespace Kevin_Restaurant
                     {
                         index = selectedIndex -3;
                     }
+                    list.Add(controller.GetById(index).Gerecht);
                     Bill(controller.GetById(index).Price);
                     Order(index);
                 }
@@ -117,6 +119,7 @@ namespace Kevin_Restaurant
                 Console.WriteLine($"You selected:\n{this.finalOrder}\n___________________________________________\n");
                 Console.WriteLine($"Total: {this.bill},-");          
             }
+            return list;
         }
         //makes the final bill
         public void Bill(int inputPrice)
