@@ -11,7 +11,7 @@ namespace Kevin_Restaurant.Controllers
 {
     internal class Reservations
     {
-        private List<Reservation> _reservations;
+        public List<Reservation> _reservations;
         string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, @"Data/reservations.json"));
         public Reservations()
         {
@@ -51,24 +51,35 @@ namespace Kevin_Restaurant.Controllers
 
         }
 
+        public void DeleteReservation(Reservation reservering)
+        {
+            _reservations.Remove(reservering);
+            Write();
+        }
+
+
+
         public Reservation FindId(string id)
         {
             return _reservations.Find(i => i.Id == id);
         }
 
-        public Reservation FindCode(string code)
-        {
-            return _reservations.Find(i => i.Id == code);
-        }
+
         public Reservation FindDate(DateTime date)
         {
             return _reservations.Find(i => i.Date == date);
+        }
+
+        public Reservation FindTime(string date)
+        {
+            return _reservations.Find(i => i.Time== date);
         }
 
         public Reservation FindUser(int Userid)
         {
             return _reservations.Find(i => i.UserId == Userid);
         }
+
 
         public int ChooseTable(int Groupsize)
         {
@@ -195,7 +206,6 @@ namespace Kevin_Restaurant.Controllers
             return string_times[selectedIndex];
         }
 
-
         public string conformation_code()
         {
             Random rnd = new Random();
@@ -210,13 +220,14 @@ namespace Kevin_Restaurant.Controllers
                 code += digit;
             }
 
-            if (FindCode(code) == null)
+            if (FindId(code) == null)
             {
                 return code;
             }
             return conformation_code();
 
         }
+
         public bool filter_byday(DateTime date)
         {
             var avalible = false;
@@ -227,21 +238,22 @@ namespace Kevin_Restaurant.Controllers
             }
             return avalible;
         }
+
         public List<Reservation> FindAllReservations(User Currentuser)
         {
             return _reservations.FindAll((i => i.UserId == Currentuser.Id));
         }
 
-        public void ViewReservations(User Currentuser)
+        public List<string> DisplayAllReservations(List<Reservation> Reservationlist)
         {
-            Console.Clear();
-            Console.WriteLine("Overview of all reservations:");
-            Console.WriteLine("\n Date         | Time    | Table   | Name \n");
-            List<Reservation> MadeReservations = FindAllReservations(Currentuser);
-            foreach(Reservation Reservation in MadeReservations)
+            List<string> AllReservations = new List<string>();
+            AllReservations.Add("Back");
+            AllReservations.Add("Filter Options");
+            foreach (Reservation reservation in Reservationlist)
             {
-                Console.WriteLine($" {Reservation.Date.ToString("MM/dd/yyyy")}   | {Reservation.Time}   | {Reservation.Table}       | {Currentuser.Username}\n");
+                AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {reservation.Table} |");
             }
+            return AllReservations;
         }
     }
 }
