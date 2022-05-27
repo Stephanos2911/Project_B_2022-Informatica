@@ -100,11 +100,11 @@ namespace Kevin_Restaurant.Controllers
             return _reservations.FindAll((i => i.Date == date));
         }
 
-        public Reservation make_reservation(Reservations reservations, int user_id)
+        public void make_reservation(User Currentuser)
         {
             Reservation res = new Reservation();
 
-            res.Id = reservations.conformation_code();
+            res.Id = conformation_code();
 
             var date = get_date(14);
             res.Date = date;
@@ -112,7 +112,7 @@ namespace Kevin_Restaurant.Controllers
             var time = get_time();
             res.Time = time;
 
-            res.UserId = user_id;
+            res.UserId = Currentuser.Id;
 
             var diners = Reservations.diners();
             res.Diners = diners;
@@ -127,8 +127,6 @@ namespace Kevin_Restaurant.Controllers
 
 
             res.WriteToFile();
-
-            return res;
         }
         public static DateTime get_date(int days_in_advance)
         {
@@ -247,12 +245,12 @@ namespace Kevin_Restaurant.Controllers
         public List<string> DisplayAllReservations(List<Reservation> Reservationlist)
         {
             List<string> AllReservations = new List<string>();
-            AllReservations.Add("Back");
-            AllReservations.Add("Filter Options");
             foreach (Reservation reservation in Reservationlist)
             {
                 AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {reservation.Table} |");
             }
+            AllReservations.Add("Filters");
+            AllReservations.Add("Back");
             return AllReservations;
         }
     }
