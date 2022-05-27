@@ -77,11 +77,14 @@ namespace Kevin_Restaurant
         {
             Console.Clear();
             int index = 0;
-            if (Currentuser.Admin)
+            if (Currentuser.Admin) // menu for admins
             {
                 index = this.admin_main_menu.Move();
                 switch (index)
                 {
+                    case 1:
+                        UserControlScreen(Usercontroller._users);
+                        break;
                     case 3:
                         ChangeUserInfo();
                         break;
@@ -90,7 +93,7 @@ namespace Kevin_Restaurant
                         break;
                 }
             }
-            else
+            else // menu for users
             {
                 index = this.main_menu.Move();
                 switch (index)
@@ -117,21 +120,432 @@ namespace Kevin_Restaurant
                     Reservation NewReservation = ReservationController.make_reservation(this.ReservationController, this.Currentuser.Id);
                     Reservationmenu();
                     break;
-                default:
-                    this.ReservationController.ViewReservations(this.Currentuser);
+                case 1:
+                    if (Currentuser.Admin)
+                    {
+                        ViewAllReservations(ReservationController._reservations);
+                    }
+                    else
+                    {
+                        ViewAllReservations(ReservationController.FindAllReservations(Currentuser));
+                    }
+                    break;
+                case 2:
+                    StartMainMenu();
                     break;
             }
         }
+
+        public void ViewAllReservations(List<Reservation> Reservationlist)
+        {
+            string prompt = " Overview of Reservations\n ID   | Date   | Time   | Table";
+            ArrowMenu AllReservMenu = new ArrowMenu(prompt, ReservationController.DisplayAllReservations(Reservationlist), 1);
+            int selectedindex = AllReservMenu.Move();
+            if (Currentuser.Admin)
+            {
+                if (selectedindex == 0)
+                {
+                    StartMainMenu();
+                }
+                else if (selectedindex == 1)
+                {
+                    FilterReservationsScreen();
+                }
+                else
+                {
+                    ViewReservation(Reservationlist[selectedindex-2].Id);
+                }
+            }
+            else
+            {
+                if (selectedindex == 0)
+                {
+                    StartMainMenu();
+                }
+                else if (selectedindex == 1)
+                {
+                    FilterReservationsScreen();
+                }
+                else
+                {
+                    ViewReservation(Reservationlist[selectedindex - 2].Id);
+                }
+            }
+        }
+        
+        public void ViewReservation(string reservationid) //individual reservation menu 
+        {
+            if (Currentuser.Admin)
+            {
+
+            }
+            else
+            {
+
+            }
+            Console.Clear();
+            Reservation CurrentReservation = ReservationController.FindId(reservationid);
+            string prompt = $" Reservation by {Usercontroller.GetId(CurrentReservation.UserId).Username}\n Details \n Date: {CurrentReservation.Date.ToString("dddd, dd MMMM yyyy")}\n Time: {CurrentReservation.Time}\n Table: {CurrentReservation.Table}\n Code: {CurrentReservation.Id}\n\n Change: \n";
+            List<string> reservoptions = new List<string>()
+                    {
+                        "Date",
+                        "Time",
+                        "Table",
+                        "Cancel Reservation",
+                        "Back"
+                    };
+            ArrowMenu Reservation = new ArrowMenu(prompt, reservoptions, 8);
+            int selectedindex = Reservation.Move();
+            switch (selectedindex)
+            {
+                case 3:
+                    Console.Clear();
+                    List<string> yesornolist = new List<string>()
+                    {
+                        "Yes, Cancel this reservation",
+                        "No"
+                    };
+
+                    ArrowMenu yesorno = new ArrowMenu("Are you sure you want to cancel this reservation?", yesornolist, 0);
+                    int ind = yesorno.Move();
+                    if (ind == 0)
+                    {
+                        ReservationController.DeleteReservation(CurrentReservation);
+                        ViewAllReservations(ReservationController.FindAllReservations(Currentuser));
+                    }
+                    else
+                    {
+                        ViewReservation(reservationid);
+                    }
+                    break;
+                case 4: 
+                    ViewReservation(reservationid);
+                    break;
+            }
+        }
+
+        public void FilterReservationsScreen()
+        {
+
+        }
+
+        public void UserControlScreen(List<User> Userlist) // function that lets admin delete users, manually add users, make an user an admin
+        {
+            string prompt = "Overview of Users\n ID   Username    Password   PhoneNumber   Admin";
+            ArrowMenu AllUsersMenu = new ArrowMenu(prompt, Usercontroller.DisplayAllusers(Userlist), 1);
+            int selectedindex = AllUsersMenu.Move();
+            if(selectedindex == 0)
+            {
+                StartMainMenu();
+            }
+            else if(selectedindex == 1)
+            {
+                FilterUsers();
+            }
+            else
+            {
+                UserControl(Userlist[selectedindex-2].Id); ;
+            }
+
+        }
+
+        public void FilterUsers()
+        {
+            Console.Clear();
+            string prompt = "Search for:";
+            List<string> filteroptions = new List<string>()
+                    {
+                        "ID",
+                        "Username",
+                        "Password",
+                        "Telephone Number",
+                        "Show all Costumors",
+                        "Show all Administrators",
+                        "Back"
+                    };
+            ArrowMenu filter = new ArrowMenu(prompt, filteroptions, 0);
+            int selectedindex = filter.Move();
+            List<User> Searcheduser = new List<User>();
+            switch (selectedindex)
+            {
+                case 0:
+                    bool searchfound = false;
+                    while (searchfound == false)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Search:");
+                        int searchid = Convert.ToInt32(Console.ReadLine());
+                        if (Usercontroller.GetId(searchid) == null)
+                        {
+                            Console.WriteLine("No existing user with this ID, Press enter to try again or Escape to go back");
+                            if (PressEnter() == true)
+                            {
+                                ;
+                            }
+                            else
+                            {
+                                FilterUsers();
+                                searchfound = true;
+                            }
+                        }
+                        else
+                        {
+                            Searcheduser.Add(Usercontroller.GetId(searchid));
+                            UserControlScreen(Searcheduser);
+                        }
+                    }
+                    break;
+                case 1:
+                    searchfound = false;
+                    string searchtry;
+                    while (searchfound == false)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Search:");
+                        searchtry = Console.ReadLine();
+                        if (Usercontroller.Getusername(searchtry) == null)
+                        {
+                            Console.WriteLine("No existing user with this username, Press enter to try again or Escape to go back");
+                            if (PressEnter() == true)
+                            {
+                                ;
+                            }
+                            else
+                            {
+                                FilterUsers();
+                                searchfound = true;
+                            }
+                        }
+                        else
+                        {
+                            Searcheduser.Add(Usercontroller.Getusername(searchtry));
+                            UserControlScreen(Searcheduser);
+                        }
+                    }
+                    break;
+                case 2:
+                    searchfound = false;
+                    while (searchfound == false)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Search:");
+                        searchtry = Console.ReadLine();
+                        if (Usercontroller.GetbyPassword(searchtry) == null)
+                        {
+                            Console.WriteLine("No existing user with this Password, Press enter to try again or Escape to go back");
+                            if (PressEnter() == true)
+                            {
+                                ;
+                            }
+                            else
+                            {
+                                FilterUsers();
+                            }
+                        }
+                        else
+                        {
+                            Searcheduser.Add(Usercontroller.GetbyPassword(searchtry));
+                            UserControlScreen(Searcheduser);
+                        }
+                    }
+                    break;
+                case 3:
+                    searchfound = false;
+                    while (searchfound == false)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Search:");
+                        searchtry = Console.ReadLine();
+                        if (Usercontroller.GetbyPhone(searchtry) == null)
+                        {
+                            Console.WriteLine("No existing user with this Telephone number, Press enter to try again or Escape to go back");
+                            if (PressEnter() == true)
+                            {
+                                ;
+                            }
+                            else
+                            {
+                                FilterUsers();
+                                searchfound = true;
+                            }
+                        }
+                        else
+                        {
+                            Searcheduser.Add(Usercontroller.GetbyPhone(searchtry));
+                            UserControlScreen(Searcheduser);
+                        }
+                    }
+                    break;
+                case 4:
+                    UserControlScreen(Usercontroller.FindAllAdminsorNot(false));
+                    break;
+                case 5:
+                    UserControlScreen(Usercontroller.FindAllAdminsorNot(true));
+                    break;
+                case 6:
+                    UserControlScreen(Usercontroller._users);
+                    break;
+            }
+        } // filter Screen
+
+        public void UserControl(int userid) // Selected user by admin, allows admin to change something about the user.
+        {
+            Console.Clear();
+            User SelectedUser = Usercontroller._users[userid-1];
+            string Adminstring;
+            if (SelectedUser.Admin == true)
+            {
+                Adminstring = "Change to Custumor";
+            }
+            else
+            {
+                Adminstring = "Promote to Admin";
+            }
+            string prompt = $"Selected User:\n\nID: {SelectedUser.Id}\nUsername: {SelectedUser.Username}\nPassword: {SelectedUser.Password}\nTelephone Number: {SelectedUser.TelephoneNumber}\nAdmin: {SelectedUser.Admin}\n\n Change\n\n";
+            List<string> filteroptions = new List<string>()
+                    {
+                        "Username",
+                        "Password",
+                        "Telephone Number",
+                        Adminstring,
+                        "Back"
+                    };
+            ArrowMenu filter = new ArrowMenu(prompt, filteroptions, 10);
+            int selectedindex = filter.Move();
+            switch (selectedindex)
+            {
+                case 0:
+                    AdminChangeUsers("Username", SelectedUser);
+                    break;
+                case 1:
+                    AdminChangeUsers("Password", SelectedUser);
+                    break;
+                case 2:
+                    AdminChangeUsers("Telephone Number", SelectedUser);
+                    break;
+                case 3:
+                    AdminChangeUsers(Adminstring, SelectedUser);
+                    break;
+                case 4:
+                    UserControlScreen(Usercontroller._users);
+                    break;
+            }
+        }
+
+        public void AdminChangeUsers(string option, User Currentuser)
+        {
+            switch (option)
+            {
+                case "Username":
+                    Console.Clear();
+                    Console.WriteLine($" Current Username:\n {Currentuser.Username}\n New Username:");
+                    string newusername = "";
+                    bool check = false;
+                    while (check == false)
+                    {
+                        newusername = Console.ReadLine();
+                        check = Checkdatabase(newusername, "username");
+                    }
+                    Currentuser.Username = newusername;
+                    Currentuser.Writetofile();
+                    Console.WriteLine("Write Succesful! Press enter to continue");
+                    PressEnter();
+                    UserControlScreen(Usercontroller._users);
+                    break;
+                case "Password":
+
+                    Console.Clear();
+                    Console.WriteLine($" Current Password:\n {Currentuser.Username}\n New Password:");
+                    string newpass = Console.ReadLine();
+                    Currentuser.Password = newpass;
+
+                    Currentuser.Writetofile();
+                    Console.WriteLine("Write Succesful! Press enter to continue");
+                    PressEnter();
+                    UserControlScreen(Usercontroller._users);
+                    break;
+                case "Telephone Number":
+
+                    Console.Clear();
+                    Console.WriteLine($" Current Phonenumber:\n {Currentuser.TelephoneNumber}\n New Phonenumber:");
+                    bool check2 = false;
+                    string newphone = "";
+
+                    while (check2 == false)
+                    {
+                        newphone = Console.ReadLine();
+                        check2 = Checkdatabase(newphone, "Phonenumber");
+                    }
+
+                    Currentuser.TelephoneNumber = newphone;
+                    Currentuser.Writetofile();
+                    Console.WriteLine("Write Succesful! Press enter to continue");
+                    PressEnter();
+                    UserControlScreen(Usercontroller._users);
+                    break;
+                case "Change to Custumor":
+                    Console.Clear();
+                    List<string> yesornolist = new List<string>()
+                    {
+                        "Yes, change to costumor",
+                        "No"
+             
+                    };
+
+                    ArrowMenu yesorno = new ArrowMenu("Are you sure you want to change this account from Administrator to a normal costumor account?", yesornolist, 0);
+                    int index = yesorno.Move();
+                    if(index == 0)
+                    {
+                        Currentuser.Admin = false;
+                    }
+                    else
+                    {
+                        ;
+                    }
+
+                    Currentuser.Writetofile();
+                    Console.WriteLine($"{Currentuser.Username} doesn't have any Administrative capabilities. Press enter to continue");
+                    PressEnter();
+                    UserControlScreen(Usercontroller._users);
+                    break;
+                case "Promote to Admin":
+                    Console.Clear();
+                    List<string> yesornolist2 = new List<string>()
+                    {
+                        "Yes, promote to Admin",
+                        "No"
+
+                    };
+                    ArrowMenu yesorno2 = new ArrowMenu("Are you sure you want to give this account Administrative priviliges?", yesornolist2, 0);
+                    
+                    int index2 = yesorno2.Move();
+                    if (index2 == 0)
+                    {
+                        Currentuser.Admin = true;
+                    }
+                    else
+                    {
+                        ;
+                    }
+
+                    Currentuser.Writetofile();
+                    Console.WriteLine($"{Currentuser.Username} has been promoted to administrator. Press enter to continue");
+                    PressEnter();
+                    UserControlScreen(Usercontroller._users);
+                    break;
+                  
+            }
+        }// actual input function for admin to change credentials
 
         public void ChangeUserInfo() //allows user to change personal information
         {
             Console.Clear();
             int choice = info_change_menu.Move();
             bool check = false;
-            switch (choice) // checks if everything is correct
+            switch (choice) 
             {
     
-                case 0:
+                case 0: // Username changer with security
                     Console.Clear();                 
                     string Usernameattempt = "";
                     Console.WriteLine("Enter new username:");
@@ -146,7 +560,7 @@ namespace Kevin_Restaurant
                         {
                             Console.WriteLine("The username you entered is the same as your current username");
                         }
-                        else if(checkdatabase(Usernameattempt, 0) == false)
+                        else if(Checkdatabase(Usernameattempt, "username") == false)
                         {
                             Console.WriteLine("This username is not available, try another");
                         }
@@ -160,9 +574,11 @@ namespace Kevin_Restaurant
                     Currentuser.Username = Usernameattempt;
                     Currentuser.Writetofile();
 
+                    Console.WriteLine("Write Succesful! Press enter to continue");
+                    PressEnter();
                     beginscherm.Show_StartingScreen();
                     break;
-                case 1:
+                case 1: // password changer for admin
                     Console.Clear();
                     string password = "";
                     Console.WriteLine("Enter new password:");
@@ -187,9 +603,12 @@ namespace Kevin_Restaurant
                     Currentuser.Password = password;
                     Currentuser.Writetofile();
 
+
+                    Console.WriteLine("Write Succesful! Press enter to continue");
+                    PressEnter();
                     beginscherm.Show_StartingScreen();
                     break;
-                case 2:
+                case 2: // phone number changer for admin
                     Console.Clear();
                     string phoneattempt = "";
                     Console.WriteLine("Enter new Telephone number:");
@@ -203,18 +622,10 @@ namespace Kevin_Restaurant
                         else if (phoneattempt == Currentuser.Username)
                         {
                             Console.WriteLine("The number you entered is the same as your current number");
-                        }
-                        else if (checkdatabase(phoneattempt, 1) == false)
-                        {
-                            Console.WriteLine("This phone number is already in use");
-                        }
-                        else if (phoneattempt.Length > 15 || OnlyDigits(phoneattempt) || phoneattempt.Length < 9)
-                        {
-                            Console.WriteLine("Please enter a valid phonenumber");
-                        }       
+                        }   
                         else
                         {
-                            check = true;
+                            check = (Checkdatabase(phoneattempt, "phone"));
                         }
                     }
 
@@ -222,6 +633,9 @@ namespace Kevin_Restaurant
                     Currentuser.TelephoneNumber = phoneattempt;
                     Currentuser.Writetofile();
 
+
+                    Console.WriteLine("Write Succesful! Press enter to continue");
+                    PressEnter();
                     beginscherm.Show_StartingScreen();
                     break;
                 case 3:
@@ -230,9 +644,9 @@ namespace Kevin_Restaurant
             }
         }
 
-        public bool checkdatabase(string input, int version)
+        public bool Checkdatabase(string input, string version) // checks if username is already in use
         {
-            if (version == 0)
+            if (version == "username")
             {
                 bool check = true;
                 foreach (User x in Usercontroller._users)
@@ -247,17 +661,28 @@ namespace Kevin_Restaurant
             else
             {
                 bool check = true;
-                foreach (User x in Usercontroller._users)
+                if (input.Length > 15 || OnlyDigits(input) || input.Length < 9 || input == "")
                 {
-                    if (x.TelephoneNumber== input)
+                    Console.WriteLine("Please enter a valid phonenumber");
+                    check = false;
+
+                }
+                else
+                {
+                    foreach (User x in Usercontroller._users)
                     {
-                        check = false;
+                        if (x.TelephoneNumber == input)
+                        {
+                            Console.WriteLine("This phone-number is already registered, try another number:");
+                            check = false;
+
+                        }
                     }
                 }
                 return check;
             }
-
         }
+
         public bool OnlyDigits(string str) // checkt of de string alleen getallen bevat
         {
             foreach (char c in str)
@@ -267,6 +692,26 @@ namespace Kevin_Restaurant
             }
 
             return false;
+        }
+
+        public bool PressEnter()
+        {
+            bool waiting = true;
+            bool boolean = false;
+            if (waiting == true)
+            {
+                ConsoleKeyInfo keypress = Console.ReadKey();
+                if (keypress.Key == ConsoleKey.Enter)
+                {
+                    waiting = false;
+                    boolean = true;
+                }
+                else
+                {
+                    waiting = false;
+                }
+            }
+            return boolean;
         }
 
     }

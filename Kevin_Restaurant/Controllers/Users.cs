@@ -50,6 +50,24 @@ namespace Kevin_Restaurant.Controllers
             return _users.Find(x => x.TelephoneNumber == phonenumberinput);
         }
 
+        public User GetbyPassword(string inputpassword)
+        {
+            return _users.Find(x => x.Password == inputpassword);
+        }
+
+        public List<User> FindAllAdminsorNot(bool adminornot)
+        {
+            if(adminornot == true)
+            {
+                return _users.FindAll(i => i.Admin == true);
+            }
+            else
+            {
+                return _users.FindAll(x => x.Admin == false);
+            }
+
+        }
+
         public void Updatelist(User updateuser)
         {
             int index = _users.FindIndex(s => s.Id == updateuser.Id);
@@ -64,6 +82,18 @@ namespace Kevin_Restaurant.Controllers
             }
             Write();
 
+        }
+
+        public List<string> DisplayAllusers(List<User> Userlist)
+        {
+            List<string> AllUsers = new List<string>();
+            AllUsers.Add("Back");
+            AllUsers.Add("Filter Options");
+            foreach (User user in Userlist)
+            {
+                AllUsers.Add($"{user.Id} | {user.Username} | {user.Password} | {user.TelephoneNumber} | {user.Admin}");
+            }
+            return AllUsers;
         }
     }
 }

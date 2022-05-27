@@ -161,9 +161,8 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
 
             else
             {
-                Console.WriteLine("Your username and password do not correspond to any User in our database, Press enter to try again");
+                Console.WriteLine("Your username and password do not correspond to any User in our database, Press enter to try again or Escape to go back");
                 this.KeytoContinue();
-                this.Login();
             }
         }
 
@@ -180,7 +179,7 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
             NewUser.Writetofile();
 
             //registration is succesfull, wait for key press to continue
-            Console.WriteLine("\nRegistration successful, press enter to continue to login.");
+            Console.WriteLine("\nRegistration successful, press enter to continue to login or escape to go to back.");
             this.KeytoContinue();
             this.Show_StartingScreen();
 
@@ -196,13 +195,14 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
                 if (keypress.Key == ConsoleKey.Enter)
                 {
                     waiting = false;
+                    this.Login();
+                }
+                else
+                {
+                    waiting = false;
+                    Show_StartingScreen();
                 }
             }
-        }
-
-        public void Pressescape()
-        {
-
         }
 
 
