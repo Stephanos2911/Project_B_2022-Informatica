@@ -70,10 +70,11 @@ namespace Kevin_Restaurant.Controllers
             return _reservations.Find(i => i.UserId == Userid);
         }
 
-        public int ChooseTable(int Groupsize)
+        public int ChooseTable(int Groupsize, DateTime DayForReservation)
         {
             Table_map A = new Table_map();
-            DateTime DayForReservation = new DateTime(2020, 05, 05);
+            
+            //DateTime DayForReservation = new DateTime(2020, 05, 05);
             List<Reservation> NotAvailableTables = FindAllAvailableTables(DayForReservation);
             foreach (Reservation index in NotAvailableTables)
             {
@@ -110,9 +111,8 @@ namespace Kevin_Restaurant.Controllers
             res.meals = order.Start(diners);
 
 
-            //Table_map x = new Table_map();
-            //x.Show_Tables();
-            //res.Table = x.Choice(diners);
+            var table = ChooseTable(diners, date);
+            res.Table = table;
 
 
             res.WriteToFile();
@@ -231,6 +231,8 @@ namespace Kevin_Restaurant.Controllers
         {
             return _reservations.FindAll((i => i.UserId == Currentuser.Id));
         }
+
+
 
         public void ViewReservations(User Currentuser)
         {
