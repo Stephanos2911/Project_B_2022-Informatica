@@ -87,13 +87,20 @@ namespace Kevin_Restaurant.Controllers
         public List<string> DisplayAllusers(List<User> Userlist)
         {
             List<string> AllUsers = new List<string>();
-            AllUsers.Add("Back");
-            AllUsers.Add("Filter Options");
             foreach (User user in Userlist)
             {
                 AllUsers.Add($"{user.Id} | {user.Username} | {user.Password} | {user.TelephoneNumber} | {user.Admin}");
             }
+            AllUsers.Add("Filters");
+            AllUsers.Add("Back");
             return AllUsers;
+        }
+
+        public void DeleteUser(int userid)
+        {
+            var itemToRemove = _users.Single(r => r.Id == userid);
+            _users.Remove(itemToRemove);
+            Write();
         }
     }
 }

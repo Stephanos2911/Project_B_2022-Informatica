@@ -57,6 +57,19 @@ namespace Kevin_Restaurant.Controllers
             Write();
         }
 
+        public void DeleteAllReservationsofUser(User DeletedUser) // deletes all reservations in json A given UserId.
+        {
+            List<Reservation> ReservationsofDeletedUser = FindAllReservations(DeletedUser);
+
+            List<string> CodestoDelete = new List<string>();
+            foreach(Reservation A in ReservationsofDeletedUser)
+            {
+                CodestoDelete.Add(A.Id);
+            }
+            _reservations.RemoveAll(r => CodestoDelete.Any(a => a == r.Id));
+            Write();
+        }
+
 
 
         public Reservation FindId(string id)
@@ -196,7 +209,7 @@ namespace Kevin_Restaurant.Controllers
                 "19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15",
                 "21:30", "21:45", "22:00", "22:15", "22:30", "22:45", "23:00" };
 
-            ArrowMenu choose_date = new ArrowMenu(promt, string_times,0);
+            ArrowMenu choose_date = new ArrowMenu(promt, string_times,1);
             int selectedIndex = choose_date.Move();
 
             Console.WriteLine(string_times[selectedIndex]);
