@@ -254,6 +254,10 @@ namespace Kevin_Restaurant.Controllers
 
             ArrowMenu choose_date = new ArrowMenu(promt, string_users, 1);
             int selectedIndex = choose_date.Move();
+            Reservation res = MadeReservations[selectedIndex];
+
+
+
 
         }
     }

@@ -117,7 +117,7 @@ namespace Kevin_Restaurant
             switch (index)
             {
                 case 0:
-                    Reservation NewReservation = ReservationController.make_reservation(this.ReservationController, this.Currentuser.Id);
+                    ReservationController.make_reservation(this.Currentuser);
                     Reservationmenu();
                     break;
                 case 1:
