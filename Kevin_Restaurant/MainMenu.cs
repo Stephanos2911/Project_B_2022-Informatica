@@ -28,6 +28,7 @@ namespace Kevin_Restaurant
 
         //reservation
         public Reservations ReservationController;
+        public Dishes DishesController;
 
         public Mainmenu(User Currentuser)
         {
@@ -35,6 +36,7 @@ namespace Kevin_Restaurant
             this.Usercontroller = new Users();
             this.Currentuser = Currentuser;
             this.ReservationController = new Reservations();
+            this.DishesController = new Dishes();
 
             //string of options
             this.user_options = new string[3]
@@ -88,6 +90,11 @@ namespace Kevin_Restaurant
                         break;
                     case 1:
                         UserControlScreen(Usercontroller._users);
+                        break;
+                    case 2:
+                        ChangeMenu X = new ChangeMenu(Currentuser);
+                        X.Selection();
+                        StartMainMenu();
                         break;
                     case 3:
                         ChangeUserInfo();
