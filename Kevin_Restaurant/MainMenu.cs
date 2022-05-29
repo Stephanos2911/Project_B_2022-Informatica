@@ -28,6 +28,7 @@ namespace Kevin_Restaurant
 
         //reservation
         public Reservations ReservationController;
+        public Dishes DishesController;
 
         public Mainmenu(User Currentuser)
         {
@@ -35,6 +36,7 @@ namespace Kevin_Restaurant
             this.Usercontroller = new Users();
             this.Currentuser = Currentuser;
             this.ReservationController = new Reservations();
+            this.DishesController = new Dishes();
 
             //string of options
             this.user_options = new string[3]
@@ -57,11 +59,12 @@ namespace Kevin_Restaurant
                 "View reservations",
                 "Back"
             };
-            this.change_info_options = new string[4]
+            this.change_info_options = new string[5]
             {
                 "Change Username",
                 "Change Password",
                 "Change Phone number",
+                "Delete Account",
                 "Back"
             };
 
@@ -82,13 +85,21 @@ namespace Kevin_Restaurant
                 index = this.admin_main_menu.Move();
                 switch (index)
                 {
+                    case 0:
+                        Reservationmenu();
+                        break;
                     case 1:
                         UserControlScreen(Usercontroller._users);
+                        break;
+                    case 2:
+                        ChangeMenu X = new ChangeMenu(Currentuser);
+                        X.Selection();
+                        StartMainMenu();
                         break;
                     case 3:
                         ChangeUserInfo();
                         break;
-                    default:
+                    case 4:
                         this.beginscherm.Show_StartingScreen();
                         break;
                 }
@@ -111,13 +122,14 @@ namespace Kevin_Restaurant
             }
         }
 
-        public void Reservationmenu() // reservering menu voor normale user
+        public void Reservationmenu() // reservering menu 
         {
+            Console.Clear();
             int index = this.reservation_menu.Move();
             switch (index)
             {
                 case 0:
-                    ReservationController.make_reservation(this.Currentuser);
+                    ReservationController.make_reservation(Currentuser);
                     Reservationmenu();
                     break;
                 case 1:
@@ -143,49 +155,41 @@ namespace Kevin_Restaurant
             int selectedindex = AllReservMenu.Move();
             if (Currentuser.Admin)
             {
-                if (selectedindex == 0)
+                if (selectedindex == Reservationlist.Count+1)
                 {
                     StartMainMenu();
                 }
-                else if (selectedindex == 1)
+                else if (selectedindex == Reservationlist.Count )
                 {
                     FilterReservationsScreen();
                 }
                 else
                 {
-                    ViewReservation(Reservationlist[selectedindex-2].Id);
+                    ViewReservation(Reservationlist[selectedindex].Id);
                 }
             }
             else
             {
-                if (selectedindex == 0)
+                if (selectedindex == Reservationlist.Count + 1)
                 {
                     StartMainMenu();
                 }
-                else if (selectedindex == 1)
+                else if (selectedindex == Reservationlist.Count )
                 {
                     FilterReservationsScreen();
                 }
                 else
                 {
-                    ViewReservation(Reservationlist[selectedindex - 2].Id);
+                    ViewReservation(Reservationlist[selectedindex].Id);
                 }
             }
         }
         
         public void ViewReservation(string reservationid) //individual reservation menu 
         {
-            if (Currentuser.Admin)
-            {
-
-            }
-            else
-            {
-
-            }
             Console.Clear();
             Reservation CurrentReservation = ReservationController.FindId(reservationid);
-            string prompt = $" Reservation by {Usercontroller.GetId(CurrentReservation.UserId).Username}\n Details \n Date: {CurrentReservation.Date.ToString("dddd, dd MMMM yyyy")}\n Time: {CurrentReservation.Time}\n Table: {CurrentReservation.Table}\n Code: {CurrentReservation.Id}\n\n Change: \n";
+            string prompt = $" Reservation by {Usercontroller.GetId(CurrentReservation.UserId).Username}\n\n Details \n Date: {CurrentReservation.Date.ToString("dddd, dd MMMM yyyy")}\n Time: {CurrentReservation.Time}\n Table: {CurrentReservation.Table}\n Code: {CurrentReservation.Id}\n\n Change: \n";
             List<string> reservoptions = new List<string>()
                     {
                         "Date",
@@ -194,10 +198,25 @@ namespace Kevin_Restaurant
                         "Cancel Reservation",
                         "Back"
                     };
-            ArrowMenu Reservation = new ArrowMenu(prompt, reservoptions, 8);
+            ArrowMenu Reservation = new ArrowMenu(prompt, reservoptions, 9);
             int selectedindex = Reservation.Move();
             switch (selectedindex)
             {
+                case 0:
+                    CurrentReservation.Date = ReservationController.get_date(14);
+                    CurrentReservation.WriteToFile();
+                    ViewReservation(reservationid);
+                    break;
+                case 1:
+                    CurrentReservation.Time = ReservationController.get_time();
+                    CurrentReservation.WriteToFile();
+                    ViewReservation(reservationid);
+                    break;
+                case 2:
+                    CurrentReservation.Table = ReservationController.ChooseTable(3);
+                    CurrentReservation.WriteToFile();
+                    ViewReservation(reservationid);
+                    break;
                 case 3:
                     Console.Clear();
                     List<string> yesornolist = new List<string>()
@@ -218,8 +237,15 @@ namespace Kevin_Restaurant
                         ViewReservation(reservationid);
                     }
                     break;
-                case 4: 
-                    ViewReservation(reservationid);
+                case 4:
+                    if (Currentuser.Admin)
+                    {
+                        ViewAllReservations(ReservationController._reservations);
+                    }
+                    else
+                    {
+                        ViewAllReservations(ReservationController.FindAllReservations(Currentuser));
+                    }
                     break;
             }
         }
@@ -234,17 +260,17 @@ namespace Kevin_Restaurant
             string prompt = "Overview of Users\n ID   Username    Password   PhoneNumber   Admin";
             ArrowMenu AllUsersMenu = new ArrowMenu(prompt, Usercontroller.DisplayAllusers(Userlist), 1);
             int selectedindex = AllUsersMenu.Move();
-            if(selectedindex == 0)
+            if(selectedindex == Userlist.Count+1)
             {
                 StartMainMenu();
             }
-            else if(selectedindex == 1)
+            else if(selectedindex == Userlist.Count)
             {
                 FilterUsers();
             }
             else
             {
-                UserControl(Userlist[selectedindex-2].Id); ;
+                UserControl(Userlist[selectedindex].Id); ;
             }
 
         }
@@ -408,6 +434,7 @@ namespace Kevin_Restaurant
                         "Password",
                         "Telephone Number",
                         Adminstring,
+                        "Delete Account",
                         "Back"
                     };
             ArrowMenu filter = new ArrowMenu(prompt, filteroptions, 10);
@@ -427,6 +454,9 @@ namespace Kevin_Restaurant
                     AdminChangeUsers(Adminstring, SelectedUser);
                     break;
                 case 4:
+                    AdminChangeUsers("Delete", SelectedUser);
+                    break;
+                case 5:
                     UserControlScreen(Usercontroller._users);
                     break;
             }
@@ -522,18 +552,37 @@ namespace Kevin_Restaurant
                     if (index2 == 0)
                     {
                         Currentuser.Admin = true;
+                        Currentuser.Writetofile();
+                        Console.WriteLine($"{Currentuser.Username} has been promoted to administrator. Press enter to continue");
+                        PressEnter();
                     }
                     else
                     {
                         ;
                     }
-
-                    Currentuser.Writetofile();
-                    Console.WriteLine($"{Currentuser.Username} has been promoted to administrator. Press enter to continue");
-                    PressEnter();
                     UserControlScreen(Usercontroller._users);
                     break;
-                  
+                case "Delete":
+                    Console.Clear();
+                    List<string> Deleteornot = new List<string>
+                    {
+                        "Yes, Delete this account and all it's open reservations",
+                        "No, Keep this account and all it's reservations"
+                    };
+                    ArrowMenu deleteornot = new ArrowMenu("Are you sure you want to delete this account?", Deleteornot, 0);
+                    int indexq = deleteornot.Move();
+                    if (indexq == 0)
+                    {
+                        Console.Clear();
+                        Usercontroller.DeleteUser(Currentuser.Id);
+                        ReservationController.DeleteAllReservationsofUser(Currentuser);
+                        this.Currentuser = null;
+                        Console.WriteLine("Account and reservations succesfully deleted. Press  key to continue.");
+                        ConsoleKeyInfo keypress = Console.ReadKey();
+                        UserControlScreen(Usercontroller._users);
+                    }
+
+                    break;
             }
         }// actual input function for admin to change credentials
 
@@ -549,7 +598,7 @@ namespace Kevin_Restaurant
                     Console.Clear();                 
                     string Usernameattempt = "";
                     Console.WriteLine("Enter new username:");
-                    while(check == false)
+                    while(check == false) 
                     {
                         Usernameattempt = Console.ReadLine();
                         if (Usernameattempt == "")
@@ -639,6 +688,31 @@ namespace Kevin_Restaurant
                     beginscherm.Show_StartingScreen();
                     break;
                 case 3:
+                    Console.Clear();
+                    List<string> Deleteornot = new List<string>
+                    {
+                        "Yes, Delete this account and all its open reservations",
+                        "No, Keep this account and all it's reservations"
+                    };
+                    ArrowMenu deleteornot = new ArrowMenu("Are you sure you want to delete this account?", Deleteornot, 0);
+                    int index = deleteornot.Move();
+                    if(index == 0)
+                    {
+                        Console.Clear();
+                        Usercontroller.DeleteUser(Currentuser.Id);
+                        ReservationController.DeleteAllReservationsofUser(Currentuser);
+                        this.Currentuser = null;
+                        Console.WriteLine("Account and reservations succesfully deleted. Press  key to continue.");
+                        ConsoleKeyInfo keypress = Console.ReadKey();
+                        beginscherm.Show_StartingScreen();
+                        
+                    }
+                    else
+                    {
+                        ChangeUserInfo();
+                    }
+                    break;
+                case 4:
                     StartMainMenu();
                     break;
             }

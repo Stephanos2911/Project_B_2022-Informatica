@@ -48,7 +48,7 @@ namespace Kevin_Restaurant.Controllers
 
         public void UpdateList(Dish m)
         {
-            int index = _Dishes.FindIndex(s => s.Gerecht == m.Gerecht);
+            int index = _Dishes.FindIndex(s => s.Id == m.Id);
             if (index != -1)
             {
                 _Dishes.Add(m);
@@ -60,8 +60,18 @@ namespace Kevin_Restaurant.Controllers
             Write();
         }
 
+        public void RemoveDish(int dishid)
+        {
+            var itemToRemove = _Dishes.Single(r => r.Id == dishid);
+            _Dishes.Remove(itemToRemove);
+            Write();
+        }
+
         public void Write()
         {
+            var options = new JsonSerializerOptions();
+            options.WriteIndented = true;
+
             string json = JsonSerializer.Serialize(_Dishes);
             File.WriteAllText(path, json);
         }
