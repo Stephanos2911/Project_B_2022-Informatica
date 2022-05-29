@@ -13,6 +13,9 @@ namespace Kevin_Restaurant.Controllers
     {
         public List<Reservation> _reservations;
         string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, @"Data/reservations.json"));
+
+        public object ViewReservation { get; private set; }
+
         public Reservations()
         {
             Load();
@@ -127,13 +130,13 @@ namespace Kevin_Restaurant.Controllers
 
             res.UserId = Currentuser.Id;
 
-            var diners = Reservations.diners();
-            res.Diners = diners;
+            var dinners = diners();
+            res.Diners = dinners;
 
             OrderScreen order = new OrderScreen();
-            res.meals = order.Start(diners);
+            res.meals = order.Start(dinners);
 
-            var table = ChooseTable(diners);
+            var table = ChooseTable(dinners);
             res.Table = table;
 
             res.WriteToFile();
@@ -168,7 +171,7 @@ namespace Kevin_Restaurant.Controllers
 
             return dates[selectedIndex];
         }
-        public static int diners()
+        public int diners()
         {
             Console.Clear();
             Console.WriteLine("how many people are you planning to come?");
@@ -184,7 +187,7 @@ namespace Kevin_Restaurant.Controllers
             return people;
         }
 
-        public static string[] get_meals(int people)
+        public string[] get_meals(int people)
         {
             var meals = new string[people + 1];
             for (int i = 1; i <= people; i++)
@@ -269,8 +272,8 @@ namespace Kevin_Restaurant.Controllers
             int selectedIndex = choose_date.Move();
             Reservation res = MadeReservations[selectedIndex];
 
-
-
+            Mainmenu x = new Mainmenu(Currentuser);
+            x.ViewReservation(res.Id);
 
         }
     }
