@@ -120,11 +120,8 @@ namespace Kevin_Restaurant.Controllers
             OrderScreen order = new OrderScreen();
             res.meals = order.Start(diners);
 
-
-            //Table_map x = new Table_map();
-            //x.Show_Tables();
-            //res.Table = x.Choice(diners);
-
+            var table = ChooseTable(diners);
+            res.Table = table;
 
             res.WriteToFile();
         }
@@ -242,16 +239,22 @@ namespace Kevin_Restaurant.Controllers
             return _reservations.FindAll((i => i.UserId == Currentuser.Id));
         }
 
-        public List<string> DisplayAllReservations(List<Reservation> Reservationlist)
+        public void ViewReservations(User Currentuser)
         {
-            List<string> AllReservations = new List<string>();
-            foreach (Reservation reservation in Reservationlist)
+            Console.Clear();
+            var promt = "Overview of all reservations:" + "\n Date         | Time    | Table   | Name \n";
+            List<Reservation> MadeReservations = FindAllReservations(Currentuser);
+            List<string> string_users = new List<string>();
+
+            for (var i = 0; i < MadeReservations.Count; i++)
             {
-                AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {reservation.Table} |");
+                string_users.Add($" {MadeReservations[i].Date.ToString("MM/dd/yyyy")}   | {MadeReservations[i].Time}   | {MadeReservations[i].Table}       | {MadeReservations[i].UserId}\n" );
+                //Console.WriteLine($" {Reservation.Date.ToString("MM/dd/yyyy")}   | {Reservation.Time}   | {Reservation.Table}       | {Currentuser.Username}\n");
             }
-            AllReservations.Add("Filters");
-            AllReservations.Add("Back");
-            return AllReservations;
+
+            ArrowMenu choose_date = new ArrowMenu(promt, string_users, 1);
+            int selectedIndex = choose_date.Move();
+
         }
     }
 }
