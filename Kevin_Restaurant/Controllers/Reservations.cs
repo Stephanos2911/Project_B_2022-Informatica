@@ -141,7 +141,7 @@ namespace Kevin_Restaurant.Controllers
 
             res.WriteToFile();
         }
-        public static DateTime get_date(int days_in_advance)
+        public DateTime get_date(int days_in_advance)
         {
             Console.Clear();
             DateTime today = DateTime.Today;
@@ -201,15 +201,15 @@ namespace Kevin_Restaurant.Controllers
             }
             return meals;
         }
-        public static string get_time()
+        public string get_time()
         {
             Console.Clear();
-            string promt = "what time do you expect you will be arriving?\n\n";
+            string promt = "what time do you expect you will be arriving?";
             string[] string_times = { "17:00", "17:15", "17:30", "17:45", "18:00", "18:15", "18:30", "18:45",
                 "19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15",
                 "21:30", "21:45", "22:00", "22:15", "22:30", "22:45", "23:00" };
 
-            ArrowMenu choose_date = new ArrowMenu(promt, string_times,1);
+            ArrowMenu choose_date = new ArrowMenu(promt, string_times,2);
             int selectedIndex = choose_date.Move();
 
             Console.WriteLine(string_times[selectedIndex]);

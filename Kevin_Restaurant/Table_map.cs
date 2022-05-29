@@ -71,7 +71,8 @@ namespace Kevin_Restaurant
             this.Table_choice = table;
             this.choice_picked = true;
             this.Tables[table].available = false;
-
+            Console.WriteLine(" Press any key to continue");
+            ConsoleKeyInfo keypress = Console.ReadKey();
         }
         public void Auto_pick(int size)
         {

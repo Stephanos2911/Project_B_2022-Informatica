@@ -180,17 +180,9 @@ namespace Kevin_Restaurant
         
         public void ViewReservation(string reservationid) //individual reservation menu 
         {
-            if (Currentuser.Admin)
-            {
-
-            }
-            else
-            {
-
-            }
             Console.Clear();
             Reservation CurrentReservation = ReservationController.FindId(reservationid);
-            string prompt = $" Reservation by {Usercontroller.GetId(CurrentReservation.UserId).Username}\n Details \n Date: {CurrentReservation.Date.ToString("dddd, dd MMMM yyyy")}\n Time: {CurrentReservation.Time}\n Table: {CurrentReservation.Table}\n Code: {CurrentReservation.Id}\n\n Change: \n";
+            string prompt = $" Reservation by {Usercontroller.GetId(CurrentReservation.UserId).Username}\n\n Details \n Date: {CurrentReservation.Date.ToString("dddd, dd MMMM yyyy")}\n Time: {CurrentReservation.Time}\n Table: {CurrentReservation.Table}\n Code: {CurrentReservation.Id}\n\n Change: \n";
             List<string> reservoptions = new List<string>()
                     {
                         "Date",
@@ -199,10 +191,25 @@ namespace Kevin_Restaurant
                         "Cancel Reservation",
                         "Back"
                     };
-            ArrowMenu Reservation = new ArrowMenu(prompt, reservoptions, 8);
+            ArrowMenu Reservation = new ArrowMenu(prompt, reservoptions, 9);
             int selectedindex = Reservation.Move();
             switch (selectedindex)
             {
+                case 0:
+                    CurrentReservation.Date = ReservationController.get_date(14);
+                    CurrentReservation.WriteToFile();
+                    ViewReservation(reservationid);
+                    break;
+                case 1:
+                    CurrentReservation.Time = ReservationController.get_time();
+                    CurrentReservation.WriteToFile();
+                    ViewReservation(reservationid);
+                    break;
+                case 2:
+                    CurrentReservation.Table = ReservationController.ChooseTable(3);
+                    CurrentReservation.WriteToFile();
+                    ViewReservation(reservationid);
+                    break;
                 case 3:
                     Console.Clear();
                     List<string> yesornolist = new List<string>()
@@ -224,7 +231,14 @@ namespace Kevin_Restaurant
                     }
                     break;
                 case 4:
-                    ReservationController.FindAllReservations(Currentuser);
+                    if (Currentuser.Admin)
+                    {
+                        ViewAllReservations(ReservationController._reservations);
+                    }
+                    else
+                    {
+                        ViewAllReservations(ReservationController.FindAllReservations(Currentuser));
+                    }
                     break;
             }
         }
@@ -531,23 +545,21 @@ namespace Kevin_Restaurant
                     if (index2 == 0)
                     {
                         Currentuser.Admin = true;
+                        Currentuser.Writetofile();
+                        Console.WriteLine($"{Currentuser.Username} has been promoted to administrator. Press enter to continue");
+                        PressEnter();
                     }
                     else
                     {
                         ;
                     }
-
-
-                    Currentuser.Writetofile();
-                    Console.WriteLine($"{Currentuser.Username} has been promoted to administrator. Press enter to continue");
-                    PressEnter();
                     UserControlScreen(Usercontroller._users);
                     break;
                 case "Delete":
                     Console.Clear();
                     List<string> Deleteornot = new List<string>
                     {
-                        "Yes, Delete this account and all its open reservations",
+                        "Yes, Delete this account and all it's open reservations",
                         "No, Keep this account and all it's reservations"
                     };
                     ArrowMenu deleteornot = new ArrowMenu("Are you sure you want to delete this account?", Deleteornot, 0);
