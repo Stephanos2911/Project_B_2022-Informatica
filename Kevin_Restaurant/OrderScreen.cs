@@ -18,6 +18,9 @@ namespace Kevin_Restaurant
         public int AppetizerCount;
         public int MainCourseCount;
         public int DessertCount;
+
+        public object Keys { get; private set; }
+
         public OrderScreen()
         {
             this.bill = 0;
@@ -84,7 +87,7 @@ namespace Kevin_Restaurant
                 int selectedIndex = OtherMenu.Move();
 
                 //if selectedIndex is equal to "appetizer", "main course" or "dessert" the program has to do nothing
-                if (selectedIndex == AppetizerCount+1 || selectedIndex == 0 || selectedIndex == (options.Length - (DessertCount +2)))
+                if (selectedIndex == AppetizerCount + 1 || selectedIndex == 0 || selectedIndex == (options.Length - (DessertCount + 2)))
                 {
                     ;
                 }
@@ -95,20 +98,20 @@ namespace Kevin_Restaurant
                     currentPerson++;
                 }
                 //makes all buttons of the dishes work
-                else 
+                else
                 {
-                    int index= 0 ;
-                    if (selectedIndex <= AppetizerCount+1)
+                    int index = 0;
+                    if (selectedIndex <= AppetizerCount + 1)
                     {
-                        index = selectedIndex -1;
+                        index = selectedIndex - 1;
                     }
-                    else if(selectedIndex < options.Length - (DessertCount+1) && selectedIndex > AppetizerCount+1)
+                    else if (selectedIndex < options.Length - (DessertCount + 1) && selectedIndex > AppetizerCount + 1)
                     {
-                        index = selectedIndex -2;
+                        index = selectedIndex - 2;
                     }
                     else
                     {
-                        index = selectedIndex -3;
+                        index = selectedIndex - 3;
                     }
                     list.Add(controller.GetById(index).Gerecht);
                     Bill(controller.GetById(index).Price);
@@ -117,10 +120,15 @@ namespace Kevin_Restaurant
                 //gives the final bill
                 Console.Clear();
                 Console.WriteLine($"You selected:\n{this.finalOrder}\n___________________________________________\n");
-                Console.WriteLine($"Total: {this.bill},-");          
+                Console.WriteLine($"Total: {this.bill},-");
             }
+            Console.WriteLine("Hello, Press any key to progress forward");
+            Console.ReadKey();
+            Console.WriteLine("This is the End");
             return list;
         }
+
+
         //makes the final bill
         public void Bill(int inputPrice)
         {

@@ -97,15 +97,15 @@ namespace Kevin_Restaurant.Controllers
         }
 
 
-        public int ChooseTable(int Groupsize)
+        public int ChooseTable(int Groupsize, DateTime DayForReservation)
         {
             Table_map A = new Table_map();
-            DateTime DayForReservation = new DateTime(2020, 05, 05);
             List<Reservation> NotAvailableTables = FindAllAvailableTables(DayForReservation);
             foreach (Reservation index in NotAvailableTables)
             {
                 A.Tables[index.Table - 1].available = false;
             }
+
 
             int indexchoice = A.Choice(Groupsize);
             return indexchoice;
@@ -115,6 +115,31 @@ namespace Kevin_Restaurant.Controllers
         {
             return _reservations.FindAll((i => i.Date == date));
         }
+
+        public int AvalibleSeat(DateTime date)
+        {
+            int seats = 48;
+            List<Reservation> reservations = FindAllAvailableTables(date);
+
+            foreach (Reservation res in reservations)
+            {
+                if (res.Table == 1 || res.Table == 2 || res.Table == 3 || res.Table == 4 || res.Table == 5 || res.Table == 6 || res.Table == 7 || res.Table == 8)
+                {
+                    seats -= 2;
+                }
+                else if (res.Table == 9 || res.Table == 10 || res.Table == 11 || res.Table == 12 || res.Table == 13)
+                {
+                    seats -= 4;
+                }
+                else if (res.Table == 14 || res.Table == 15)
+                {
+                    seats -= 6;
+                }
+            }
+            Console.WriteLine(seats);
+            return seats;
+        }
+
 
         public void make_reservation(User Currentuser)
         {
@@ -130,16 +155,17 @@ namespace Kevin_Restaurant.Controllers
 
             res.UserId = Currentuser.Id;
 
-            var dinners = diners();
+            var dinners = get_diners(date);
             res.Diners = dinners;
 
             OrderScreen order = new OrderScreen();
             res.meals = order.Start(dinners);
 
-            var table = ChooseTable(dinners);
+            int table = ChooseTable(dinners,date);
             res.Table = table;
 
             res.WriteToFile();
+            UpdateList(res);
         }
         public DateTime get_date(int days_in_advance)
         {
@@ -166,20 +192,27 @@ namespace Kevin_Restaurant.Controllers
             string promt = "the booking is for the entire day from 17:00 to 23:00 enjoy :);";
 
 
-            ArrowMenu choose_date = new ArrowMenu(promt, Strring_dates_array, 1);
+            ArrowMenu choose_date = new ArrowMenu(promt, Strring_dates_array, 0);
             int selectedIndex = choose_date.Move();
 
             return dates[selectedIndex];
         }
-        public int diners()
+        public int get_diners(DateTime date)
         {
+            int seats = AvalibleSeat(date);
+
             Console.Clear();
             Console.WriteLine("how many people are you planning to come?");
             var string_people = Console.ReadLine();
 
-            while (!Int32.TryParse(string_people, out var date))
+            while (!Int32.TryParse(string_people, out var dat))
             {
-                Console.WriteLine("WRONG......try again input must be an int");
+                Console.WriteLine("WRONG......try again input must be a number");
+                string_people = Console.ReadLine();
+            }
+            while (Convert.ToInt32(string_people) > seats)
+            {
+                Console.WriteLine($"SORRY.......we currently only have {seats} seats avalible on {date.ToString("dddd")} {date.ToString("M")}");
                 string_people = Console.ReadLine();
             }
             var people = Int32.Parse(string_people);
@@ -268,6 +301,18 @@ namespace Kevin_Restaurant.Controllers
             AllReservations.Add("Back");
             return AllReservations;
         }
+
+
+
+
+
+
+
+
+
+
+
+
         //public void ViewReservations(User Currentuser)
         //{
         //    Console.Clear();
