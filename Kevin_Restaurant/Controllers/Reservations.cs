@@ -158,8 +158,8 @@ namespace Kevin_Restaurant.Controllers
             var dinners = get_diners(date);
             res.Diners = dinners;
 
-            OrderScreen order = new OrderScreen();
-            res.meals = order.Start(dinners);
+            var order = make_order(dinners);
+            res.meals = order;
 
             int table = ChooseTable(dinners,date);
             res.Table = table;
@@ -220,6 +220,24 @@ namespace Kevin_Restaurant.Controllers
             return people;
         }
 
+        public static List<string> make_order(int dinners)
+        {
+            string[] yes_no = new string[] { "yess", "no" };
+            ArrowMenu menu = new ArrowMenu("would you like to add your order",yes_no,0);
+            var index = menu.Move();
+
+            if (index == 0)
+            {
+                OrderScreen order = new OrderScreen();
+                var res = order.Start(dinners);
+                return res;
+            }
+            else
+            {
+                return null;
+            }
+            
+        }
         public string[] get_meals(int people)
         {
             var meals = new string[people + 1];
