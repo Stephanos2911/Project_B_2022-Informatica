@@ -197,6 +197,7 @@ namespace Kevin_Restaurant.Controllers
 
             return dates[selectedIndex];
         }
+
         public int get_diners(DateTime date)
         {
             int seats = AvailableSeat(date);
@@ -222,8 +223,8 @@ namespace Kevin_Restaurant.Controllers
 
         public static List<string> make_order(int dinners)
         {
-            string[] yes_no = new string[] { "yess", "no" };
-            ArrowMenu menu = new ArrowMenu("would you like to add your order",yes_no,0);
+            string[] yes_no = new string[] { "yes", "no" };
+            ArrowMenu menu = new ArrowMenu("Would you like to add your order for every person in advance?",yes_no,0);
             var index = menu.Move();
 
             if (index == 0)

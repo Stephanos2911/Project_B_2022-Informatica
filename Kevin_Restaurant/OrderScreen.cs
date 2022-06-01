@@ -122,7 +122,7 @@ namespace Kevin_Restaurant
                 Console.WriteLine($"You selected:\n{this.finalOrder}\n___________________________________________\n");
                 Console.WriteLine($"Total: {this.bill},-");
             }
-            Console.WriteLine("Hello, Press any key to progress forward");
+            Console.WriteLine("Press any key to continue");
             Console.ReadKey();
             Console.WriteLine("This is the End");
             return list;
