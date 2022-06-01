@@ -97,17 +97,24 @@ namespace Kevin_Restaurant.Controllers
         }
 
 
-        public int ChooseTable(int Groupsize, DateTime DayForReservation)
+        public List<int> ChooseTable(int Groupsize, DateTime DayForReservation)
         {
             Table_map A = new Table_map();
-            List<Reservation> NotAvailableTables = FindAllAvailableTables(DayForReservation);
-            foreach (Reservation index in NotAvailableTables)
+            List<Reservation> ReservationsonSameDay = FindAllAvailableTables(DayForReservation);
+            List<int> NotAvailableTables = new List<int>();
+            foreach (Reservation reservation in ReservationsonSameDay)
             {
-                A.Tables[index.Table - 1].available = false;
+                for(int i = 0; i < reservation.Table.Count; i++)
+                {
+                    NotAvailableTables.Add(reservation.Table[i]);
+                }
             }
 
-
-            int indexchoice = A.Choice(Groupsize);
+            foreach(int X in NotAvailableTables)
+            {
+                A.Tables[X - 1].available = false;
+            }
+            List<int> indexchoice = A.Choice(Groupsize);
             return indexchoice;
         }
 
@@ -116,24 +123,17 @@ namespace Kevin_Restaurant.Controllers
             return _reservations.FindAll((i => i.Date == date));
         }
 
-        public int AvalibleSeat(DateTime date)
+        public int AvailableSeat (DateTime date)
         {
+            Table_map Temp = new Table_map();
             int seats = 48;
             List<Reservation> reservations = FindAllAvailableTables(date);
 
             foreach (Reservation res in reservations)
             {
-                if (res.Table == 1 || res.Table == 2 || res.Table == 3 || res.Table == 4 || res.Table == 5 || res.Table == 6 || res.Table == 7 || res.Table == 8)
+                for(int i = 0; i < res.Table.Count; i++)
                 {
-                    seats -= 2;
-                }
-                else if (res.Table == 9 || res.Table == 10 || res.Table == 11 || res.Table == 12 || res.Table == 13)
-                {
-                    seats -= 4;
-                }
-                else if (res.Table == 14 || res.Table == 15)
-                {
-                    seats -= 6;
+                    seats -= Temp.Tables[res.Table[i] - 1].table_type;
                 }
             }
             Console.WriteLine(seats);
@@ -161,7 +161,7 @@ namespace Kevin_Restaurant.Controllers
             var order = make_order(dinners);
             res.meals = order;
 
-            int table = ChooseTable(dinners,date);
+            List<int> table = ChooseTable(dinners, date);
             res.Table = table;
 
             res.WriteToFile();
@@ -199,7 +199,7 @@ namespace Kevin_Restaurant.Controllers
         }
         public int get_diners(DateTime date)
         {
-            int seats = AvalibleSeat(date);
+            int seats = AvailableSeat(date);
 
             Console.Clear();
             Console.WriteLine("how many people are you planning to come?");
@@ -207,12 +207,12 @@ namespace Kevin_Restaurant.Controllers
 
             while (!Int32.TryParse(string_people, out var dat))
             {
-                Console.WriteLine("WRONG......try again input must be a number");
+                Console.WriteLine("\nYou didn't type a number");
                 string_people = Console.ReadLine();
             }
             while (Convert.ToInt32(string_people) > seats)
             {
-                Console.WriteLine($"SORRY.......we currently only have {seats} seats avalible on {date.ToString("dddd")} {date.ToString("M")}");
+                Console.WriteLine($"\nSorry, we currently only have {seats} seats available on {date.ToString("dddd")} {date.ToString("M")}");
                 string_people = Console.ReadLine();
             }
             var people = Int32.Parse(string_people);
@@ -311,9 +311,27 @@ namespace Kevin_Restaurant.Controllers
         public List<string> DisplayAllReservations(List<Reservation> Reservationlist)
         {
             List<string> AllReservations = new List<string>();
+
             foreach (Reservation reservation in Reservationlist)
             {
-                AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {reservation.Table} |");
+                if(reservation.Table.Count == 1)
+                {
+                    AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {reservation.Table[0]} |");
+                }
+                else if(reservation.Table.Count == 2)
+                {
+                    string tempstring = $"{reservation.Table[0]} and {reservation.Table[1]}";
+                    AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {tempstring} |");
+                }
+                else
+                {
+                    string allTables = $"{reservation.Table[0]}";
+                    for (int i = 1; i < reservation.Table.Count - 1; i++)
+                    {
+                        allTables += $", {reservation.Table[i]}";
+                    }
+                    AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {allTables} |");
+                } 
             }
             AllReservations.Add("Filters");
             AllReservations.Add("Back");

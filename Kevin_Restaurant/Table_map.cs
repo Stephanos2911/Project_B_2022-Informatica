@@ -108,16 +108,17 @@ namespace Kevin_Restaurant
                 }
             }
 
+            ChosenTables.Sort(); // puts all integers from low to high
             this.Show_Tables();
             string alltables;
-            if (ChosenTables.Count > 1)
+            if (ChosenTables.Count > 1)  // string creation for all the tables chosen
             {
-                alltables = "We have chosen Tables";
+                alltables = "We have chosen tables : ";
                 for (int i = 0; i < ChosenTables.Count - 2; i++)
                 {
                     alltables += $"{ChosenTables[i]}, ";
                 }
-                alltables += $" {ChosenTables[ChosenTables.Count - 2]} and {ChosenTables[ChosenTables.Count - 1]}";
+                alltables += $"{ChosenTables[ChosenTables.Count - 2]} and {ChosenTables[ChosenTables.Count - 1]}";
             }
             else
             {

@@ -24,7 +24,7 @@ namespace Kevin_Restaurant.Models
 
         [JsonPropertyName("table")]
 
-        public int Table { get; set; }
+        public List<int> Table { get; set; }
 
         [JsonPropertyName("date")]
         public DateTime Date { get; set; }
