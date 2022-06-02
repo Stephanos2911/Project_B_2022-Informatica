@@ -49,7 +49,7 @@ namespace Kevin_Restaurant
             {
                 "Manage Reservations",
                 "Manage Users",
-                "Manage Dishes",
+                "Manage Menu",
                 "Account",
                 "Log out"
             };
@@ -93,8 +93,7 @@ namespace Kevin_Restaurant
                         break;
                     case 2:
                         ChangeMenu X = new ChangeMenu(Currentuser);
-                        X.Selection();
-                        StartMainMenu();
+                        X.ShowAllMenus();
                         break;
                     case 3:
                         ChangeUserInfo();

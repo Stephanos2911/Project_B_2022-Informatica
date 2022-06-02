@@ -12,7 +12,7 @@ namespace Kevin_Restaurant.Controllers
     public class Dishes
     {
         public List<Dish> _Dishes;
-        string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, @"Data/Menu.json"));
+        string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, @"Data/Dishes.json"));
 
         public Dishes()
         {
@@ -44,6 +44,11 @@ namespace Kevin_Restaurant.Controllers
         public Dish GetBySort(string sort)
         {
             return _Dishes.Find(x => x.Sort == sort);
+        }
+
+        public List<Dish> AllDishesbyMenu(int Searchmenuid)
+        {
+            return _Dishes.FindAll(i => i.MenuId == Searchmenuid);
         }
 
         public void UpdateList(Dish m)
