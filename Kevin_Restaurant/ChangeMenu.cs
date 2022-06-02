@@ -20,7 +20,7 @@ namespace Kevin_Restaurant
         public ChangeMenu(User CurrentUser)
         {
             this.controller = new Dishes();
-            this.prompt = "Please select";
+            this.prompt = "Please select an option";
             this.AllDishes = controller._Dishes;
             this.NewDish = new Dish();
             this.CurrentUser = CurrentUser;
@@ -36,25 +36,29 @@ namespace Kevin_Restaurant
             List<string> AllDishList = new List<string>();
             foreach (Dish i in AllDishes)
             {
-                AllDishList.Add($" [{i.Type}] {i.Gerecht} {i.Price},-");
+                AllDishList.Add($" -{i.Theme}- [{i.Type}] {i.Gerecht} {i.Price},-");
             }
             AllDishList.Add("   Add    ");
+            AllDishList.Add("   Filter    ");
             AllDishList.Add("   Back    ");
             return AllDishList;
         }
 
         public void Selection()
         {
-            prompt = $"this month's theme: ";
             List<string> options = ListBuild();
 
             ArrowMenu OtherMenu = new ArrowMenu(prompt, options, 0);
+  
             int selectedIndex = OtherMenu.Move();
             if (selectedIndex == AllDishes.Count + 1)
             {
+                //Filter();
+            }
+            else if (selectedIndex == AllDishes.Count + 2)
+            {
                 Mainmenu A = new Mainmenu(CurrentUser);
                 A.StartMainMenu();
-
             }
             else if (selectedIndex == AllDishes.Count)
             {
@@ -78,7 +82,8 @@ namespace Kevin_Restaurant
                 else if (selectedIndex2 == 1)
                 {
                     controller.RemoveDish(AllDishes[selectedIndex].Id);
-                    Selection();
+                    this.prompt = "Removal succesfull";
+                    Selection();                 
                 }
                 else
                 {
@@ -106,17 +111,16 @@ namespace Kevin_Restaurant
             int selectedIndex = OtherMenu.Move();
             if (selectedIndex == 0)
             {
-                Type(DishID, "change");
+                Type(dish, "change");
             }
             else if (selectedIndex == 1)
             {
-                Name(DishID, "change");
+                Name(dish, "change");
             }
             else
             {
                 Price(DishID, "change");
             }
-
         }
         public void Add(int IdNewDish)
         {
@@ -143,15 +147,34 @@ namespace Kevin_Restaurant
                 NewDish.Sort = "Dessert";
             }
             Console.Clear();
-            Name(IdNewDish, "Add");
-            Type(IdNewDish, "Add");
+            Name(NewDish, "Add");
+            Type(NewDish, "Add");
             Price(IdNewDish, "Add");
             Theme(IdNewDish, "Add");
-            Id(IdNewDish);
-            NewDish.WriteToFile();
+            NewDish.Id = AllDishes[AllDishes.Count - 1].Id + 1;
+            //Id(controller._Dishes.Count);
+            controller.UpdateList(NewDish);
+            //NewDish.WriteToFile();
         }
+        public void Name(Dish DishtoAdjust, string AddorChange)
+        {
+            Console.Clear();
+            Console.WriteLine("What will be the new name? ");
+            string newname = Console.ReadLine();
 
-        public void Type(int DishId, string AddorChange)
+            if (AddorChange == "Add")
+            {
+                NewDish.Gerecht = newname;
+            }
+            else
+            {
+                DishtoAdjust.Gerecht = newname;
+                controller.UpdateList(DishtoAdjust);
+                //AllDishes[DishId].Gerecht = newname;
+                //AllDishes[DishId].WriteToFile();
+            }
+        }
+        public void Type(Dish DishtoAdjust, string AddorChange)
         {
             Console.Clear();
             string prompt2 = "Please select the dish type.";
@@ -172,13 +195,12 @@ namespace Kevin_Restaurant
 
             if (AddorChange == "Add")
             {
-
                 NewDish.Type = newtype;
             }
             else
             {
-                AllDishes[DishId].Type = newtype;
-                AllDishes[DishId].WriteToFile();
+                DishtoAdjust.Type = newtype;
+                controller.UpdateList(DishtoAdjust);
             }
         }
         public void Price(int DishId, string AddorChange)
@@ -186,6 +208,10 @@ namespace Kevin_Restaurant
             Console.Clear();
             Console.WriteLine("What will be the new price? ");
             int newprice = Int32.Parse(Console.ReadLine());
+            //while (!int.TryParse(Console.ReadLine(), out newprice))
+            //{
+            //    Console.WriteLine("That was invalid. Enter a valid Grid Size.");
+            //}
 
             if (AddorChange == "Add")
             {
@@ -194,26 +220,12 @@ namespace Kevin_Restaurant
             else
             {
                 AllDishes[DishId].Price = newprice;
+                //controller.UpdateList(DishtoAdjust);
+                //controller.UpdateList(AllDishes[DishId].Price);
                 AllDishes[DishId].WriteToFile();
             }
         }
-        public void Name(int DishId, string AddorChange)
-        {
-            Console.Clear();
-            Console.WriteLine("What will be the new name? ");
-            string newname = Console.ReadLine();
 
-
-            if (AddorChange == "Add")
-            {
-                NewDish.Gerecht = newname;
-            }
-            else
-            {
-                AllDishes[DishId].Gerecht = newname;
-                AllDishes[DishId].WriteToFile();
-            }
-        }
         public void Theme(int DishId, string AddorChange)
         {
             Console.Clear();
@@ -228,14 +240,8 @@ namespace Kevin_Restaurant
             else
             {
                 AllDishes[DishId].Theme = newtheme;
-                AllDishes[DishId].WriteToFile();
+                //AllDishes[DishId].WriteToFile();
             }
-        }
-        public void Id(int DishId)
-        {
-            Console.Clear();
-            int newid = AllDishList.Count+1;
-            NewDish.Id = newid;
         }
     }
 }
