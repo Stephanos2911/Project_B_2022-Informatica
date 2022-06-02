@@ -139,7 +139,7 @@ namespace Kevin_Restaurant
 
         }
 
-        public void AddMenu()
+        public void AddMenu() // Admin can add a menu 
         {
             Menu newMenu = new Menu();
             Console.Clear();
