@@ -49,7 +49,7 @@ namespace Kevin_Restaurant
             {
                 "Manage Reservations",
                 "Manage Users",
-                "Manage Dishes",
+                "Manage Menu",
                 "Account",
                 "Log out"
             };
@@ -93,8 +93,7 @@ namespace Kevin_Restaurant
                         break;
                     case 2:
                         ChangeMenu X = new ChangeMenu(Currentuser);
-                        X.Selection();
-                        StartMainMenu();
+                        X.ShowAllMenus();
                         break;
                     case 3:
                         ChangeUserInfo();
@@ -150,7 +149,7 @@ namespace Kevin_Restaurant
 
         public void ViewAllReservations(List<Reservation> Reservationlist)
         {
-            string prompt = " Overview of Reservations\n ID   | Date   | Time   | Table";
+            string prompt = " Overview of Reservations\n ID   | Date                 | Time  | Table";
             ArrowMenu AllReservMenu = new ArrowMenu(prompt, ReservationController.DisplayAllReservations(Reservationlist), 1);
             int selectedindex = AllReservMenu.Move();
             if (Currentuser.Admin)
@@ -213,7 +212,7 @@ namespace Kevin_Restaurant
                     ViewReservation(reservationid);
                     break;
                 case 2:
-                    CurrentReservation.Table = ReservationController.ChooseTable(CurrentReservation.Diners,CurrentReservation.Date);
+                    CurrentReservation.Table = ReservationController.ChooseTable(CurrentReservation.Diners, CurrentReservation.Date);
                     CurrentReservation.WriteToFile();
                     ViewReservation(reservationid);
                     break;

@@ -26,7 +26,7 @@ namespace Kevin_Restaurant
             this.Start_posX = Start_posX;
             this.Start_posY = Start_posY;
             this.selected = false;
-            this.Can_select = false;
+            this.Can_select = true;
 
         }
 

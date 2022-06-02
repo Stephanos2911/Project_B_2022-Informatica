@@ -10,8 +10,8 @@ namespace Kevin_Restaurant.Models
 {
     public class Dish
     {
-        [JsonPropertyName("theme")]
-        public string Theme { get; set; }
+        [JsonPropertyName("menuid")]
+        public int MenuId { get; set; }
         [JsonPropertyName("gerecht")]
         public string Gerecht { get; set; }
         [JsonPropertyName("id")]

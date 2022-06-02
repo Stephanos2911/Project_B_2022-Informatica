@@ -10,6 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Controllers\Menus.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="Controllers\Dishes.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -23,6 +26,9 @@
 
   <ItemGroup>
     <None Update="Data\Menu.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Dishes.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Data\reservations.json">

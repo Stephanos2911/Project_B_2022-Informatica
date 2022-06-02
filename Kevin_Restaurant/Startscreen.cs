@@ -290,7 +290,6 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
             return check;
         }
 
-
         public bool OnlyDigits(string str) // checkt of de string alleen getallen bevat
         {
             foreach (char c in str)
