@@ -27,7 +27,7 @@ namespace Kevin_Restaurant
         public void ShowAllMenus()
         {
             List<string> options = ListBuildMenu();
-            ArrowMenu OtherMenu = new ArrowMenu("Overview of All Menu's", options, 0);
+            ArrowMenu OtherMenu = new ArrowMenu("Overview of All Menu's\nID | Start Date | End Date   | Name", options, 1);
             int selectedIndex = OtherMenu.Move();
             if (selectedIndex == Menucontroller._menus.Count + 1)
             {
@@ -51,7 +51,7 @@ namespace Kevin_Restaurant
             List<Menu> AllMenus = Menucontroller._menus;
             foreach (Menu i in AllMenus)
             {
-                AllMenuList.Add($" [{i.Name}] -  {i.Id},-");
+                AllMenuList.Add($"{i.Id} | {i.StartingDate.ToString("MM/dd/yyyy")} | {i.EndDate.ToString("MM/dd/yyyy")} | {i.Name} |");
             }
             AllMenuList.Add("   Add Menu   ");
             AllMenuList.Add("   Back    ");
@@ -74,6 +74,7 @@ namespace Kevin_Restaurant
 
         public void Selection(Menu thismenu) // shows all dishes of a chosen menu
         {
+            List<Dish> DishesOfMenu = controller.AllDishesbyMenu(thismenu.Id);
             string prompt1 = $"All dishes of the {thismenu.Name} Menu";
             List<string> options = DishListBuild(thismenu.Id);
 
@@ -83,12 +84,12 @@ namespace Kevin_Restaurant
 
             if(options.Count > 2)
             {
-                if (selectedIndex == controller._Dishes.Count + 1)
+                if (selectedIndex == DishesOfMenu.Count + 1)
                 {
                     ShowAllMenus();
 
                 }
-                else if (selectedIndex == controller._Dishes.Count)
+                else if (selectedIndex == DishesOfMenu.Count)
                 {
                     Add(thismenu);
                     Selection(thismenu);
@@ -104,17 +105,17 @@ namespace Kevin_Restaurant
                     };
                     ArrowMenu OtherMenu2 = new ArrowMenu(prompt, stringArray, 0);
                     int selectedIndex2 = OtherMenu2.Move();
-                    if (selectedIndex2 == 0)
+                    if (selectedIndex2 == 0) // adjust dish
                     {
-                        Adjust(controller._Dishes[selectedIndex].Id);
+                        Adjust(DishesOfMenu[selectedIndex2].Id);
                         Selection(thismenu);
                     }
-                    else if (selectedIndex2 == 1)
+                    else if (selectedIndex2 == 1) // delete dish
                     {
                         controller.RemoveDish(controller._Dishes[selectedIndex].Id);
                         Selection(thismenu);
                     }
-                    else
+                    else // go back to all dishes overview
                     {
                         Selection(thismenu);
                     }
@@ -131,6 +132,7 @@ namespace Kevin_Restaurant
                 else
                 {
                     Add(thismenu);
+                    Selection(thismenu);
                 }
             }
 
@@ -163,15 +165,21 @@ namespace Kevin_Restaurant
             if (selectedIndex == 0)
             {
                 dish.Type = Type();
+                dish.WriteToFile();
             }
             else if (selectedIndex == 1)
             {
                 dish.Gerecht = Name();
+                dish.WriteToFile();
             }
             else
             {
                 dish.Price = Price();
+                dish.WriteToFile();
             }
+            Console.Clear();
+            Console.WriteLine("Dish succesfully updated! Press any key to continue");
+            Console.ReadKey();
 
         }
         public void Add(Menu CurrentMenu) //adds a dish to a chosen menu
@@ -192,6 +200,7 @@ namespace Kevin_Restaurant
             if (selectedIndex == 0)
             {
                 NewDish.Sort = "appetizer";
+
             }
             else if (selectedIndex == 1)
             {
@@ -211,7 +220,11 @@ namespace Kevin_Restaurant
             NewDish.Id = controller._Dishes[controller._Dishes.Count - 1].Id + 1; //id of the last dish + 1
 
             //write new dish to json
-            NewDish.WriteToFile();
+            controller.UpdateList(NewDish);
+            Console.Clear();
+            Console.WriteLine("New Dish succesfully added! Press any key to continue");
+            Console.ReadKey();
+
         }
 
         public string Type()
