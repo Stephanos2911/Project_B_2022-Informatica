@@ -1,14 +1,98 @@
 [
   {
-    "name": "Dutch",
+    "theme": "Dutch",
+    "gerecht": "Frikandel",
+    "type": "Meat",
     "id": 0,
-    "start": "2022-06-01T00:00:00+02:00",
-    "end": "2022-07-01T00:00:00+02:00"
+    "price": 15,
+    "sort": "appetizer" 
   },
   {
-    "name": "Spanish",
+    "theme": "Dutch",
+    "gerecht": "Vegetarian Bitterballen",
+    "type": "Vegetarian",
     "id": 1,
-    "start": "2022-07-02T00:00:00+02:00",
-    "end": "2022-08-01T00:00:00+02:00"
+    "price": 20,
+    "sort": "appetizer"
+  },
+  {
+    "theme": "French",
+    "gerecht": "Snails",
+    "type": "Vegan",
+    "id": 2,
+    "price": 25,
+    "sort": "appetizer"
+  },
+  {
+    "theme": "French",
+    "gerecht": "French fish",
+    "type": "Fish",
+    "id": 3,
+    "price": 30,
+    "sort": "appetizer"
+  },
+  {
+    "theme": "Dutch",
+    "gerecht": "Stampot",
+    "type": "Meat",
+    "id": 4,
+    "price": 30,
+    "sort": "main course"
+  },
+  {
+    "theme": "Dutch",
+    "gerecht": "Vegetarian Stampot",
+    "type": "Vegetarian",
+    "id": 5,
+    "price": 35,
+    "sort": "main course"
+  },
+  {
+    "theme": "French",
+    "gerecht": "Vegan Stampot",
+    "type": "Vegan",
+    "id": 6,
+    "price": 40,
+    "sort": "main course"
+  },
+  {
+    "theme": "French",
+    "gerecht": "Fish Stampot",
+    "type": "Fish",
+    "id": 7,
+    "price": 45,
+    "sort": "main course"
+  },
+  {
+    "theme": "Dutch",
+    "gerecht": "Cream Pie",
+    "type": "Pie",
+    "id": 8,
+    "price": 5,
+    "sort": "Dessert"
+  },
+  {
+    "theme": "Dutch",
+    "gerecht": "Appel Pie",
+    "type": "Pie",
+    "id": 9,
+    "price": 100,
+    "sort": "Dessert"
+  },
+  {
+    "theme": "French",
+    "gerecht": "Che special",
+    "type": "Che",
+    "id": 10,
+    "price": 5,
+    "sort": "Dessert"
+  },
+  {
+    "theme": "French",
+    "gerecht": "Ice Cream",
+    "type": "Ice Cream",
+    "id": 11,
+    "price": 5,
+    "sort": "Dessert"
   }
 ]
