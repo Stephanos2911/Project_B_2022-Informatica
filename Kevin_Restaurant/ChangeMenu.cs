@@ -2,6 +2,7 @@ using Kevin_Restaurant.Controllers;
 using Kevin_Restaurant.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -140,7 +141,64 @@ namespace Kevin_Restaurant
 
         public void AddMenu()
         {
+            Menu newMenu = new Menu();
+            Console.Clear();
 
+            //ask menu name
+            bool correctname = false;
+            while(correctname == false)
+            {
+                Console.WriteLine("Name of new Menu:\n");
+                newMenu.Name = Console.ReadLine();
+                bool check = true;
+                foreach(Menu S in Menucontroller._menus)
+                {
+                    if(S.Name == newMenu.Name)
+                    {
+                        check = false;
+                    }
+                }
+                if (check == false)
+                {
+                    Console.WriteLine("There is already an other existing menu with this name, try again.");
+                }
+                correctname = check;
+            }
+
+            if(Menucontroller._menus.Count == 0)
+            {
+                newMenu.Id = 0;
+            }
+            else
+            {
+                newMenu.Id = Menucontroller._menus[Menucontroller._menus.Count - 1].Id + 1 ;
+            }
+            
+
+            //ask which month
+            string[] options = ShowAvailableMonths();
+            Console.Clear();
+            ArrowMenu NewDate = new ArrowMenu("Choose in which month this menu will be present.", options, 0);
+            int ind = NewDate.Move();
+            DateTime X = new DateTime(2022, ind + 1, 15);
+            newMenu.StartingDate = FirstDayOfMonth(X);
+            newMenu.EndDate = newMenu.StartingDate.AddMonths(1).AddDays(-1);
+
+            Menucontroller.UpdateList(newMenu);
+            Console.Clear();
+            Console.WriteLine("Menu succesfully added! Press any key to continue");
+            Console.ReadKey();
+        }
+
+        public string[] ShowAvailableMonths()
+        {
+            string[] months = DateTimeFormatInfo.CurrentInfo.MonthNames;
+            return months;
+        }
+
+        public DateTime FirstDayOfMonth(DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, 1);
         }
 
 
