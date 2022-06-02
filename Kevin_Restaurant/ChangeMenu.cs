@@ -308,8 +308,13 @@ namespace Kevin_Restaurant
         public int Price()
         {
             Console.Clear();
+            int newprice;
             Console.WriteLine("What will be the new price? ");
-            int newprice = Int32.Parse(Console.ReadLine());
+            while (!int.TryParse(Console.ReadLine(), out newprice))
+            {
+                Console.Clear();
+                Console.WriteLine("That was invalid. Enter a valid number.");
+            }
             return newprice;
         }
         public string Name()
