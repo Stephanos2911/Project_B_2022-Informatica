@@ -13,25 +13,16 @@ namespace Kevin_Restaurant
         public Dishes controller;
         public Menus Menucontroller;
         public string prompt;
-        List<Dish> AllDishes;
-        public Dish NewDish;
-        User CurrentUser;
-        List<string> AllDishList;
+        public User CurrentUser;
 
         public ChangeMenu(User CurrentUser)
         {
             this.controller = new Dishes();
             this.Menucontroller = new Menus();
             this.prompt = "Please select";
-            this.AllDishes = controller._Dishes;
-            this.NewDish = new Dish();
             this.CurrentUser = CurrentUser;
-            AllDishList = new List<string>();
         }
-        public List<Dish> FindAllDish(string sort)
-        {
-            return controller._Dishes.FindAll(i => i.Sort == sort);
-        }///?????????????????????????????????????????????????????????
+
 
         public void ShowAllMenus()
         {
@@ -54,7 +45,7 @@ namespace Kevin_Restaurant
             }
         }
 
-        public List<string> ListBuildMenu()
+        public List<string> ListBuildMenu() // makes a String list of all menus
         {
             List<string> AllMenuList = new List<string>();
             List<Menu> AllMenus = Menucontroller._menus;
@@ -62,8 +53,8 @@ namespace Kevin_Restaurant
             {
                 AllMenuList.Add($" [{i.Name}] -  {i.Id},-");
             }
-            AllDishList.Add("   Add Menu   ");
-            AllDishList.Add("   Back    ");
+            AllMenuList.Add("   Add Menu   ");
+            AllMenuList.Add("   Back    ");
             return AllMenuList;
         }
 
@@ -81,7 +72,7 @@ namespace Kevin_Restaurant
             return AllDishList;
         }
 
-        public void Selection(Menu thismenu)
+        public void Selection(Menu thismenu) // shows all dishes of a chosen menu
         {
             string prompt1 = $"All dishes of the {thismenu.Name} Menu";
             List<string> options = DishListBuild(thismenu.Id);
@@ -92,14 +83,15 @@ namespace Kevin_Restaurant
 
             if(options.Count > 2)
             {
-                if (selectedIndex == AllDishes.Count + 1)
+                if (selectedIndex == controller._Dishes.Count + 1)
                 {
                     ShowAllMenus();
 
                 }
-                else if (selectedIndex == AllDishes.Count)
+                else if (selectedIndex == controller._Dishes.Count)
                 {
-                    Add(AllDishes.Count, thismenu);
+                    Add(thismenu);
+                    Selection(thismenu);
                 }
                 else
                 {
@@ -114,12 +106,12 @@ namespace Kevin_Restaurant
                     int selectedIndex2 = OtherMenu2.Move();
                     if (selectedIndex2 == 0)
                     {
-                        Adjust(AllDishes[selectedIndex].Id);
+                        Adjust(controller._Dishes[selectedIndex].Id);
                         Selection(thismenu);
                     }
                     else if (selectedIndex2 == 1)
                     {
-                        controller.RemoveDish(AllDishes[selectedIndex].Id);
+                        controller.RemoveDish(controller._Dishes[selectedIndex].Id);
                         Selection(thismenu);
                     }
                     else
@@ -138,7 +130,7 @@ namespace Kevin_Restaurant
                 }
                 else
                 {
-                    Add(AllDishes.Count, thismenu);
+                    Add(thismenu);
                 }
             }
 
@@ -151,7 +143,7 @@ namespace Kevin_Restaurant
 
 
 
-        public void Adjust(int DishID)
+        public void Adjust(int DishID) // allows an admin to adjust a dish or delete it
         {
             Console.Clear();
             Dish dish = controller.GetById(DishID);
@@ -170,21 +162,22 @@ namespace Kevin_Restaurant
             int selectedIndex = OtherMenu.Move();
             if (selectedIndex == 0)
             {
-                Type(DishID, "change");
+                dish.Type = Type();
             }
             else if (selectedIndex == 1)
             {
-                Name(DishID, "change");
+                dish.Gerecht = Name();
             }
             else
             {
-                Price(DishID, "change");
+                dish.Price = Price();
             }
 
         }
-        public void Add(int IdNewDish, Menu CurrentMenu)
+        public void Add(Menu CurrentMenu) //adds a dish to a chosen menu
         {
             Console.Clear();
+            Dish NewDish = new Dish();
             string prompt2 = "Please select the dish sort.";
             string[] addMenu = new string[]
             {
@@ -193,6 +186,8 @@ namespace Kevin_Restaurant
                 "Dessert"
             };
             ArrowMenu OtherMenu = new ArrowMenu(prompt2, addMenu, 0);
+
+
             int selectedIndex = OtherMenu.Move();
             if (selectedIndex == 0)
             {
@@ -207,15 +202,19 @@ namespace Kevin_Restaurant
                 NewDish.Sort = "Dessert";
             }
             Console.Clear();
-            Name(IdNewDish, "Add");
-            Type(IdNewDish, "Add");
-            Price(IdNewDish, "Add");
+
+            //ask for everything
+            NewDish.Gerecht = Name();
+            NewDish.Type = Type();
+            NewDish.Price = Price();
             NewDish.MenuId = CurrentMenu.Id;
-            Id(IdNewDish);
+            NewDish.Id = controller._Dishes[controller._Dishes.Count - 1].Id + 1; //id of the last dish + 1
+
+            //write new dish to json
             NewDish.WriteToFile();
         }
 
-        public void Type(int DishId, string AddorChange)
+        public string Type()
         {
             Console.Clear();
             string prompt2 = "Please select the dish type.";
@@ -233,50 +232,21 @@ namespace Kevin_Restaurant
             int selectedIndex = OtherMenu.Move();
 
             string newtype = typeMenu[selectedIndex];
-
-            if (AddorChange == "Add")
-            {
-
-                NewDish.Type = newtype;
-            }
-            else
-            {
-                AllDishes[DishId].Type = newtype;
-                AllDishes[DishId].WriteToFile();
-            }
+            return newtype;
         }
-        public void Price(int DishId, string AddorChange)
+        public int Price()
         {
             Console.Clear();
             Console.WriteLine("What will be the new price? ");
             int newprice = Int32.Parse(Console.ReadLine());
-
-            if (AddorChange == "Add")
-            {
-                NewDish.Price = newprice;
-            }
-            else
-            {
-                AllDishes[DishId].Price = newprice;
-                AllDishes[DishId].WriteToFile();
-            }
+            return newprice;
         }
-        public void Name(int DishId, string AddorChange)
+        public string Name()
         {
             Console.Clear();
             Console.WriteLine("What will be the new name? ");
             string newname = Console.ReadLine();
-
-
-            if (AddorChange == "Add")
-            {
-                NewDish.Gerecht = newname;
-            }
-            else
-            {
-                AllDishes[DishId].Gerecht = newname;
-                AllDishes[DishId].WriteToFile();
-            }
+            return newname; 
         }
 
         //public void Theme(int DishId, string AddorChange)
@@ -296,10 +266,6 @@ namespace Kevin_Restaurant
         //        AllDishes[DishId].WriteToFile();
         //    }
         //}
-        public void Id(int DishId)
-        {
-            int newid = AllDishList.Count+1;
-            NewDish.Id = newid;
-        }
+
     }
 }

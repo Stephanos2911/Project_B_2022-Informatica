@@ -27,9 +27,9 @@ namespace Kevin_Restaurant
             this.finalOrder = "";
             this.controller = new Dishes();
             this.totallength = controller._Dishes.Count;
-            this.AppetizerCount = FindAllDish("appetizer").Count();
-            this.MainCourseCount = FindAllDish("main course").Count();
-            this.DessertCount = FindAllDish("Dessert").Count();
+            this.AppetizerCount = controller.FindAllDish("appetizer").Count();
+            this.MainCourseCount = controller.FindAllDish("main course").Count();
+            this.DessertCount = controller.FindAllDish("Dessert").Count();
         }
 
 
@@ -37,9 +37,9 @@ namespace Kevin_Restaurant
         {
             int index = 0;
             string [] str = new string[controller._Dishes.Count + 4];
-            List<Dish> appetizers= FindAllDish("appetizer");
-            List<Dish> Maindishes= FindAllDish("main course");
-            List<Dish> desserts= FindAllDish("Dessert");
+            List<Dish> appetizers= controller.FindAllDish("appetizer");
+            List<Dish> Maindishes= controller.FindAllDish("main course");
+            List<Dish> desserts= controller.FindAllDish("Dessert");
             str[index] = "Appetizers";    
             index++;
             //puts all objects with an "appetizer" attribute in an array
@@ -64,11 +64,6 @@ namespace Kevin_Restaurant
             }
             str[index] = "Done";
             return str;
-        }
-
-        public List<Dish> FindAllDish(string sort)
-        {
-            return controller._Dishes.FindAll(i => i.Sort == sort);
         }
 
         public List<string> Start(int groupsize)

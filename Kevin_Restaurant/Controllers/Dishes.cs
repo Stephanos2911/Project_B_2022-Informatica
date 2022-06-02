@@ -51,18 +51,26 @@ namespace Kevin_Restaurant.Controllers
             return _Dishes.FindAll(i => i.MenuId == Searchmenuid);
         }
 
+        public List<Dish> FindAllDish(string sort)
+        {
+            return _Dishes.FindAll(i => i.Sort == sort);
+        }
+
+
         public void UpdateList(Dish m)
         {
             int index = _Dishes.FindIndex(s => s.Id == m.Id);
+
             if (index != -1)
-            {
-                _Dishes.Add(m);
-            }
-            else
             {
                 _Dishes[index] = m;
             }
+            else
+            {
+                _Dishes.Add(m);
+            }
             Write();
+
         }
 
         public void RemoveDish(int dishid)
