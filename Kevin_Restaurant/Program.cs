@@ -14,7 +14,6 @@ namespace Kevin_Restaurant
             beginscherm.Show_StartingScreen();
             ////Reservations test = new Reservations();
             ////int A = test.ChooseTable(3);
-            
 
 
         }

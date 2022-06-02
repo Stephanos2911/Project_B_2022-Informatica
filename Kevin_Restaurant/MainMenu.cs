@@ -213,7 +213,7 @@ namespace Kevin_Restaurant
                     ViewReservation(reservationid);
                     break;
                 case 2:
-                    CurrentReservation.Table = ReservationController.ChooseTable(CurrentReservation.Diners,CurrentReservation.Date);
+                    CurrentReservation.Table = ReservationController.ChooseTable(3);
                     CurrentReservation.WriteToFile();
                     ViewReservation(reservationid);
                     break;
