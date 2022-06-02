@@ -313,7 +313,8 @@ namespace Kevin_Restaurant.Controllers
             List<string> AllReservations = new List<string>();
             foreach (Reservation reservation in Reservationlist)
             {
-                AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {reservation.Table} |");
+           
+                AllReservations.Add(" |{ 0,5}|{ 1,5}|{ 2,5}|{ 3,5}| ",$"{reservation.Id}" , $"{reservation.Date.ToString("dddd, dd MMMM yyyy")}", $"{reservation.Time}" , $"{reservation.Table}" ,  $"{reservation.meals}");
             }
             AllReservations.Add("Filters");
             AllReservations.Add("Back");
