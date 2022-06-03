@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace Kevin_Restaurant
 {
-    internal class Mainmenu
+    public class Mainmenu
     {
-        public string [] user_options;
-        public string[] admin_options;
-        public string[] reservation_options;
-        public string[] change_info_options;
+        private readonly string[] user_options;
+        private readonly string[] admin_options;
+        private readonly string[] reservation_options;
+        private readonly string[] change_info_options;
 
         // current user
-        public Users Usercontroller;
-        public User Currentuser;
+        private readonly Users Usercontroller;
+        private User Currentuser;
 
         //menu 
         public ArrowMenu main_menu;
@@ -27,8 +27,7 @@ namespace Kevin_Restaurant
         public Startscreen beginscherm;
 
         //reservation
-        public Reservations ReservationController;
-        public Dishes DishesController;
+        private readonly Reservations ReservationController;
 
         public Mainmenu(User Currentuser)
         {
@@ -36,7 +35,7 @@ namespace Kevin_Restaurant
             this.Usercontroller = new Users();
             this.Currentuser = Currentuser;
             this.ReservationController = new Reservations();
-            this.DishesController = new Dishes();
+
 
             //string of options
             this.user_options = new string[3]
@@ -79,7 +78,7 @@ namespace Kevin_Restaurant
         public void StartMainMenu()//Main menu start
         {
             Console.Clear();
-            int index = 0;
+            int index;
             if (Currentuser.Admin) // menu for admins
             {
                 index = this.admin_main_menu.Move();
@@ -92,7 +91,7 @@ namespace Kevin_Restaurant
                         UserControlScreen(Usercontroller._users);
                         break;
                     case 2:
-                        ChangeMenu X = new ChangeMenu(Currentuser);
+                        ChangeMenu X = new(Currentuser);
                         X.ShowAllMenus();
                         break;
                     case 3:
@@ -121,7 +120,7 @@ namespace Kevin_Restaurant
             }
         }
 
-        public void Reservationmenu() // reservering menu 
+        private void Reservationmenu() // reservering menu 
         {
             Console.Clear();
             int index = this.reservation_menu.Move();
@@ -147,10 +146,10 @@ namespace Kevin_Restaurant
             }
         }
 
-        public void ViewAllReservations(List<Reservation> Reservationlist)
+        private void ViewAllReservations(List<Reservation> Reservationlist)
         {
             string prompt = " Overview of Reservations\n ID   | Date                 | Time  | Table";
-            ArrowMenu AllReservMenu = new ArrowMenu(prompt, ReservationController.DisplayAllReservations(Reservationlist), 1);
+            ArrowMenu AllReservMenu = new(prompt, ReservationController.DisplayAllReservations(Reservationlist), 1);
             int selectedindex = AllReservMenu.Move();
             if (Currentuser.Admin)
             {
@@ -183,12 +182,12 @@ namespace Kevin_Restaurant
                 }
             }
         }
-        
-        public void ViewReservation(string reservationid) //individual reservation menu 
+
+        private void ViewReservation(string reservationid) //individual reservation menu 
         {
             Console.Clear();
             Reservation CurrentReservation = ReservationController.FindId(reservationid);
-            string prompt = $" Reservation by {Usercontroller.GetId(CurrentReservation.UserId).Username}\n\n Details \n Date: {CurrentReservation.Date.ToString("dddd, dd MMMM yyyy")}\n Time: {CurrentReservation.Time}\n Table: {CurrentReservation.Table}\n Code: {CurrentReservation.Id}\n\n Change: \n";
+            string prompt = $" Reservation by {Usercontroller.GetId(CurrentReservation.UserId).Username}\n\n Details \n Date: {CurrentReservation.Date:dddd, dd MMMM yyyy}\n Time: {CurrentReservation.Time}\n Table: {CurrentReservation.Table}\n Code: {CurrentReservation.Id}\n\n Change: \n";
             List<string> reservoptions = new List<string>()
                     {
                         "Date",
@@ -254,7 +253,7 @@ namespace Kevin_Restaurant
 
         }
 
-        public void UserControlScreen(List<User> Userlist) // function that lets admin delete users, manually add users, make an user an admin
+        private void UserControlScreen(List<User> Userlist) // function that lets admin delete users, manually add users, make an user an admin
         {
             string prompt = "Overview of Users\n ID   Username    Password   PhoneNumber   Admin";
             ArrowMenu AllUsersMenu = new ArrowMenu(prompt, Usercontroller.DisplayAllusers(Userlist), 1);
@@ -274,7 +273,7 @@ namespace Kevin_Restaurant
 
         }
 
-        public void FilterUsers()
+        private void FilterUsers()
         {
             Console.Clear();
             string prompt = "Search for:";
@@ -413,7 +412,7 @@ namespace Kevin_Restaurant
             }
         } // filter Screen
 
-        public void UserControl(int userid) // Selected user by admin, allows admin to change something about the user.
+        private void UserControl(int userid) // Selected user by admin, allows admin to change something about the user.
         {
             Console.Clear();
             User SelectedUser = Usercontroller._users[userid-1];
@@ -461,7 +460,7 @@ namespace Kevin_Restaurant
             }
         }
 
-        public void AdminChangeUsers(string option, User Currentuser)
+        private void AdminChangeUsers(string option, User Currentuser)
         {
             switch (option)
             {
@@ -585,7 +584,7 @@ namespace Kevin_Restaurant
             }
         }// actual input function for admin to change credentials
 
-        public void ChangeUserInfo() //allows user to change personal information
+        private void ChangeUserInfo() //allows user to change personal information
         {
             Console.Clear();
             int choice = info_change_menu.Move();
@@ -693,7 +692,7 @@ namespace Kevin_Restaurant
                         "Yes, Delete this account and all its open reservations",
                         "No, Keep this account and all it's reservations"
                     };
-                    ArrowMenu deleteornot = new ArrowMenu("Are you sure you want to delete this account?", Deleteornot, 0);
+                    ArrowMenu deleteornot = new("Are you sure you want to delete this account?", Deleteornot, 0);
                     int index = deleteornot.Move();
                     if(index == 0)
                     {
@@ -717,7 +716,7 @@ namespace Kevin_Restaurant
             }
         }
 
-        public bool Checkdatabase(string input, string version) // checks if username is already in use
+        private bool Checkdatabase(string input, string version) // checks if username is already in use
         {
             if (version == "username")
             {
@@ -734,7 +733,7 @@ namespace Kevin_Restaurant
             else
             {
                 bool check = true;
-                if (input.Length > 15 || OnlyDigits(input) || input.Length < 9 || input == "")
+                if (input.Length > 15 || Startscreen.OnlyDigits(input) || input.Length < 9 || input == "")
                 {
                     Console.WriteLine("Please enter a valid phonenumber");
                     check = false;
@@ -756,18 +755,8 @@ namespace Kevin_Restaurant
             }
         }
 
-        public bool OnlyDigits(string str) // checkt of de string alleen getallen bevat
-        {
-            foreach (char c in str)
-            {
-                if (c < '0' || c > '9')
-                    return true;
-            }
 
-            return false;
-        }
-
-        public bool PressEnter()
+        private bool PressEnter()
         {
             bool waiting = true;
             bool boolean = false;

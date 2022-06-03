@@ -9,7 +9,7 @@ namespace Kevin_Restaurant
     public class Table_map
     {
         public List<Table> Tables;
-        public List<Table> AvailableTablesLeft;
+        private List<Table> AvailableTablesLeft;
 
         public Table_map()
         {
@@ -41,7 +41,7 @@ namespace Kevin_Restaurant
                 tafel.table_print();
             }
         }
-        public void Color_Change(int table_number, bool available) // verandert kleur van opgegeven tafel met selected
+        private void Color_Change(int table_number, bool available) // verandert kleur van opgegeven tafel met selected
         {
             if (available == true)
             {
@@ -55,17 +55,8 @@ namespace Kevin_Restaurant
             }
         }
 
-        public void AutoPicker(int table)
-        {
-            this.Color_Change(table + 1, true);
-            Console.SetCursorPosition(0, 44);
-            Console.WriteLine($"  We have picked table {this.Tables[table].table_number}");
-            this.Tables[table].available = false;
-            Console.WriteLine(" Press any key to continue");
-            ConsoleKeyInfo keypress = Console.ReadKey();
-        }
 
-        public void SetAvailableTables()
+        private void SetAvailableTables()
         {
             foreach(Table tafel in Tables)
             {
@@ -75,7 +66,7 @@ namespace Kevin_Restaurant
                 }
             }
         }
-        public List<int> Auto_pick(int groupsize)
+        private List<int> Auto_pick(int groupsize)
         {
             List<int> ChosenTables = new List<int>();
             int peopleleft = groupsize;
@@ -133,7 +124,7 @@ namespace Kevin_Restaurant
             return ChosenTables;
         }
 
-        public List<Table> Set_canSelect(int group_size) // sets can_select of every table object in Tables of same type or smaller type to true
+        private List<Table> Set_canSelect(int group_size) // sets can_select of every table object in Tables of same type or smaller type to true
         {
             List<Table> ReturnList = new List<Table>();
             if (group_size <= 2)
@@ -159,7 +150,7 @@ namespace Kevin_Restaurant
             return ReturnList;
         }
 
-        public List<int> Manual_pick(int groupsize)
+        private List<int> Manual_pick(int groupsize)
         {
             List<int> ChosenTables = new List<int>();
             int temp_choice = 1;

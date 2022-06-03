@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Kevin_Restaurant.Controllers
 {
-    class Users
+    public class Users
     {
         public List<User> _users;
         string path = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, @"Data/userdatabase.json"));
@@ -18,14 +18,14 @@ namespace Kevin_Restaurant.Controllers
             Load();
         }
 
-        public void Load()
+        private void Load()
         {
             string json = File.ReadAllText(path);
 
             _users = JsonSerializer.Deserialize<List<User>>(json);
         }
 
-        public void Write()
+        private void Write()
         {
             var options = new JsonSerializerOptions();
             options.WriteIndented = true;

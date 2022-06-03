@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace Kevin_Restaurant
 {
-    class ChangeMenu
+    public class ChangeMenu
     {
-        public Dishes controller;
-        public Menus Menucontroller;
-        public string prompt;
-        public User CurrentUser;
+        private Dishes controller;
+        private Menus Menucontroller;
+        private string prompt;
+        private User CurrentUser;
 
         public ChangeMenu(User CurrentUser)
         {

@@ -7,13 +7,13 @@ using static System.Console;
 
 namespace Kevin_Restaurant
 {
-    internal class ArrowMenu
+    public class ArrowMenu
     {
         // Variables for the menu of selected items.
         private int SelectedIndex;
         private string[] Options;
         private string Intro;
-        public int startposY;
+        private int startposY;
 
         public ArrowMenu(string intro, string[] options, int Startingposition)
         {
@@ -33,7 +33,7 @@ namespace Kevin_Restaurant
             this.startposY = Startingposition;
         }
 
-        public void DisplayOptions() // displays the text.
+        private void DisplayOptions() // displays the text.
         {
             for (int i = 0; i < Options.Length; i++) // iterates from line to line
             {
@@ -56,7 +56,7 @@ namespace Kevin_Restaurant
             ResetColor();
         }
 
-        public void DisplaySingleOption(int index, bool selected) // Changes the selected option on or off
+        private void DisplaySingleOption(int index, bool selected) // Changes the selected option on or off
         {
             Console.SetCursorPosition(0,startposY+ (index+1));
             string current_option = Options[index];

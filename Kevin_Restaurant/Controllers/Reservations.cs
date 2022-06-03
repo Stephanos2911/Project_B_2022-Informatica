@@ -9,7 +9,7 @@ using Kevin_Restaurant.Models;
 
 namespace Kevin_Restaurant.Controllers
 {
-    internal class Reservations
+    public class Reservations
     {
         public List<Reservation> _reservations;
         string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, @"Data/reservations.json"));
@@ -21,7 +21,7 @@ namespace Kevin_Restaurant.Controllers
             Load();
         }
 
-        public void Load()
+        private void Load()
         {
             Console.WriteLine(path);
             string json = File.ReadAllText(path);
@@ -29,7 +29,7 @@ namespace Kevin_Restaurant.Controllers
             _reservations = JsonSerializer.Deserialize<List<Reservation>>(json);
         }
 
-        public void Write()
+        private void Write()
         {
             var options = new JsonSerializerOptions();
             options.WriteIndented = true;
@@ -123,7 +123,7 @@ namespace Kevin_Restaurant.Controllers
             return _reservations.FindAll((i => i.Date == date));
         }
 
-        public int AvailableSeat (DateTime date)
+        private int AvailableSeat (DateTime date)
         {
             Table_map Temp = new Table_map();
             int seats = 48;
@@ -225,7 +225,7 @@ namespace Kevin_Restaurant.Controllers
             return people;
         }
 
-        public static List<string> make_order(int dinners)
+        private static List<string> make_order(int dinners)
         {
             string[] yes_no = new string[] { "yes", "no" };
             ArrowMenu menu = new ArrowMenu("Would you like to add your order for every person in advance?",yes_no,0);
@@ -243,7 +243,7 @@ namespace Kevin_Restaurant.Controllers
             }
             
         }
-        public string[] get_meals(int people)
+        private string[] get_meals(int people)
         {
             var meals = new string[people + 1];
             for (int i = 1; i <= people; i++)
@@ -273,7 +273,7 @@ namespace Kevin_Restaurant.Controllers
             return string_times[selectedIndex];
         }
 
-        public string conformation_code()
+        private string conformation_code()
         {
             Random rnd = new Random();
             string code = string.Empty;

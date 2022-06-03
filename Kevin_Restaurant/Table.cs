@@ -9,11 +9,11 @@ namespace Kevin_Restaurant
     public class Table
     {
         public int table_type;
-        public int table_id;
+        private int table_id;
         public int table_number;
         public bool available;
-        public int Start_posX;
-        public int Start_posY;
+        private int Start_posX;
+        private int Start_posY;
         public bool selected;
         public bool Can_select;
 
@@ -30,7 +30,7 @@ namespace Kevin_Restaurant
 
         }
 
-        public void TextAt(int left, int top, string text) //plaatst een string op een aangewezen plek, checkt availability voor kleur.
+        private void TextAt(int left, int top, string text) //plaatst een string op een aangewezen plek, checkt availability voor kleur.
         {
             if (this.selected == true && this.available == true) // blue if selected
             {

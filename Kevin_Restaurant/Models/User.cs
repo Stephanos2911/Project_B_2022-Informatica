@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Kevin_Restaurant.Models
 {
-    internal class User
+    public class User
     {
         [JsonPropertyName("id")]
         public int Id { get; set; }
