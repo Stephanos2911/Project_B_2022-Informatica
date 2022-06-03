@@ -46,7 +46,7 @@ namespace Kevin_Restaurant
             }
         }
 
-        public List<string> ListBuildMenu() // makes a String list of all menus
+        private List<string> ListBuildMenu() // makes a String list of all menus
         {
             List<string> AllMenuList = new List<string>();
             List<Menu> AllMenus = Menucontroller._menus;
@@ -60,7 +60,7 @@ namespace Kevin_Restaurant
         }
 
 
-        public List<String> DishListBuild(int MenuId) //given a menu id gives a string with all dishes from that menu
+        private List<String> DishListBuild(int MenuId) //given a menu id gives a string with all dishes from that menu
         {
             List<string> AllDishList = new List<string>();
             List<Dish> DishesofMenu = controller.AllDishesbyMenu(MenuId);
@@ -73,7 +73,7 @@ namespace Kevin_Restaurant
             return AllDishList;
         }
 
-        public void Selection(Menu thismenu) // shows all dishes of a chosen menu
+        private void Selection(Menu thismenu) // shows all dishes of a chosen menu
         {
             List<Dish> DishesOfMenu = controller.AllDishesbyMenu(thismenu.Id);
             string prompt1 = $"All dishes of the {thismenu.Name} Menu";
@@ -92,7 +92,7 @@ namespace Kevin_Restaurant
                 }
                 else if (selectedIndex == DishesOfMenu.Count)
                 {
-                    Add(thismenu);
+                    AddDish(thismenu);
                     Selection(thismenu);
                 }
                 else
@@ -132,14 +132,14 @@ namespace Kevin_Restaurant
                 }
                 else
                 {
-                    Add(thismenu);
+                    AddDish(thismenu);
                     Selection(thismenu);
                 }
             }
 
         }
 
-        public void AddMenu() // Admin can add a menu 
+        private void AddMenu() // Admin can add a menu 
         {
             Menu newMenu = new Menu();
             Console.Clear();
@@ -190,20 +190,20 @@ namespace Kevin_Restaurant
             Console.ReadKey();
         }
 
-        public string[] ShowAvailableMonths()
+        private string[] ShowAvailableMonths()
         {
             string[] months = DateTimeFormatInfo.CurrentInfo.MonthNames;
             return months;
         }
 
-        public DateTime FirstDayOfMonth(DateTime dateTime)
+        private DateTime FirstDayOfMonth(DateTime dateTime)
         {
             return new DateTime(dateTime.Year, dateTime.Month, 1);
         }
 
 
 
-        public void Adjust(int DishID) // allows an admin to adjust a dish or delete it
+        private void Adjust(int DishID) // allows an admin to adjust a dish or delete it
         {
             Console.Clear();
             Dish dish = controller.GetById(DishID);
@@ -240,7 +240,7 @@ namespace Kevin_Restaurant
             Console.ReadKey();
 
         }
-        public void Add(Menu CurrentMenu) //adds a dish to a chosen menu
+        private void AddDish(Menu CurrentMenu) //adds a dish to a chosen menu
         {
             Console.Clear();
             Dish NewDish = new Dish();
@@ -285,7 +285,7 @@ namespace Kevin_Restaurant
 
         }
 
-        public string Type()
+        private string Type()
         {
             Console.Clear();
             string prompt2 = "Please select the dish type.";
@@ -305,7 +305,7 @@ namespace Kevin_Restaurant
             string newtype = typeMenu[selectedIndex];
             return newtype;
         }
-        public int Price()
+        private int Price()
         {
             Console.Clear();
             int newprice;
@@ -317,7 +317,7 @@ namespace Kevin_Restaurant
             }
             return newprice;
         }
-        public string Name()
+        private string Name()
         {
             Console.Clear();
             Console.WriteLine("What will be the new name? ");

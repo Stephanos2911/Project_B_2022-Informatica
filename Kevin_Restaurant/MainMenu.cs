@@ -20,10 +20,10 @@ namespace Kevin_Restaurant
         private User Currentuser;
 
         //menu 
-        public ArrowMenu main_menu;
-        public ArrowMenu admin_main_menu;
-        public ArrowMenu reservation_menu;
-        public ArrowMenu info_change_menu;
+        private ArrowMenu main_menu;
+        private ArrowMenu admin_main_menu;
+        private ArrowMenu reservation_menu;
+        private ArrowMenu info_change_menu;
         public Startscreen beginscherm;
 
         //reservation
@@ -120,7 +120,7 @@ namespace Kevin_Restaurant
             }
         }
 
-        private void Reservationmenu() // reservering menu 
+        private void Reservationmenu() // Reservation menu options
         {
             Console.Clear();
             int index = this.reservation_menu.Move();
@@ -146,10 +146,10 @@ namespace Kevin_Restaurant
             }
         }
 
-        private void ViewAllReservations(List<Reservation> Reservationlist)
+        private void ViewAllReservations(List<Reservation> Reservationlist) //shows user all reservations he made ( or the admin all reservations in the system)
         {
             string prompt = " Overview of Reservations\n ID   | Date                 | Time  | Table";
-            ArrowMenu AllReservMenu = new(prompt, ReservationController.DisplayAllReservations(Reservationlist), 1);
+            ArrowMenu AllReservMenu = new(prompt, ReservationController.DisplayAllReservations(Reservationlist, Currentuser.Admin), 1);
             int selectedindex = AllReservMenu.Move();
             if (Currentuser.Admin)
             {
@@ -159,7 +159,7 @@ namespace Kevin_Restaurant
                 }
                 else if (selectedindex == Reservationlist.Count )
                 {
-                    FilterReservationsScreen();
+                    FilterAllReservations();
                 }
                 else
                 {
@@ -168,13 +168,9 @@ namespace Kevin_Restaurant
             }
             else
             {
-                if (selectedindex == Reservationlist.Count + 1)
+                if (selectedindex == Reservationlist.Count)
                 {
                     StartMainMenu();
-                }
-                else if (selectedindex == Reservationlist.Count )
-                {
-                    FilterReservationsScreen();
                 }
                 else
                 {
@@ -183,11 +179,195 @@ namespace Kevin_Restaurant
             }
         }
 
+        private void FilterAllReservations() // allows admin to filter on all reservations in the system
+        {
+            Console.Clear();
+            string prompt = "Search for:";
+            List<string> filteroptions = new List<string>()
+                    {
+                        "All Reservations from User",
+                        "Date",
+                        "Time",
+                        "Code",
+                        "Back"
+                    };
+            ArrowMenu filter = new ArrowMenu(prompt, filteroptions, 0);
+            int selectedindex = filter.Move();
+            List<Reservation> ReservationsFromUser = new List<Reservation>();
+            switch (selectedindex)
+            {
+                case 0:
+                    //Search by User ID
+                    bool searchfound = false;
+                    while (searchfound == false)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("ID of User:");
+                        int searchid = Convert.ToInt32(Console.ReadLine());
+                        if (Usercontroller.GetId(searchid) == null)
+                        {
+                            Console.WriteLine("No existing user with this ID, Press enter to try again or Escape to go back");
+                            if (PressEnter() == true)
+                            {
+                                ;
+                            }
+                            else
+                            {
+                                FilterAllReservations();
+                                searchfound = true;
+                            }
+                        }
+                        else
+                        {
+                            ReservationsFromUser = ReservationController.FindAllReservations(Usercontroller.GetId(searchid));
+                            ViewAllReservations(ReservationsFromUser);
+                        }
+                    }
+                    break;
+                //Search by date
+                case 1:
+
+                    searchfound = false;
+                    while (searchfound == false)
+                    {
+                        int day = 0;
+                        int month = 0;
+                        Console.Clear();
+                        bool correctinput = false;
+                     
+                        //ask day
+                        while(correctinput == false)
+                        {
+                            Console.WriteLine("Day (Example: 7 or 20): ");
+                            int x = Convert.ToInt32(Console.ReadLine());
+                            if(x <= 0 || x >= 31)
+                            {
+                                Console.WriteLine("invalid, try again");
+                            }
+                            else
+                            {
+                                day = x;
+                                correctinput = true;
+                               
+                            }
+                        }
+
+                        correctinput = false;
+                        while (correctinput == false)
+                        {
+                            Console.WriteLine("Month (Example: 3 or 11): ");
+                            int y = Convert.ToInt32(Console.ReadLine());
+                            if (y < 0 || y > 12)
+                            {
+                                Console.WriteLine("invalid, try again");
+                            }
+                            else
+                            {
+                                month = y;
+                                correctinput = true;
+                          
+                            }
+                        }
+
+                        //year is hardcoded for now
+                        DateTime SearchDate = new(2022, month , day);
+                        if (ReservationController.FindDate(SearchDate) == null)
+                        {
+                            Console.WriteLine("No existing reservations on this date, Press enter to try again or Escape to go back");
+                            if (PressEnter() == true)
+                            {
+                                ;
+                            }
+                            else
+                            {
+                                FilterAllReservations();
+                            }
+                        }
+                        else
+                        {
+                            ReservationsFromUser.Add(ReservationController.FindDate(SearchDate));
+                            ViewAllReservations(ReservationsFromUser);
+                        }
+                    }
+                    break;
+                    //Search by Time
+                case 2:
+                    searchfound = false;
+                    while (searchfound == false)
+                    {
+                        Console.Clear();
+                        string search = Reservations.get_time();
+                    
+                        if (ReservationController.FindTime(search) == null)
+                        {
+                            Console.SetCursorPosition(0, 30);
+                            Console.WriteLine("No existing reservations on this time, Press enter to try again or Escape to go back");
+                            if (PressEnter() == true)
+                            {
+                                ;
+                            }
+                            else
+                            {
+                                FilterUsers();
+                            }
+                        }
+                        else
+                        {
+                            ReservationsFromUser.Add(ReservationController.FindTime(search));
+                            ViewAllReservations(ReservationsFromUser);
+                        }
+                    }
+                    break;
+                //search reservation with Confirmation Code
+                case 3:
+                    searchfound = false;
+                    while (searchfound == false)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Search:");
+                        string searchtry = Console.ReadLine();
+                        if (ReservationController.FindId(searchtry) == null)
+                        {
+                            Console.WriteLine("No existing Reservation with this code, Press enter to try again or Escape to go back");
+                            if (PressEnter() == true)
+                            {
+                                ;
+                            }
+                            else
+                            {
+                                FilterUsers();
+                                searchfound = true;
+                            }
+                        }
+                        else
+                        {
+                            ReservationsFromUser.Add(ReservationController.FindId(searchtry));
+                            ViewAllReservations(ReservationsFromUser);
+                        }
+                    }
+                    break;
+                //go back
+                case 4:
+                    if (Currentuser.Admin)
+                    {
+                        ViewAllReservations(ReservationController._reservations);
+                        break;
+                    }
+                    else
+                    {
+                        ViewAllReservations(ReservationController.FindAllReservations(Currentuser));
+                        break;
+                    }
+        
+            }
+        }
+
         private void ViewReservation(string reservationid) //individual reservation menu 
         {
             Console.Clear();
             Reservation CurrentReservation = ReservationController.FindId(reservationid);
-            string prompt = $" Reservation by {Usercontroller.GetId(CurrentReservation.UserId).Username}\n\n Details \n Date: {CurrentReservation.Date:dddd, dd MMMM yyyy}\n Time: {CurrentReservation.Time}\n Table: {CurrentReservation.Table}\n Code: {CurrentReservation.Id}\n\n Change: \n";
+            string tables = StringOfTables(CurrentReservation);
+            string prompt = $" Reservation by {Usercontroller.GetId(CurrentReservation.UserId).Username} (ID : {Usercontroller.GetId(CurrentReservation.UserId).Id})\n\n Details \n Date: {CurrentReservation.Date:dddd, dd MMMM yyyy}\n Time: {CurrentReservation.Time}\n Table: {tables}\n Code: {CurrentReservation.Id}\n\n Change: \n\n";
             List<string> reservoptions = new List<string>()
                     {
                         "Date",
@@ -196,7 +376,7 @@ namespace Kevin_Restaurant
                         "Cancel Reservation",
                         "Back"
                     };
-            ArrowMenu Reservation = new ArrowMenu(prompt, reservoptions, 9);
+            ArrowMenu Reservation = new ArrowMenu(prompt, reservoptions, 10);
             int selectedindex = Reservation.Move();
             switch (selectedindex)
             {
@@ -206,12 +386,12 @@ namespace Kevin_Restaurant
                     ViewReservation(reservationid);
                     break;
                 case 1:
-                    CurrentReservation.Time = ReservationController.get_time();
+                    CurrentReservation.Time = Reservations.get_time();
                     CurrentReservation.WriteToFile();
                     ViewReservation(reservationid);
                     break;
                 case 2:
-                    CurrentReservation.Table = ReservationController.ChooseTable(CurrentReservation.Diners, CurrentReservation.Date);
+                    CurrentReservation.Table = ReservationController.ChooseTable(CurrentReservation);
                     CurrentReservation.WriteToFile();
                     ViewReservation(reservationid);
                     break;
@@ -248,9 +428,18 @@ namespace Kevin_Restaurant
             }
         }
 
-        public void FilterReservationsScreen()
+        private string StringOfTables(Reservation X )  // returns a string of all tables reserved
         {
-
+            string alltables = $"{X.Table[0]}";
+            if (X.Table.Count > 1)
+            {
+                foreach (int tafel in X.Table.Skip(1))
+                {
+                    alltables += $", {tafel}";
+                }
+            }
+            
+            return alltables;
         }
 
         private void UserControlScreen(List<User> Userlist) // function that lets admin delete users, manually add users, make an user an admin
@@ -273,7 +462,7 @@ namespace Kevin_Restaurant
 
         }
 
-        private void FilterUsers()
+        private void FilterUsers() // allows user or admin to select an option to filter on the list of users
         {
             Console.Clear();
             string prompt = "Search for:";
@@ -410,7 +599,7 @@ namespace Kevin_Restaurant
                     UserControlScreen(Usercontroller._users);
                     break;
             }
-        } // filter Screen
+        } 
 
         private void UserControl(int userid) // Selected user by admin, allows admin to change something about the user.
         {
@@ -460,7 +649,7 @@ namespace Kevin_Restaurant
             }
         }
 
-        private void AdminChangeUsers(string option, User Currentuser)
+        private void AdminChangeUsers(string option, User Currentuser) // allows admin to change the information of any user
         {
             switch (option)
             {
@@ -584,7 +773,7 @@ namespace Kevin_Restaurant
             }
         }// actual input function for admin to change credentials
 
-        private void ChangeUserInfo() //allows user to change personal information
+        private void ChangeUserInfo() //allows user to change his own personal information
         {
             Console.Clear();
             int choice = info_change_menu.Move();
@@ -716,7 +905,7 @@ namespace Kevin_Restaurant
             }
         }
 
-        private bool Checkdatabase(string input, string version) // checks if username is already in use
+        private bool Checkdatabase(string input, string version) // checks if username/phone is already in use
         {
             if (version == "username")
             {
@@ -756,7 +945,7 @@ namespace Kevin_Restaurant
         }
 
 
-        private bool PressEnter()
+        private bool PressEnter() // waits for user to press enter,
         {
             bool waiting = true;
             bool boolean = false;

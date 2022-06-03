@@ -8,7 +8,7 @@ using Kevin_Restaurant.Controllers;
 
 namespace Kevin_Restaurant.Models
 {
-    internal class Reservation
+    public class Reservation
     {
         [JsonPropertyName("meals")]
         public List<string> meals { get; set; }
@@ -31,9 +31,6 @@ namespace Kevin_Restaurant.Models
 
         [JsonPropertyName("time")]
         public string Time { get; set; }
-
-
-
 
         public void WriteToFile()
         {
