@@ -56,7 +56,6 @@ namespace Kevin_Restaurant.Controllers
             return _Dishes.FindAll(i => i.Sort == sort);
         }
 
-
         public void UpdateList(Dish m)
         {
             int index = _Dishes.FindIndex(s => s.Id == m.Id);
@@ -73,9 +72,9 @@ namespace Kevin_Restaurant.Controllers
 
         }
 
-        public void RemoveDish(int dishid)
+        public void RemoveDish(int id)
         {
-            var itemToRemove = _Dishes.Single(r => r.Id == dishid);
+            var itemToRemove = _Dishes.Single(r => r.Id == id);
             _Dishes.Remove(itemToRemove);
             Write();
         }
