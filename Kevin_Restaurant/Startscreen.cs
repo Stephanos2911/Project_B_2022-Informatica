@@ -31,8 +31,6 @@ namespace Kevin_Restaurant
 | . \  __/\ V /| | | | | \__ \ | (_| | | | | |  __/ |_  
 |_|\_\___| \_/ |_|_| |_| |___/  \__,_|_|_| |_|\___|_(_)
 Welcome to Kevin’s diner, a place where you can taste the world. (uhh maybe ?)
-Every month we have a brand-new cultural theme, this month’s theme is ….
-Next month’s theme is ….
 ---------------------------------------------------------------------------------------------------------------------- 
 L O C A T I O N
 
