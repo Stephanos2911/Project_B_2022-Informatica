@@ -324,24 +324,5 @@ namespace Kevin_Restaurant
             string newname = Console.ReadLine();
             return newname; 
         }
-
-        //public void Theme(int DishId, string AddorChange)
-        //{
-        //    Console.Clear();
-        //    Console.WriteLine("What will be the new theme? ");
-        //    string newtheme = Console.ReadLine();
-
-
-        //    if (AddorChange == "Add")
-        //    {
-        //        NewDish.Theme = newtheme;
-        //    }
-        //    else
-        //    {
-        //        AllDishes[DishId].Theme = newtheme;
-        //        AllDishes[DishId].WriteToFile();
-        //    }
-        //}
-
     }
 }
