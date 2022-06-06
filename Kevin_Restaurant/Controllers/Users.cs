@@ -102,5 +102,44 @@ namespace Kevin_Restaurant.Controllers
             _users.Remove(itemToRemove);
             Write();
         }
+
+        public bool CheckforPhone(string input) // checks if username/phone is already in use
+        {
+            bool check = true;
+            if (input.Length > 15 || Startscreen.OnlyDigits(input) || input.Length < 9 || input == "")
+            {
+                Console.WriteLine("Please enter a valid phonenumber");
+                check = false;
+
+            }
+            else
+            {
+                foreach (User x in _users)
+                {
+                    if (x.TelephoneNumber == input)
+                    {
+                        Console.WriteLine("This phone-number is already registered, try another number:");
+                        check = false;
+
+                    }
+                }
+            }
+            return check;
+
+        }
+
+        public bool CheckForUsername(string input)
+        {
+            bool check = true;
+            foreach (User x in _users)
+            {
+                if (x.Username == input)
+                {
+                    check = false;
+                }
+            }
+            return check;
+        }
+
     }
 }
