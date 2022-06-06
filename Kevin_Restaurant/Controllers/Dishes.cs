@@ -33,18 +33,6 @@ namespace Kevin_Restaurant.Controllers
         {
             return _Dishes.Find(x => x.Id == id);
         }
-        public Dish GetByPrice(int price)
-        {
-            return _Dishes.Find(x => x.Price == price);
-        }
-        public Dish GetByType(string type)
-        {
-            return _Dishes.Find(x => x.Type == type);
-        }
-        public Dish GetBySort(string sort)
-        {
-            return _Dishes.Find(x => x.Sort == sort);
-        }
 
         public List<Dish> AllDishesbyMenu(int Searchmenuid)
         {
