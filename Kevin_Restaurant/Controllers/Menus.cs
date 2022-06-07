@@ -19,7 +19,7 @@ namespace Kevin_Restaurant.Controllers
             Load();
         }
 
-        public void Load()
+        private void Load()
         {
             string json = File.ReadAllText(path);
             _menus = JsonSerializer.Deserialize<List<Menu>>(json);
@@ -51,7 +51,7 @@ namespace Kevin_Restaurant.Controllers
             Write();
         }
 
-        public void Write()
+        private void Write()
         {
             var options = new JsonSerializerOptions();
             options.WriteIndented = true;

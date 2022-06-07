@@ -9,7 +9,7 @@ using Kevin_Restaurant.Models;
 
 namespace Kevin_Restaurant.Controllers
 {
-    internal class Reservations
+    public class Reservations
     {
         public List<Reservation> _reservations;
         string path = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, @"Data/reservations.json"));
@@ -21,7 +21,7 @@ namespace Kevin_Restaurant.Controllers
             Load();
         }
 
-        public void Load()
+        private void Load()
         {
             Console.WriteLine(path);
             string json = File.ReadAllText(path);
@@ -29,7 +29,7 @@ namespace Kevin_Restaurant.Controllers
             _reservations = JsonSerializer.Deserialize<List<Reservation>>(json);
         }
 
-        public void Write()
+        private void Write()
         {
             var options = new JsonSerializerOptions();
             options.WriteIndented = true;
@@ -74,7 +74,6 @@ namespace Kevin_Restaurant.Controllers
         }
 
 
-
         public Reservation FindId(string id)
         {
             return _reservations.Find(i => i.Id == id);
@@ -97,10 +96,10 @@ namespace Kevin_Restaurant.Controllers
         }
 
 
-        public List<int> ChooseTable(int Groupsize, DateTime DayForReservation)
+        public List<int> ChooseTable(Reservation CurrentReservation)
         {
             Table_map A = new Table_map();
-            List<Reservation> ReservationsonSameDay = FindAllAvailableTables(DayForReservation);
+            List<Reservation> ReservationsonSameDay = FindAllAvailableTables(CurrentReservation.Date);
             List<int> NotAvailableTables = new List<int>();
             foreach (Reservation reservation in ReservationsonSameDay)
             {
@@ -110,20 +109,31 @@ namespace Kevin_Restaurant.Controllers
                 }
             }
 
-            foreach(int X in NotAvailableTables)
+            //If user wants to change his table choices later, removes the already chosen tables from notavailabletables so that they are available for picking again.
+            if(CurrentReservation.Table != null)
+            {
+                foreach (int Y in CurrentReservation.Table)
+                {
+                    NotAvailableTables.Remove(Y);
+                }
+            }
+
+
+            foreach (int X in NotAvailableTables)
             {
                 A.Tables[X - 1].available = false;
             }
-            List<int> indexchoice = A.Choice(Groupsize);
+            List<int> indexchoice = A.Choice(CurrentReservation.Diners);
             return indexchoice;
         }
+
 
         public List<Reservation> FindAllAvailableTables(DateTime date)
         {
             return _reservations.FindAll((i => i.Date == date));
         }
 
-        public int AvailableSeat (DateTime date)
+        private int AvailableSeat (DateTime date)
         {
             Table_map Temp = new Table_map();
             int seats = 48;
@@ -161,7 +171,7 @@ namespace Kevin_Restaurant.Controllers
             var order = make_order(dinners);
             res.meals = order;
 
-            List<int> table = ChooseTable(dinners, date);
+            List<int> table = ChooseTable(res);
             res.Table = table;
 
             res.WriteToFile();
@@ -171,6 +181,7 @@ namespace Kevin_Restaurant.Controllers
             Console.WriteLine("Reservation succesfully placed! Press any key to continue");
             Console.ReadKey();
         }
+
         public DateTime get_date(int days_in_advance)
         {
             Console.Clear();
@@ -286,7 +297,7 @@ namespace Kevin_Restaurant.Controllers
             return people;
         }
 
-        public static List<string> make_order(int dinners)
+        private static List<string> make_order(int dinners)
         {
             string[] yes_no = new string[] { "yes", "no" };
             ArrowMenu menu = new ArrowMenu("Would you like to add your order for every person in advance?",yes_no,0);
@@ -304,7 +315,7 @@ namespace Kevin_Restaurant.Controllers
             }
             
         }
-        public string[] get_meals(int people)
+        private string[] get_meals(int people)
         {
             var meals = new string[people + 1];
             for (int i = 1; i <= people; i++)
@@ -318,10 +329,10 @@ namespace Kevin_Restaurant.Controllers
             }
             return meals;
         }
-        public string get_time()
+        public static string get_time()
         {
             Console.Clear();
-            string promt = "what time do you expect you will be arriving?";
+            string promt = "Select an arrival time.";
             string[] string_times = { "17:00", "17:15", "17:30", "17:45", "18:00", "18:15", "18:30", "18:45",
                 "19:00", "19:15", "19:30", "19:45", "20:00", "20:15", "20:30", "20:45", "21:00", "21:15",
                 "21:30", "21:45", "22:00", "22:15", "22:30", "22:45", "23:00" };
@@ -334,7 +345,7 @@ namespace Kevin_Restaurant.Controllers
             return string_times[selectedIndex];
         }
 
-        public string conformation_code()
+        private string conformation_code()
         {
             Random rnd = new Random();
             string code = string.Empty;
@@ -374,7 +385,7 @@ namespace Kevin_Restaurant.Controllers
 
 
 
-        public List<string> DisplayAllReservations(List<Reservation> Reservationlist)
+        public List<string> DisplayAllReservations(List<Reservation> Reservationlist, bool admin)
         {
             List<string> AllReservations = new List<string>();
 
@@ -382,24 +393,27 @@ namespace Kevin_Restaurant.Controllers
             {
                 if(reservation.Table.Count == 1)
                 {
-                    AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {reservation.Table[0]} |");
+                    AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {reservation.Table[0]} ");
                 }
                 else if(reservation.Table.Count == 2)
                 {
                     string tempstring = $"{reservation.Table[0]} and {reservation.Table[1]}";
-                    AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {tempstring} |");
+                    AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {tempstring} ");
                 }
                 else
                 {
                     string allTables = $"{reservation.Table[0]}";
-                    for (int i = 1; i < reservation.Table.Count - 1; i++)
+                    for (int i = 1; i < reservation.Table.Count; i++)
                     {
                         allTables += $", {reservation.Table[i]}";
                     }
-                    AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {allTables} |");
+                    AllReservations.Add($"{reservation.Id} | {reservation.Date.ToString("dddd, dd MMMM yyyy")} | {reservation.Time} | {allTables} ");
                 } 
             }
-            AllReservations.Add("Filters");
+            if (admin)
+            {
+                AllReservations.Add("Filters");
+            }
             AllReservations.Add("Back");
             return AllReservations;
         }

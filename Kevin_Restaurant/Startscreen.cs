@@ -11,23 +11,15 @@ using System.Threading.Tasks;
 // kunnen meerdere usernames dezelfde wachtwoord hebben
 namespace Kevin_Restaurant
 {
-    internal class Startscreen
+    public class Startscreen
     {
-        public string Username;
-        public string Password;
-        public string Telephonenumber;
+        private readonly string[] options;
+        private readonly string[] extra_options;
 
-        public string[] options;
-        public string[] extra_options;
-
-        public ArrowMenu mainMenu;
-        public ArrowMenu extraMenu;
+        private readonly ArrowMenu mainMenu;
+        private readonly ArrowMenu extraMenu;
         public Startscreen()
         {
-            this.Username = null;
-            this.Password = null;
-            this.Telephonenumber = null;
-
             this.options = new string [] { "Sign up", "Log in", "More / Extra", "Exit" };
             this.extra_options = new string[] { "Menu Card", "Map", "Back" };
 
@@ -39,8 +31,6 @@ namespace Kevin_Restaurant
 | . \  __/\ V /| | | | | \__ \ | (_| | | | | |  __/ |_  
 |_|\_\___| \_/ |_|_| |_| |___/  \__,_|_|_| |_|\___|_(_)
 Welcome to Kevin’s diner, a place where you can taste the world. (uhh maybe ?)
-Every month we have a brand-new cultural theme, this month’s theme is ….
-Next month’s theme is ….
 ---------------------------------------------------------------------------------------------------------------------- 
 L O C A T I O N
 
@@ -57,6 +47,8 @@ Use the up and down arrow to select what you want to do. (maybe)
 ----------------------------------------------------------------------------------------------------------------------
 Have fun dining out and thank you for choosing us. -K", this.options, 24);
             this.extraMenu = new ArrowMenu("Extras", this.extra_options,0);
+
+        
         }
 
 
@@ -109,7 +101,7 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
         }
 
 
-        public void Login()
+        private void Login()
         {
             //setup
             Console.Clear();
@@ -149,13 +141,13 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
                 }
             }
 
-            Users usercontroller = new Users();
+            Users usercontroller = new();
 
             //check if credentials are valid to an account
             User logintry = usercontroller.Getusername(Usernameattempt);
             if (logintry != null && logintry.Password == passwordattempt && logintry.Username == Usernameattempt)
             {
-                Mainmenu mainMenu = new Mainmenu(logintry);
+                Mainmenu mainMenu = new(logintry);
                 mainMenu.StartMainMenu();
             }
 
@@ -167,12 +159,12 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
         }
 
 
-        public void Register() // asks for username, password, phonenumber then registers to json.
+        private void Register() // asks for username, password, phonenumber then registers to json.
         {
             Console.Clear();
 
             //setup nieuwe user om te writen
-            Users usercontroller = new Users();
+            Users usercontroller = new();
 
             User NewUser = CheckCredentials(usercontroller._users, usercontroller._users.Count + 1);
 
@@ -186,7 +178,7 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
         }
 
 
-        public void KeytoContinue() // enter repeats the action, escape goes back
+        private void KeytoContinue() // enter repeats the action, escape goes back
         {
             bool waiting = true;
             if (waiting == true)
@@ -206,12 +198,13 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
         }
 
 
-        public User CheckCredentials(List<User> users, int ID) // function to keep asking for correct inputs
+        private User CheckCredentials(List<User> users, int ID) // function to keep asking for correct inputs
         {
-            User writeuser = new User();
-            writeuser.Id = ID;
-            writeuser.Admin = false;
-
+            User writeuser = new()
+            {
+                Id = ID,
+                Admin = false
+            };
 
             //check username
             Console.WriteLine("What do you want your username to be?");
@@ -238,8 +231,7 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
             return writeuser;
         }
 
-
-        public bool AlreadyExists(List<User> users, string type, string input)
+        private bool AlreadyExists(List<User> users, string type, string input)
         {
             bool stoploop = false;
             bool check = true;
@@ -290,7 +282,7 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
             return check;
         }
 
-        public bool OnlyDigits(string str) // checkt of de string alleen getallen bevat
+        public static bool OnlyDigits(string str) // checkt of de string alleen getallen bevat
         {
             foreach (char c in str)
             {

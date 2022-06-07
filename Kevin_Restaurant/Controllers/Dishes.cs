@@ -19,7 +19,7 @@ namespace Kevin_Restaurant.Controllers
             Load();
         }
 
-        public void Load()
+        private void Load()
         {
             string json = File.ReadAllText(path);
             _Dishes = JsonSerializer.Deserialize<List<Dish>>(json);
@@ -33,18 +33,6 @@ namespace Kevin_Restaurant.Controllers
         {
             return _Dishes.Find(x => x.Id == id);
         }
-        public Dish GetByPrice(int price)
-        {
-            return _Dishes.Find(x => x.Price == price);
-        }
-        public Dish GetByType(string type)
-        {
-            return _Dishes.Find(x => x.Type == type);
-        }
-        public Dish GetBySort(string sort)
-        {
-            return _Dishes.Find(x => x.Sort == sort);
-        }
 
         public List<Dish> AllDishesbyMenu(int Searchmenuid)
         {
@@ -55,7 +43,6 @@ namespace Kevin_Restaurant.Controllers
         {
             return _Dishes.FindAll(i => i.Sort == sort);
         }
-
 
         public void UpdateList(Dish m)
         {
@@ -73,14 +60,14 @@ namespace Kevin_Restaurant.Controllers
 
         }
 
-        public void RemoveDish(int dishid)
+        public void RemoveDish(int id)
         {
-            var itemToRemove = _Dishes.Single(r => r.Id == dishid);
+            var itemToRemove = _Dishes.Single(r => r.Id == id);
             _Dishes.Remove(itemToRemove);
             Write();
         }
 
-        public void Write()
+        private void Write()
         {
             var options = new JsonSerializerOptions();
             options.WriteIndented = true;

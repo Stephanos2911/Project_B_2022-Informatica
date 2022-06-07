@@ -13,56 +13,76 @@ namespace Kevin_Restaurant
         public Dishes controller;
         public int bill;
         public string finalOrder;
-        public int totallength;
-        public Dish[] AllDishes;
-        public int AppetizerCount;
-        public int MainCourseCount;
-        public int DessertCount;
 
-        public object Keys { get; private set; }
+        public Menu currentMenu;
+        List<Dish> AllDishesInCurrentMenu;
+        public int AppetizerCount;
+        public int MainCount;
+        public int DessertCount;
 
         public OrderScreen()
         {
             this.bill = 0;
+            this.currentMenu = CurrentMenu();
             this.finalOrder = "";
             this.controller = new Dishes();
-            this.totallength = controller._Dishes.Count;
-            this.AppetizerCount = controller.FindAllDish("appetizer").Count();
-            this.MainCourseCount = controller.FindAllDish("main course").Count();
-            this.DessertCount = controller.FindAllDish("Dessert").Count();
+            this.AllDishesInCurrentMenu = controller.AllDishesbyMenu(currentMenu.Id);
+            this.AppetizerCount = AllDishesInCurrentMenu.Count(x => x.Sort == "appetizer");
+            this.MainCount = AllDishesInCurrentMenu.Count(x => x.Sort == "main course");
+            this.DessertCount = AllDishesInCurrentMenu.Count(x => x.Sort == "Dessert");
         }
 
-
-        public string [] alldishestostring()
+        private Menu CurrentMenu()
         {
-            int index = 0;
-            string [] str = new string[controller._Dishes.Count + 4];
-            List<Dish> appetizers= controller.FindAllDish("appetizer");
-            List<Dish> Maindishes= controller.FindAllDish("main course");
-            List<Dish> desserts= controller.FindAllDish("Dessert");
-            str[index] = "Appetizers";    
-            index++;
+            Menu CurrentMenu = new Menu();
+            bool found = false;
+            Menus X = new Menus();
+            while (found == false)
+            {
+                foreach (Menu menu in X._menus)
+                {
+                    if (DateTime.Now > menu.StartingDate && DateTime.Now < menu.EndDate)
+                    {
+                        CurrentMenu = menu;
+                        found = true;
+                    }
+                }
+            }
+            return CurrentMenu;
+        }
+
+        public List<string> alldishestostring()
+        {
+            Menu currentMenu = CurrentMenu();
+            List<String> str = new List<string>();
+            List<Dish> AllDishesInCurrentMenu = controller.AllDishesbyMenu(currentMenu.Id);
+
+            str.Add("Appetizers");
             //puts all objects with an "appetizer" attribute in an array
-            foreach(Dish i in appetizers)
+            foreach (Dish i in AllDishesInCurrentMenu)
             {
-                str[index] = $"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-";
-                index++;
+                if (i.Sort == "appetizer")
+                {
+                    str.Add($"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-");
+                }
             }
-            str[index] = "Main course";
-            index++; 
-            foreach (Dish i in Maindishes)
+            str.Add("Main course");
+            foreach (Dish i in AllDishesInCurrentMenu)
             {
-                str[index] = $"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-";
-                index++;
+                if (i.Sort == "main course")
+                {
+                    str.Add($"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-");
+                }
             }
-            str[index] = "Desserts";
-            index++; 
-            foreach (Dish i in desserts)
+            str.Add("Desserts");
+            foreach (Dish i in AllDishesInCurrentMenu)
             {
-                str[index] = $"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-";
-                index++;
+                if (i.Sort == "Dessert")
+                {
+                    str.Add($"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-");
+                }
             }
-            str[index] = "Done";
+            str.Add("Done");
             return str;
         }
 
@@ -70,24 +90,25 @@ namespace Kevin_Restaurant
         {
             int usersleft = groupsize;
             int currentPerson = 1;
-            string prompt = $"Current person {currentPerson}";
-            string [] options = alldishestostring();
-            List<string> list = new List<string>();
+            string prompt;
+            List<string> options = alldishestostring();
+            List<string> ChosenDishes = new List<string>();
+
 
             //makes the program work until all users have selcted their dishes
             while (usersleft > 0)
             {
-                prompt = $"Current person {currentPerson}";
-                ArrowMenu OtherMenu = new ArrowMenu(prompt, options, 0);
+                prompt = $"This month's theme: {currentMenu.Name}\nCurrent person {currentPerson}\n";
+                ArrowMenu OtherMenu = new ArrowMenu(prompt, options, 2);
                 int selectedIndex = OtherMenu.Move();
 
                 //if selectedIndex is equal to "appetizer", "main course" or "dessert" the program has to do nothing
-                if (selectedIndex == AppetizerCount + 1 || selectedIndex == 0 || selectedIndex == (options.Length - (DessertCount + 2)))
+                if (selectedIndex == AppetizerCount + 1 || selectedIndex == 0 || selectedIndex == (options.Count - (DessertCount + 2)))
                 {
                     ;
                 }
                 //makes the "done" button work
-                else if (selectedIndex == options.Length - 1)
+                else if (selectedIndex == options.Count - 1)
                 {
                     usersleft--;
                     currentPerson++;
@@ -100,7 +121,7 @@ namespace Kevin_Restaurant
                     {
                         index = selectedIndex - 1;
                     }
-                    else if (selectedIndex < options.Length - (DessertCount + 1) && selectedIndex > AppetizerCount + 1)
+                    else if (selectedIndex < options.Count - (DessertCount + 1) && selectedIndex > AppetizerCount + 1)
                     {
                         index = selectedIndex - 2;
                     }
@@ -108,9 +129,9 @@ namespace Kevin_Restaurant
                     {
                         index = selectedIndex - 3;
                     }
-                    list.Add(controller.GetById(index).Gerecht);
-                    Bill(controller.GetById(index).Price);
-                    Order(index);
+                    ChosenDishes.Add(AllDishesInCurrentMenu[index].Gerecht);
+                    Bill(AllDishesInCurrentMenu[index].Price);
+                    Order(AllDishesInCurrentMenu[index]);
                 }
                 //gives the final bill
                 Console.Clear();
@@ -120,7 +141,7 @@ namespace Kevin_Restaurant
             Console.WriteLine("Press any key to continue");
             Console.ReadKey();
             Console.WriteLine("This is the End");
-            return list;
+            return ChosenDishes;
         }
 
 
@@ -130,9 +151,9 @@ namespace Kevin_Restaurant
             this.bill += inputPrice;
         }
         //makes the final order after all users have selected their order
-        public void Order(int i)
+        public void Order(Dish X)
         {
-            this.finalOrder += $"{controller._Dishes[i].Gerecht}, {controller._Dishes[i].Price},-\n";
+            this.finalOrder += $"{X.Gerecht}, {X.Price},-\n";
         }
     }
 }
