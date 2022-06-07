@@ -326,7 +326,7 @@ namespace Kevin_Restaurant
             }
             Console.Clear();
 
-            //ask for everything
+            //ask for everything to make a new dish
             NewDish.Gerecht = Name();
             NewDish.Type = Type();
             NewDish.Price = Price();
@@ -366,38 +366,19 @@ namespace Kevin_Restaurant
             Console.Clear();
             int newprice;
             Console.WriteLine("What will be the new price? ");
-            while (!int.TryParse(Console.ReadLine(), out newprice))
+            while (!int.TryParse(Console.ReadLine(), out newprice)) // checks if given input is an int
             {
                 Console.Clear();
                 Console.WriteLine("That was invalid. Enter a valid number.");
             }
             return newprice;
         }
-        private string Name()
+        private string Name() 
         {
             Console.Clear();
             Console.WriteLine("What will be the new name? ");
             string newname = Console.ReadLine();
             return newname; 
         }
-
-        //public void Theme(int DishId, string AddorChange)
-        //{
-        //    Console.Clear();
-        //    Console.WriteLine("What will be the new theme? ");
-        //    string newtheme = Console.ReadLine();
-
-
-        //    if (AddorChange == "Add")
-        //    {
-        //        NewDish.Theme = newtheme;
-        //    }
-        //    else
-        //    {
-        //        AllDishes[DishId].Theme = newtheme;
-        //        AllDishes[DishId].WriteToFile();
-        //    }
-        //}
-
     }
 }

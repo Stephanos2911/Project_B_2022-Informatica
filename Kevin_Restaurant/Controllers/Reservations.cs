@@ -192,7 +192,7 @@ namespace Kevin_Restaurant.Controllers
 
             for (int i = 0; i < days_in_advance; i++)
             {
-                if (today.AddDays(i).DayOfWeek != DayOfWeek.Tuesday)
+                if (today.AddDays(i).DayOfWeek != DayOfWeek.Tuesday & AvailableSeat(today.AddDays(i)) > 0)
                 {
                     var string_date = $"{today.AddDays(i).DayOfWeek} {today.AddDays(i).ToString("M")}";
                     var date = today.AddDays(i);//.ToUniversalTime();
@@ -201,6 +201,9 @@ namespace Kevin_Restaurant.Controllers
                     dates.Add(date);
                 }
             }
+            string_dates.Add("<expand list an additional 2 weeks>");
+            //string_dates.Add("<manualy give date>");
+
             string[] Strring_dates_array = string_dates.ToArray();
             DateTime[] dates_array = dates.ToArray();
 
@@ -210,9 +213,67 @@ namespace Kevin_Restaurant.Controllers
             ArrowMenu choose_date = new ArrowMenu(promt, Strring_dates_array, 0);
             int selectedIndex = choose_date.Move();
 
-            return dates[selectedIndex];
+            if (selectedIndex < dates.Count)
+            {
+                return dates[selectedIndex];
+            }
+            else //if (selectedIndex == dates.Count)
+            {
+                return get_date(days_in_advance + 14);
+            }
+            //else;
+            //{
+            //    int this_Year = today.Year;
+            //    Console.Clear();
+            //    Console.WriteLine("year:");
+            //    var string_Year = Console.ReadLine();
+            //    int year = check_if_int(string_Year);    
+
+            //    while (year < this_Year)
+            //    {
+            //        Console.WriteLine("wrong please enter the year of the date you would like to book:");
+            //        string_Year = Console.ReadLine();
+            //        year = check_if_int(string_Year);
+            //    }
+
+            //    int this_Month = today.Month;
+            //    Console.Clear();
+            //    Console.WriteLine("month(as a number):");
+            //    var string_Month = Console.ReadLine();
+            //    int month = check_if_int(string_Month);
+
+            //    while (month >12)
+            //    {
+            //        Console.WriteLine("month(as a number):");
+            //        string_Month = Console.ReadLine();
+            //        month = check_if_int(string_Month);
+            //    }
+
+            //    int this_Day = today.Day;
+            //    Console.Clear();
+            //    Console.WriteLine("day of month:");
+            //    var string_Day = Console.ReadLine();
+            //    int day = check_if_int(string_Day);
+
+            //    while (day <= this_Day & DateTime.DaysInMonth(year, month))
+            //    {
+            //        Console.WriteLine("day of month:");
+            //        string_Day = Console.ReadLine();
+            //        day = check_if_int(string_Day);
+            //    }
+            //    return new DateTime(year, month, day);
+            //}
         }
 
+        public int check_if_int(string number)
+        {
+            while (!Int32.TryParse(number, out var dat))
+            {
+                Console.WriteLine("\n please enter a number");
+                number = Console.ReadLine();
+            }
+            return Int32.Parse(number);
+        }
         public int get_diners(DateTime date)
         {
             int seats = AvailableSeat(date);
