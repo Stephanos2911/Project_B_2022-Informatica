@@ -1,15 +1,15 @@
 [
   {
     "id": 1,
-    "username": "Stephanos",
-    "password": "jemoeder",
+    "username": "Kevin",
+    "password": "isadmin",
     "admin": true,
     "telephonenumber": "642058154233"
   },
   {
     "id": 2,
     "username": "Rishi",
-    "password": "papa",
+    "password": "Ryan",
     "admin": false,
     "telephonenumber": "64203443323"
   }

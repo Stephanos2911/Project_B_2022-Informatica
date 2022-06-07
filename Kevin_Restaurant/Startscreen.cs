@@ -14,14 +14,11 @@ namespace Kevin_Restaurant
     public class Startscreen
     {
         private readonly string[] options;
-        private readonly string[] extra_options;
 
         private readonly ArrowMenu mainMenu;
-        private readonly ArrowMenu extraMenu;
         public Startscreen()
         {
-            this.options = new string [] { "Sign up", "Log in", "More / Extra", "Exit" };
-            this.extra_options = new string[] { "Menu Card", "Map", "Back" };
+            this.options = new string [] { "Sign up", "Log in", "Menu", "Exit" };
 
             this.mainMenu = new ArrowMenu(@"
  _  __          _       _           _ _                 
@@ -31,8 +28,7 @@ namespace Kevin_Restaurant
 | . \  __/\ V /| | | | | \__ \ | (_| | | | | |  __/ |_  
 |_|\_\___| \_/ |_|_| |_| |___/  \__,_|_|_| |_|\___|_(_)
 Welcome to Kevin’s diner, a place where you can taste the world. (uhh maybe ?)
-Every month we have a brand-new cultural theme, this month’s theme is ….
-Next month’s theme is ….
+Every month we have a brand-new cultural theme, you can check our current menu by going to menu down here.
 ---------------------------------------------------------------------------------------------------------------------- 
 L O C A T I O N
 
@@ -43,12 +39,11 @@ O P E N I N G
 We are open on Monday, Wednesday till Sunday. On Tuesdays we are closed. 
 Kevin’s diner is open from 17.00-23.00. 
 ----------------------------------------------------------------------------------------------------------------------
-H E L P
 
-Use the up and down arrow to select what you want to do. (maybe) 
+Have fun dining out and thank you for choosing us. -K
 ----------------------------------------------------------------------------------------------------------------------
-Have fun dining out and thank you for choosing us. -K", this.options, 24);
-            this.extraMenu = new ArrowMenu("Extras", this.extra_options,0);
+Use the Arrow-Keys to navigate our program :)", this.options, 22);
+  
 
         
         }
@@ -67,7 +62,7 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
                     this.Login();
                     break;
                 case 2:
-                    Extras_Menu();
+                    Show_Menu();
                     break;
                 case 3:
                     Environment.Exit(0);
@@ -77,33 +72,27 @@ Have fun dining out and thank you for choosing us. -K", this.options, 24);
         }
 
 
-        private void Extras_Menu() // menu with extra information for a costumor
+        private void Show_Menu() // menu with extra information for a costumor
         {
-            string[] only_back = { "Back" };
-            int extramenu_selectedIndex = this.extraMenu.Move();
-
-            switch (extramenu_selectedIndex)
+            Menus onlymenu = new();
+            Dishes AllDishes = new();
+            Menu CurrentMenu = onlymenu.CurrentMenu();
+            List<string> strings = AllDishes.alldishestostring(CurrentMenu);
+            strings.Remove("Done");
+            string allinone = $"Menu of this month: {CurrentMenu.Name}";
+            foreach (string s in strings)
             {
-                case 0:
-                    Console.WriteLine("hier komt het menu");
-                    break;
-                case 1:
-                    Table_map OnlyToShowMap = new Table_map();
-                    OnlyToShowMap.Show_Tables();
-
-                    ArrowMenu only_forback = new ArrowMenu("These are all the tables we offer at Kevin's", only_back, 50);
-                    int index = only_forback.Move();
-                    this.Extras_Menu();
-                    break;
-                case 2:
-                    this.Show_StartingScreen();
-                    break;
+                allinone += $"\n{s}";
             }
 
+            string[] only_back = { "Back" };
+            ArrowMenu MenuOfMonth = new(allinone, only_back, strings.Count);
+            int extramenu_selectedIndex = MenuOfMonth.Move();
+            this.Show_StartingScreen();
         }
 
 
-        private void Login()
+        private void Login() // prompts user for a username and password to login, then checks if they are linked to a valid account, if so they will be logged into the main menu 
         {
             //setup
             Console.Clear();

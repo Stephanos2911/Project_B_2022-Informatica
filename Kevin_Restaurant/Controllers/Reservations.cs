@@ -228,7 +228,7 @@ namespace Kevin_Restaurant.Controllers
             }
             while (Convert.ToInt32(string_people) > seats)
             {
-                Console.WriteLine($"\nSorry, we currently only have {seats} seats available on {date.ToString("dddd")} {date.ToString("M")}");
+                Console.WriteLine($"\nSorry, we currently only have {seats} seats available on {date.ToString("dddd")} {date.ToString("M")}, try again.");
                 string_people = Console.ReadLine();
             }
             var people = Int32.Parse(string_people);

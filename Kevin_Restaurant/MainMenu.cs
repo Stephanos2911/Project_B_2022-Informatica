@@ -13,7 +13,6 @@ namespace Kevin_Restaurant
         private readonly string[] user_options;
         private readonly string[] admin_options;
         private readonly string[] reservation_options;
-        private readonly string[] change_info_options;
 
         // current user
         private readonly Users Usercontroller;
