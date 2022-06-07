@@ -270,7 +270,7 @@ namespace Kevin_Restaurant
             }
             Console.Clear();
 
-            //ask for everything
+            //ask for everything to make a new dish
             NewDish.Gerecht = Name();
             NewDish.Type = Type();
             NewDish.Price = Price();
@@ -317,7 +317,7 @@ namespace Kevin_Restaurant
             }
             return newprice;
         }
-        private string Name()
+        private string Name() 
         {
             Console.Clear();
             Console.WriteLine("What will be the new name? ");
