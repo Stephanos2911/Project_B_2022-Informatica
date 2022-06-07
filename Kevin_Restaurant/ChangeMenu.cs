@@ -310,7 +310,7 @@ namespace Kevin_Restaurant
             Console.Clear();
             int newprice;
             Console.WriteLine("What will be the new price? ");
-            while (!int.TryParse(Console.ReadLine(), out newprice))
+            while (!int.TryParse(Console.ReadLine(), out newprice)) // checks if given input is an int
             {
                 Console.Clear();
                 Console.WriteLine("That was invalid. Enter a valid number.");
