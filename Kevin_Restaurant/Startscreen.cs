@@ -45,7 +45,7 @@ H E L P
 
 Use the up and down arrow to select what you want to do. (maybe) 
 ----------------------------------------------------------------------------------------------------------------------
-Have fun dining out and thank you for choosing us. -K", this.options, 24);
+Have fun dining out and thank you for choosing us. -K", this.options, 22);
             this.extraMenu = new ArrowMenu("Extras", this.extra_options,0);
 
         
