@@ -265,7 +265,7 @@ namespace Kevin_Restaurant.Controllers
             //}
         }
 
-        public int check_if_int(string number)
+        private int check_if_int(string number)
         {
             while (!Int32.TryParse(number, out var dat))
             {
@@ -274,7 +274,7 @@ namespace Kevin_Restaurant.Controllers
             }
             return Int32.Parse(number);
         }
-        public int get_diners(DateTime date)
+        private int get_diners(DateTime date)
         {
             int seats = AvailableSeat(date);
 
@@ -367,7 +367,7 @@ namespace Kevin_Restaurant.Controllers
 
         }
 
-        public bool filter_byday(DateTime date)
+        private bool filter_byday(DateTime date)
         {
             var avalible = false;
 
@@ -418,37 +418,5 @@ namespace Kevin_Restaurant.Controllers
             return AllReservations;
         }
 
-
-
-
-
-
-
-
-
-
-
-
-        //public void ViewReservations(User Currentuser)
-        //{
-        //    Console.Clear();
-        //    var promt = "Overview of all reservations:" + "\n Date         | Time    | Table   | Name \n";
-        //    List<Reservation> MadeReservations = FindAllReservations(Currentuser);
-        //    List<string> string_users = new List<string>();
-
-        //    for (var i = 0; i < MadeReservations.Count; i++)
-        //    {
-        //        string_users.Add($" {MadeReservations[i].Date.ToString("MM/dd/yyyy")}   | {MadeReservations[i].Time}   | {MadeReservations[i].Table}       | {MadeReservations[i].UserId}\n");
-        //        Console.WriteLine($" {Reservation.Date.ToString("MM/dd/yyyy")}   | {Reservation.Time}   | {Reservation.Table}       | {Currentuser.Username}\n");
-        //    }
-
-        //    ArrowMenu choose_date = new ArrowMenu(promt, string_users, 1);
-        //    int selectedIndex = choose_date.Move();
-        //    Reservation res = MadeReservations[selectedIndex];
-
-        //    Mainmenu x = new Mainmenu(Currentuser);
-        //    x.ViewReservation(res.Id);
-
-        //}
     }
 }
