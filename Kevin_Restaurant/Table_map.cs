@@ -34,7 +34,7 @@ namespace Kevin_Restaurant
             };
         }
 
-        public void Show_Tables()// laat hele plattegrond zien
+        private void Show_Tables()// laat hele plattegrond zien
         {
             foreach(Table tafel in Tables)
             {
@@ -66,21 +66,21 @@ namespace Kevin_Restaurant
                 }
             }
         }
-        private List<int> Auto_pick(int groupsize)
+        private List<int> Auto_pick(int groupsize) // returns a list with Integers (table numbers) chosen by this function, depending on which tables are available and how many people are coming.
         {
             List<int> ChosenTables = new List<int>();
             int peopleleft = groupsize;
             while(peopleleft > 0)
             {
-                if(peopleleft >= 5 && AvailableTablesLeft.Find(i => i.table_type == 6) != null)
-                {
+                if(peopleleft >= 5 && AvailableTablesLeft.Find(i => i.table_type == 6) != null) // if more than 6 people left and there is a table for 6, add a table of 6 to the chosentables list
+                {                                                                               //delete that table from Availabletables
                     Table pickedtable = AvailableTablesLeft.Find(i => i.table_type == 6);
                     ChosenTables.Add(pickedtable.table_number);
                     AvailableTablesLeft.Remove(pickedtable);
                     Tables[pickedtable.table_number - 1].selected = true;
                     peopleleft -= 6;
                 }
-                else if(peopleleft >= 3 && AvailableTablesLeft.Find(i => i.table_type == 4) != null)
+                else if(peopleleft >= 3 && AvailableTablesLeft.Find(i => i.table_type == 4) != null) //people left can be higher than 6, but if there is no table for 6 available, choose a table for 4. 
                 {
                     Table pickedtable = AvailableTablesLeft.Find(i => i.table_type == 4);
                     ChosenTables.Add(pickedtable.table_number);
@@ -90,8 +90,8 @@ namespace Kevin_Restaurant
                 }
                 else
                 {
-                    Table pickedtable = AvailableTablesLeft.Find(i => i.table_type == 2);
-                    ChosenTables.Add(pickedtable.table_number);
+                    Table pickedtable = AvailableTablesLeft.Find(i => i.table_type == 2); // if there are only 2 people left (or started with 2) and there are no tables of larger size available,
+                    ChosenTables.Add(pickedtable.table_number);                           // choose a table for 2.
                     AvailableTablesLeft.Remove(pickedtable);
                     Tables[pickedtable.table_number - 1].selected = true;
 
@@ -158,7 +158,6 @@ namespace Kevin_Restaurant
             Console.SetCursorPosition(0, 40);
             Console.WriteLine("  use the arrow-keys to navigate, press enter to select a table.");
 
-            //Tables[0].table_print(); // print table 1 because cancelling a table doesn't show table 1 correct.
             int PeopleLeft = groupsize;
             while (PeopleLeft > 0)
             {
@@ -292,7 +291,7 @@ namespace Kevin_Restaurant
                                 while (check_confirm == false)
                                 {
                                     ConsoleKeyInfo Keypressed_confirm = Console.ReadKey();
-                                    if (Keypressed_confirm.Key == ConsoleKey.Enter)
+                                    if (Keypressed_confirm.Key == ConsoleKey.Enter) 
                                     {
                                         Tables[temp_choice-1].available = false;
                                         Color_Change(temp_choice-1, false);

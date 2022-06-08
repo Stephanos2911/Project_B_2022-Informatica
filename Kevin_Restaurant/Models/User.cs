@@ -31,7 +31,7 @@ namespace Kevin_Restaurant.Models
             newuser.Updatelist(this);
         }
 
-        private void PromoteToAdminOrCostumor(User Currentuser)
+        private void PromoteToAdminOrCostumor(User Currentuser) // promotes this instance of user to admin or costumor
         {
             if (this.Admin)
             {
@@ -81,7 +81,7 @@ namespace Kevin_Restaurant.Models
             this.Writetofile();
         }
 
-        private void ChangeUsername(User CurrentUser)
+        private void ChangeUsername(User CurrentUser) // changes username of this instance
         {
             Console.Clear();
             Users Usercontroller = new();
@@ -116,7 +116,7 @@ namespace Kevin_Restaurant.Models
             ChangeUserInfo(CurrentUser);
         }
 
-        private void ChangePassword(User CurrentUser)
+        private void ChangePassword(User CurrentUser) // changes password of this instance
         {
             Console.Clear();
             string password = "";
@@ -148,7 +148,7 @@ namespace Kevin_Restaurant.Models
             ChangeUserInfo(CurrentUser);
         }
 
-        private void ChangePhoneNumber(User CurrentUser)
+        private void ChangePhoneNumber(User CurrentUser) // changes phone number of this instance
         {
             Console.Clear();
             string phoneattempt = "";
@@ -179,7 +179,7 @@ namespace Kevin_Restaurant.Models
             ChangeUserInfo(CurrentUser);
         }
 
-        private void DeleteThisUser(User CurrentUser)
+        private void DeleteThisUser(User CurrentUser) // deltes this instance of user.
         {
             Users Usercontroller = new();
             Reservations ReservationController = new();
@@ -280,7 +280,7 @@ namespace Kevin_Restaurant.Models
                 "Delete Account",
                 "Back"
                 };
-                ArrowMenu info_change_menu = new ArrowMenu($"Username: {this.Username}\nPassword: {this.Password}\nPhone Number: {this.TelephoneNumber}\n If you want to change your personal information, select an option from the menu below.", change_info_options, 3);
+                ArrowMenu info_change_menu = new ArrowMenu($"Username: {this.Username}\nPassword: {this.Password}\nPhone Number: {this.TelephoneNumber}\n\nIf you want to change your personal information, select an option from the menu below.\n", change_info_options, 5);
                 int index = info_change_menu.Move();
                 switch (index)
                 {

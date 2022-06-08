@@ -68,7 +68,8 @@ namespace Kevin_Restaurant
             {
                 AllDishList.Add($" [{i.Type}] {i.Gerecht} {i.Price},-");
             }
-            AllDishList.Add("   Add    ");
+            AllDishList.Add("   Add Dish   ");
+            AllDishList.Add("   Delete this Menu   ");
             AllDishList.Add("   Back    ");
             return AllDishList;
         }
@@ -83,17 +84,21 @@ namespace Kevin_Restaurant
             int selectedIndex = OtherMenu.Move();
 
 
-            if(options.Count > 2)
+            if(options.Count > 2) // if menu has already one dish
             {
-                if (selectedIndex == DishesOfMenu.Count + 1)
+                if (selectedIndex == DishesOfMenu.Count + 2) // go back
                 {
                     ShowAllMenus();
 
                 }
-                else if (selectedIndex == DishesOfMenu.Count)
+                else if (selectedIndex == DishesOfMenu.Count) // add dish
                 {
                     AddDish(thismenu);
                     Selection(thismenu);
+                }
+                else if(selectedIndex == DishesOfMenu.Count + 1) // delete menu
+                {
+                    DeleteMenu(thismenu);
                 }
                 else
                 {
@@ -104,11 +109,11 @@ namespace Kevin_Restaurant
                     "Remove",
                     "Back"
                     };
-                    ArrowMenu OtherMenu2 = new ArrowMenu(prompt, stringArray, 0);
+                    ArrowMenu OtherMenu2 = new ArrowMenu(prompt, stringArray, 0); // Adjust, Remove, Back
                     int selectedIndex2 = OtherMenu2.Move();
                     if (selectedIndex2 == 0) // adjust dish
                     {
-                        Adjust(DishesOfMenu[selectedIndex2].Id);
+                        Adjust(DishesOfMenu[selectedIndex].Id);
                         Selection(thismenu);
                     }
                     else if (selectedIndex2 == 1) // delete dish
@@ -123,12 +128,16 @@ namespace Kevin_Restaurant
                 }
 
             }
-            else
+            else // if Menu is empty
             {
-                if (selectedIndex == 1)
+                if (selectedIndex == 2)
                 {
                     ShowAllMenus();
 
+                }
+                else if(selectedIndex == 1)
+                {
+                    DeleteMenu(thismenu);
                 }
                 else
                 {
@@ -137,6 +146,31 @@ namespace Kevin_Restaurant
                 }
             }
 
+        }
+
+        private void DeleteMenu(Menu MenutoDelete)
+        {
+            Console.Clear();
+            List<string> yesorno = new List<string>()
+            {
+                "Yes",
+                "No"
+            };
+            ArrowMenu AreYouSure = new("Are you sure you want to Delete this menu and all it's dishes?", yesorno, 0);
+            int index = AreYouSure.Move();
+            if(index == 0)
+            {
+                Menucontroller.DeleteMenu(MenutoDelete.Id);
+                controller.DeleteAllDishesofMenu(MenutoDelete.Id);
+                Console.Clear();
+                Console.WriteLine("Menu deleted succesfully, press any key to continue");
+                ConsoleKeyInfo consoleKeyInfo = Console.ReadKey();
+                ShowAllMenus();
+            }
+            else
+            {
+                Selection(MenutoDelete);
+            }
         }
 
         private void AddMenu() // Admin can add a menu 
@@ -165,7 +199,7 @@ namespace Kevin_Restaurant
                 correctname = check;
             }
 
-            if(Menucontroller._menus.Count == 0)
+            if(Menucontroller._menus.Count == 0) // if this is the first menu, menu id =0
             {
                 newMenu.Id = 0;
             }
@@ -173,14 +207,18 @@ namespace Kevin_Restaurant
             {
                 newMenu.Id = Menucontroller._menus[Menucontroller._menus.Count - 1].Id + 1 ;
             }
-            
+
 
             //ask which month
-            string[] options = ShowAvailableMonths();
+            Dictionary <int,string> Availablemonths = AvailableMonths();
+            List<string> monthsformenu = Availablemonths.Values.ToList();
+            List<int> MonthstoInt = Availablemonths.Keys.ToList();
+            
             Console.Clear();
-            ArrowMenu NewDate = new ArrowMenu("Choose in which month this menu will be present.", options, 0);
+
+            ArrowMenu NewDate = new ArrowMenu("Choose one month out of the available monthes below for this menu.\n", monthsformenu, 1);
             int ind = NewDate.Move();
-            DateTime X = new DateTime(2022, ind + 1, 15);
+            DateTime X = new DateTime(2022, MonthstoInt[ind], 15);
             newMenu.StartingDate = FirstDayOfMonth(X);
             newMenu.EndDate = newMenu.StartingDate.AddMonths(1).AddDays(-1);
 
@@ -190,9 +228,27 @@ namespace Kevin_Restaurant
             Console.ReadKey();
         }
 
-        private string[] ShowAvailableMonths()
+        private Dictionary<int, string> AvailableMonths()  // returns list of integers of months that are available
         {
-            string[] months = DateTimeFormatInfo.CurrentInfo.MonthNames;
+            Dictionary<int, string> months = new Dictionary<int, string>()
+{
+                {1, "January"},
+                {2, "February"},
+                {3, "March"},
+                {4, "April"},
+                {5, "May"},
+                {6, "June" },
+                {7,"July"},
+                {8, "August"},
+                {9, "September"},
+                {10 , "October"},
+                {11 ,"November"},
+                { 12, "December"},
+};
+            foreach (Menu X in Menucontroller._menus)
+            {
+                months.Remove(X.StartingDate.Month);
+            }
             return months;
         }
 

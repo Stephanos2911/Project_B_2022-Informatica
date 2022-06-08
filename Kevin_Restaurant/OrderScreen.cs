@@ -10,20 +10,22 @@ namespace Kevin_Restaurant
 {
     public class OrderScreen
     {
-        public Dishes controller;
-        public int bill;
-        public string finalOrder;
+        private Dishes controller;
+        private Menus MenuController;
+        private int bill;
+        private string finalOrder;
 
-        public Menu currentMenu;
-        List<Dish> AllDishesInCurrentMenu;
-        public int AppetizerCount;
-        public int MainCount;
-        public int DessertCount;
+        private Menu currentMenu;
+        private List<Dish> AllDishesInCurrentMenu;
+        private int AppetizerCount;
+        private int MainCount;
+        private int DessertCount;
 
         public OrderScreen()
         {
             this.bill = 0;
-            this.currentMenu = CurrentMenu();
+            this.MenuController = new();
+            this.currentMenu = MenuController.CurrentMenu();
             this.finalOrder = "";
             this.controller = new Dishes();
             this.AllDishesInCurrentMenu = controller.AllDishesbyMenu(currentMenu.Id);
@@ -32,66 +34,12 @@ namespace Kevin_Restaurant
             this.DessertCount = AllDishesInCurrentMenu.Count(x => x.Sort == "Dessert");
         }
 
-        private Menu CurrentMenu()
-        {
-            Menu CurrentMenu = new Menu();
-            bool found = false;
-            Menus X = new Menus();
-            while (found == false)
-            {
-                foreach (Menu menu in X._menus)
-                {
-                    if (DateTime.Now > menu.StartingDate && DateTime.Now < menu.EndDate)
-                    {
-                        CurrentMenu = menu;
-                        found = true;
-                    }
-                }
-            }
-            return CurrentMenu;
-        }
-
-        public List<string> alldishestostring()
-        {
-            Menu currentMenu = CurrentMenu();
-            List<String> str = new List<string>();
-            List<Dish> AllDishesInCurrentMenu = controller.AllDishesbyMenu(currentMenu.Id);
-
-            str.Add("Appetizers");
-            //puts all objects with an "appetizer" attribute in an array
-            foreach (Dish i in AllDishesInCurrentMenu)
-            {
-                if (i.Sort == "appetizer")
-                {
-                    str.Add($"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-");
-                }
-            }
-            str.Add("Main course");
-            foreach (Dish i in AllDishesInCurrentMenu)
-            {
-                if (i.Sort == "main course")
-                {
-                    str.Add($"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-");
-                }
-            }
-            str.Add("Desserts");
-            foreach (Dish i in AllDishesInCurrentMenu)
-            {
-                if (i.Sort == "Dessert")
-                {
-                    str.Add($"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-");
-                }
-            }
-            str.Add("Done");
-            return str;
-        }
-
         public List<string> Start(int groupsize)
         {
             int usersleft = groupsize;
             int currentPerson = 1;
             string prompt;
-            List<string> options = alldishestostring();
+            List<string> options = controller.alldishestostring(this.currentMenu);
             List<string> ChosenDishes = new List<string>();
 
 
@@ -146,12 +94,12 @@ namespace Kevin_Restaurant
 
 
         //makes the final bill
-        public void Bill(int inputPrice)
+        private void Bill(int inputPrice)
         {
             this.bill += inputPrice;
         }
         //makes the final order after all users have selected their order
-        public void Order(Dish X)
+        private void Order(Dish X)
         {
             this.finalOrder += $"{X.Gerecht}, {X.Price},-\n";
         }

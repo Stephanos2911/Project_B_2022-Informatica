@@ -36,6 +36,14 @@ namespace Kevin_Restaurant.Controllers
             return _menus.Find(x => x.Name == name);
         }
 
+        public void DeleteMenu(int menuid)
+        {
+            var itemToRemove = _menus.Single(r => r.Id == menuid);
+            _menus.Remove(itemToRemove);
+            Write();
+        }
+
+
         public void UpdateList(Menu m)
         {
             int index = _menus.FindIndex(s => s.Id == m.Id);
@@ -49,6 +57,24 @@ namespace Kevin_Restaurant.Controllers
                 _menus.Add(m);
             }
             Write();
+        }
+
+        public Menu CurrentMenu()
+        {
+            Menu CurrentMenu = new Menu();
+            bool found = false;
+            while (found == false)
+            {
+                foreach (Menu menu in _menus)
+                {
+                    if (DateTime.Now > menu.StartingDate && DateTime.Now < menu.EndDate)
+                    {
+                        CurrentMenu = menu;
+                        found = true;
+                    }
+                }
+            }
+            return CurrentMenu;
         }
 
         private void Write()

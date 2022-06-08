@@ -44,6 +44,15 @@ namespace Kevin_Restaurant.Controllers
             return _Dishes.FindAll(i => i.Sort == sort);
         }
 
+        public void DeleteAllDishesofMenu(int MenuID)
+        {
+            List<Dish> dishestodelete = AllDishesbyMenu(MenuID);
+            foreach(Dish dish in dishestodelete)
+            {
+                RemoveDish(dish.Id);
+            }
+        }
+
         public void UpdateList(Dish m)
         {
             int index = _Dishes.FindIndex(s => s.Id == m.Id);
@@ -65,6 +74,41 @@ namespace Kevin_Restaurant.Controllers
             var itemToRemove = _Dishes.Single(r => r.Id == id);
             _Dishes.Remove(itemToRemove);
             Write();
+        }
+
+        public List<string> alldishestostring(Menu CurrentMenu)
+        {
+            Menu currentMenu = new();
+            List<String> str = new List<string>();
+            List<Dish> AllDishesInCurrentMenu = AllDishesbyMenu(currentMenu.Id);
+
+            str.Add("Appetizers");
+            //puts all objects with an "appetizer" attribute in an array
+            foreach (Dish i in AllDishesInCurrentMenu)
+            {
+                if (i.Sort == "appetizer")
+                {
+                    str.Add($"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-");
+                }
+            }
+            str.Add("Main course");
+            foreach (Dish i in AllDishesInCurrentMenu)
+            {
+                if (i.Sort == "main course")
+                {
+                    str.Add($"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-");
+                }
+            }
+            str.Add("Desserts");
+            foreach (Dish i in AllDishesInCurrentMenu)
+            {
+                if (i.Sort == "Dessert")
+                {
+                    str.Add($"{i.Id}. [{i.Type}] {i.Gerecht} {i.Price},-");
+                }
+            }
+            str.Add("Done");
+            return str;
         }
 
         private void Write()
